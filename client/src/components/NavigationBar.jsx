@@ -100,7 +100,7 @@ const NavigationBar = () => {
         <ul className="mt-6">
           <li>
             <a
-              href="/"
+              href="/admin/"
               className="block p-4 text-white hover:bg-red-400"
               onClick={toggleSideBar}
             >
@@ -109,7 +109,7 @@ const NavigationBar = () => {
           </li>
           <li>
             <a
-              href="/tracking"
+              href="/admin/tracking"
               className="block p-4 text-white hover:bg-red-400"
               onClick={toggleSideBar}
             >
@@ -118,7 +118,7 @@ const NavigationBar = () => {
           </li>
           <li>
             <a
-              href="/cargo-management"
+              href="/admin/cargo-management"
               className="block p-4 text-white hover:bg-red-400"
               onClick={toggleSideBar}
             >
@@ -127,7 +127,7 @@ const NavigationBar = () => {
           </li>
           <li>
             <a
-              href="/user-management"
+              href="/admin/user-management"
               className="block p-4 text-white hover:bg-red-400"
               onClick={toggleSideBar}
             >
@@ -136,7 +136,7 @@ const NavigationBar = () => {
           </li>
           <li>
             <a
-              href="/reports-analytics"
+              href="/admin/reports-analytics"
               className="block p-4 text-white hover:bg-red-400"
               onClick={toggleSideBar}
             >

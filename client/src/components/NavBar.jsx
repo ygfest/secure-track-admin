@@ -51,7 +51,7 @@ const NavBar = () => {
             <ul className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow bg-base-100 rounded-lg w-52">
               <li>
                 <Link
-                  to="/"
+                  to="/admin/"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -60,7 +60,7 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/tracking"
+                  to="/admin/tracking"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -69,7 +69,7 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/cargo-management"
+                  to="/admin/cargo-management"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -78,7 +78,7 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/user-management"
+                  to="/admin/user-management"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -87,7 +87,7 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/reports-analytics"
+                  to="/admin/reports-analytics"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -102,7 +102,7 @@ const NavBar = () => {
 
       <div className="navbar-center flex-1 justify-center">
         <Link
-          to="/"
+          to="/admin/"
           className="link btn btn-ghost text-xl no-underline text-red-500"
         >
           Cargo Live Tracking

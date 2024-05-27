@@ -1,31 +1,51 @@
 import { Route, Routes } from "react-router-dom";
-import MapComponent from "./components/MapComponent";
-import DashboardPage from "./components/DashboardPage";
-import CargoManagement from "./components/CargoManagement";
-import ResourceMgmtPage from "./components/ResourceMgmtPage";
-import UserManagement from "./components/UserManagement";
-import SettingsPage from "./components/SettingsPage";
-import AlertsNotificationsPage from "./components/AlertsNotificationsPage";
-import ReportsAnalyticsPage from "./components/ReportsAnalyticsPage";
-import HelpSupportPage from "./components/HelpSupportPage";
-import UserSide from "./components/UserSide";
+import MapComponent from "./pages-admin/MapComponent";
+import ADashBoard from "./pages-admin/DashBoard";
+import CargoManagement from "./pages-admin/CargoManagement";
+import UserManagement from "./pages-admin/UserManagement";
+import ReportsAnalyticsPage from "./pages-admin/ReportsAnalyticsPage";
+import UserDashboard from "./pages-user/DashBoard"; // Assuming you have a UserDashboard component
+import LuggageTracking from "./pages-user/LuggageTracking";
+import Profile from "./pages-user/Profile"; // Assuming you have a UserProfile component
+import AssocLuggage from "./pages-user/AssocLuggage";
+import SignInForm from "./components/SignIn";
+import SignUpForm from "./components/SignUp";
+import AdminSignIn from "./components/Admin-SignIn";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
+const AdminRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<ADashBoard />} />
+      <Route path="/tracking" element={<MapComponent />} />
+      <Route path="/cargo-management" element={<CargoManagement />} />
+      <Route path="/user-management" element={<UserManagement />} />
+      <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
+    </Routes>
+  );
+};
+
+const UserRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<UserDashboard />} />
+      <Route path="/tracking" element={<LuggageTracking />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/luggage" element={<AssocLuggage />} />
+      {/* Add other user-side routes as needed */}
+    </Routes>
+  );
+};
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<DashboardPage />} />
-      <Route path="/tracking" element={<MapComponent />} />
-      <Route path="/cargo-management" element={<CargoManagement />} />
-      <Route path="/resource-management" element={<ResourceMgmtPage />} />
-      <Route path="/user-management" element={<UserManagement />} />
-      <Route path="/settings" element={<SettingsPage />} />
-      <Route
-        path="/alerts-notifications"
-        element={<AlertsNotificationsPage />}
-      />
-      <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
-      <Route path="/help-support" element={<HelpSupportPage />} />
-      <Route path="/user-side" element={<UserSide />} />
+      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="/user/*" element={<UserRoutes />} />
+      <Route path="/sign-in" element={<SignInForm />} />
+      <Route path="/sign-up" element={<SignUpForm />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
 };
