@@ -22,16 +22,20 @@ const verifyUser = (req, res, next) => {
 
 router.get('/verify', verifyUser, async (req, res) => {
   try {
+     // Add this line for logging
     const user = await User.findOne({ email: req.user.email });
+    //console.log('Decoded user:', user);
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname } });
+    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname, userID: user._id } });
+    
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
   }
 });
+
 
 router.get('/users', async (req, res) => {
   try {

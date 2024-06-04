@@ -1,7 +1,9 @@
 const express = require('express');
 const Luggage = require('../models/Luggage');
+const User = require('../models/User')
 const FallDetectionLog = require('../models/FallDetectionLog');
 const TamperDetectionLog = require('../models/TamperDetectionLog');
+const TempLog = require('../models/TempLog')
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -14,21 +16,28 @@ const verifyUser = (req, res, next) => {
       return res.status(401).json({ status: false, message: "No token" });
     }
     const decoded = jwt.verify(token, process.env.KEY);
+    req.user = decoded;  // Set req.user with decoded token
     next();
   } catch (err) {
     return res.status(401).json({ status: false, message: "Invalid token" });
   }
 };
 
+
 // Verify user route
 router.get('/verify', verifyUser, async (req, res) => {
+  
   return res.json({ status: true, message: "Authorized" });
 });
 
-// Fetch luggage data route
-router.get('/luggage', async (req, res) => {
+// Fetch luggage data route for user side
+router.get('/luggage', verifyUser, async (req, res) => {
   try {
-    const luggage = await Luggage.find();
+    const user = await User.findOne({ email: req.user.email });
+    if (!user) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+    const luggage = await Luggage.find({ user_id: user._id });
     res.json(luggage);
   } catch (error) {
     console.error('Error fetching luggage data:', error);
@@ -36,10 +45,64 @@ router.get('/luggage', async (req, res) => {
   }
 });
 
-// Fetch fall detection logs route
-router.get('/fall-logs', async (req, res) => {
+//Fetch luggage data route for  admin side
+router.get('/luggage-admin', verifyUser, async(req, res) => {
   try {
-    const fallLogs = await FallDetectionLog.find();
+    const luggage = await Luggage.find();
+    if(!luggage){
+      return res.status(404).json({status: false, message: "Luggage not found"});
+    } 
+    res.json(luggage)
+  } catch (error) {
+    console.log('Error fetching luggage data:', error);
+    res.status(500).send("Server Error");
+  }
+})
+
+
+
+// Fetch fall detection logs route for admin
+router.get('/fall-logs1', verifyUser, async (req, res) => {
+  try {
+    const user = await User.findOne({email: req.user.email})
+    if(!user){
+      return res.status(404).json({status: false, message: "user not found"})
+    }
+    const luggageList = await Luggage.find({user_id: user._id})
+    if(luggageList.length === 0){
+      return res.status(404).json({status: false, message: "luggage not found"})
+    }
+    const fallLogs = [0];
+    for (const luggage of luggageList){
+      const logs = await FallDetectionLog.find({luggage_tag_number: luggage.luggage_tag_number})
+      fallLogs.push(...logs);
+    }
+    res.json(fallLogs);
+  } catch (error) {
+    console.error('Error fetching fall detection logs:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Fetch fall detection logs route for admin
+router.get('/fall-logs2', verifyUser, async (req, res) => {
+  try {
+    const user = await User.findOne({email: req.user.email})
+    if(!user){
+      return res.status(404).json({status: false, message: "user not found"})
+    }
+    const luggageList = await Luggage.find({user_id: user._id})
+    if(luggageList.length === 0){
+      return res.status(404).json({status: false, message: "luggage not found"})
+    }
+    const fallLogs = [];
+    for (const luggage of luggageList){
+      const logs = await FallDetectionLog.find({luggage_tag_number: luggage.luggage_tag_number}).lean();
+      logs.forEach(log => {
+        log.luggage_custom_name = luggage.luggage_custom_name;
+      })
+      fallLogs.push(...logs);
+    }
     res.json(fallLogs);
   } catch (error) {
     console.error('Error fetching fall detection logs:', error);
@@ -48,15 +111,82 @@ router.get('/fall-logs', async (req, res) => {
 });
 
 // Fetch tamper detection logs route
-router.get('/tamper-logs', async (req, res) => {
+router.get('/tamper-logs1', verifyUser, async (req, res) => {
   try {
-    const tamperLogs = await TamperDetectionLog.find();
-    res.json(tamperLogs);
+    const user = await User.findOne({email: req.user.email})
+    if(!user) {
+      return res.status(404).json({status: false, message: "User not found"})
+    }
+    const luggageList = await Luggage.find({user_id: user._id})
+    if(luggageList.length === 0){
+      return res.status(404).json({status: false, message: "Luggage not found"})
+    }
+    const tamperLogs = [];
+    for(const luggage of luggageList){
+      const logs = await TamperDetectionLog.find({luggage_tag_number: luggage.luggage_tag_number})
+      tamperLogs.push(...logs);
+    }
+    res.json(tamperLogs)
   } catch (error) {
     console.error('Error fetching tamper detection logs:', error);
     res.status(500).send('Server error');
   }
 });
+
+router.get('/tamper-logs2', verifyUser, async (req, res) => {
+  try {
+    const user = await User.findOne({email: req.user.email})
+    if(!user) {
+      return res.status(404).json({status: false, message: "User not found"})
+    }
+    const luggageList = await Luggage.find({user_id: user._id})
+    if(luggageList.length === 0){
+      return res.status(404).json({status: false, message: "Luggage not found"})
+    }
+    const tamperLogs = [];
+    for(const luggage of luggageList){
+      const logs = await TamperDetectionLog.find({luggage_tag_number: luggage.luggage_tag_number}).lean();
+      logs.forEach(log => {
+        log.luggage_custom_name = luggage.luggage_custom_name;
+      })
+      tamperLogs.push(...logs)
+    }
+    res.json(tamperLogs)
+  } catch (error) {
+    console.error('Error fetching tamper detection logs:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+//fetch temp logs
+// Fetch temp logs
+router.get('/temp-logs', verifyUser, async(req, res) => {
+  try {
+    const user = await User.findOne({email: req.user.email});
+    if(!user) {
+      return res.status(404).json({status: false, message: 'User not found'});
+    } 
+    const luggageList = await Luggage.find({user_id: user._id});
+    if(luggageList.length === 0){
+      return res.status(404).json({status: false, message: 'No luggage found'});
+    }
+    const tempLogs = [];
+    for(const luggage of luggageList){
+      const logs = await TempLog.find({luggage_tag_number: luggage.luggage_tag_number}).lean();
+      logs.forEach(log => {
+        log.luggage_custom_name = luggage.luggage_custom_name;
+      });
+      tempLogs.push(...logs);
+    }
+    // Ensure we send the response back
+    res.json(tempLogs);
+  } catch (error) {
+    console.error('Error fetching temperature logs:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
 
 // Add new luggage route
 router.post('/addluggage', verifyUser, async (req, res) => {
@@ -112,6 +242,7 @@ router.put('/updateluggage/:id', verifyUser, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
 
 // Delete luggage route
 router.delete('/deleteluggage/:id', verifyUser, async (req, res) => {

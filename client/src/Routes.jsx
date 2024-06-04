@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import MapComponent from "./pages-admin/MapComponent";
+import AdminLuggageTracking from "./pages-admin/AdminLuggageTracking";
 import ADashBoard from "./pages-admin/DashBoard";
 import CargoManagement from "./pages-admin/CargoManagement";
 import UserManagement from "./pages-admin/UserManagement";
@@ -10,7 +11,6 @@ import Profile from "./pages-user/Profile"; // Assuming you have a UserProfile c
 import AssocLuggage from "./pages-user/AssocLuggage";
 import SignInForm from "./components/SignIn";
 import SignUpForm from "./components/SignUp";
-import AdminSignIn from "./components/Admin-SignIn";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 
@@ -20,6 +20,7 @@ const AdminRoutes = () => {
       <Route path="/" element={<ADashBoard />} />
       <Route path="/tracking" element={<MapComponent />} />
       <Route path="/cargo-management" element={<CargoManagement />} />
+      <Route path="/livetracking" element={<AdminLuggageTracking />} />
       <Route path="/user-management" element={<UserManagement />} />
       <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
     </Routes>

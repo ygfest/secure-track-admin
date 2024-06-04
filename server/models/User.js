@@ -20,11 +20,15 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "user", // Default role is "user"
+    default: "user", 
   },
   loggedInAt: {
     type: Date,
-    default: Date.now // Default loggedInAt to current date and time
+    default: Date.now 
+  },
+  profile_dp: {
+    type: String, 
+    default: '', 
   }
 });
 

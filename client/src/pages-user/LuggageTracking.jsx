@@ -10,7 +10,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { Icon, divIcon } from "leaflet";
-import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 
 import hazardPinIcon from "../assets/aler-hazard.svg";
@@ -101,6 +101,8 @@ const LuggageTracking = () => {
   const [clicked, setClicked] = useState(false);
   const [luggageDeets, setLuggageDeets] = useState([]);
   const [usersData, setUsersData] = useState([]);
+  const [userId, setUserId] = useState();
+  const [showAddModal, setShowAddModal] = useState(false);
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
   const navigate = useNavigate();
@@ -115,6 +117,8 @@ const LuggageTracking = () => {
         const response = await axios.get("http://localhost:3000/auth/verify");
         if (!response.data.status) {
           navigate("/user/tracking");
+        } else {
+          setUserId(response.data.user.userID);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -133,7 +137,7 @@ const LuggageTracking = () => {
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}&format=json`
             );
-            const data = response.data;
+            const data = await response.json();
             return { ...luggageLoc, currentLocation: data.display_name };
           })
         );
@@ -175,9 +179,8 @@ const LuggageTracking = () => {
   useEffect(() => {
     const fetchUsersData = async () => {
       try {
-        const datas = await fetch("http://localhost:3000/auth/users");
-        const datasJSON = await datas.json();
-        setUsersData(datasJSON);
+        const datas = await axios.get("http://localhost:3000/auth/users");
+        setUsersData(datas.data);
       } catch (error) {
         console.error("Error fetching users data:", error);
       }
@@ -189,11 +192,10 @@ const LuggageTracking = () => {
   useEffect(() => {
     const fetchLuggageData = async () => {
       try {
-        const datas = await fetch(
+        const datas = await axios.get(
           "http://localhost:3000/luggage-router/luggage"
         );
-        const datasJSON = await datas.json();
-        setLuggageDeets(datasJSON);
+        setLuggageDeets(datas.data);
       } catch (error) {
         console.error("Error fetching luggage data:", error);
       }
@@ -229,6 +231,16 @@ const LuggageTracking = () => {
     }
   }, [selectedMarker, luggageDeets]);
 
+  useEffect(() => {
+    const formatStationarySince = (timestamp) => {
+      const date = new Date(timestamp);
+      const isToday = date.toDateString() === new Date().toDateString();
+      return isToday
+        ? `Since ${format(date, "p")}`
+        : `Since ${format(date, "p EEEE")}`;
+    };
+  }, [luggageDeets]);
+
   const formatStationarySince = (timestamp) => {
     const date = new Date(timestamp);
     const isToday = date.toDateString() === new Date().toDateString();
@@ -237,8 +249,19 @@ const LuggageTracking = () => {
       : `Since ${format(date, "p EEEE")}`;
   };
 
-  const findUserById = (userId) => {
-    return usersData.find((user) => user._id === userId);
+  const handleAddNewLuggage = async (newLuggage) => {
+    console.log("clicked");
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/luggage-router/addluggage",
+        newLuggage
+      );
+      setLuggageDeets([...luggageDeets, newLuggage]);
+      console.log("New Luggage Details: ", newLuggage);
+      setShowAddModal(false);
+    } catch (error) {
+      console.log("error adding luggage", error);
+    }
   };
 
   return (
@@ -249,10 +272,11 @@ const LuggageTracking = () => {
           center={[14.5092, 121.0144]}
           zoom={13}
           style={{ height: "100vh", width: "100%" }}
+          zoomControl={false}
         >
           <TileLayer
             attribution={`&copy; 
-            <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
+            <a href="https://www.openstreetmap.org/copyright" className="bg-black text-white">OpenStreetMap</a> 
             contributors`}
             url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
             //url="https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png"
@@ -276,12 +300,33 @@ const LuggageTracking = () => {
                 <Popup>
                   {usersData && luggage.user_id && (
                     <>
-                      {findUserById(luggage.user_id)?.lastname}'s luggage <br />
-                      Tracking Number: {luggage.luggage_tag_number} <br />
-                      Location: {luggage.currentLocation} <br />
-                      Destination: {luggage.destination}
+                      <span className="text-lg font-bold font-poppins">
+                        {luggage.luggage_custom_name}
+                      </span>
                       <br />
-                      Status: {luggage.status}
+                      <span className="font-poppins">
+                        Tracking Number: {luggage.luggage_tag_number}
+                      </span>{" "}
+                      <br />
+                      <span className="font-poppins">
+                        Location: {luggage.currentLocation}
+                      </span>{" "}
+                      <br />
+                      <span className="font-poppins">
+                        Destination: {luggage.destination}{" "}
+                      </span>
+                      <br />
+                      <span
+                        className={`font-poppins ${
+                          luggage.status === "In Range"
+                            ? "text-green-500"
+                            : luggage.status === "Out of Range"
+                            ? "text-yellow-500"
+                            : "text-red-500"
+                        }`}
+                      >
+                        Status: {luggage.status}
+                      </span>
                     </>
                   )}
                 </Popup>
@@ -296,9 +341,9 @@ const LuggageTracking = () => {
           </MarkerClusterGroup>
           <div
             onClick={() => setClicked((prevClick) => !prevClick)}
-            className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl md:right-2 transition-all duration-500 text-white ${
+            className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
               clicked ? "bottom-0" : "bottom-[-65%]"
-            } bg-[#1e1e1ea0] backdrop-blur-xl h-[85%] md:max-h-[24rem] max-h-auto cursor-pointer`}
+            } bg-[#020202a0] backdrop-blur-xl h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer`}
             style={{ zIndex: 1000 }}
           >
             <div className="block md:hidden mx-auto my-2">
@@ -309,7 +354,7 @@ const LuggageTracking = () => {
                 Luggage Details
               </h2>
             </div>
-            <div className="card-body overflow-y-auto h-full pt-2">
+            <div className="card-body overflow-y-auto h-full pt-2 gap-3">
               {luggageDeets.map((luggageDeet, index) => (
                 <div
                   key={luggageDeet._id}
@@ -318,26 +363,23 @@ const LuggageTracking = () => {
                     luggageDeet === selectedMarker
                       ? "border-2 border-white scale-105"
                       : ""
-                  } hover:scale-105 transition rounded-[7px] flex flex-col gap-2 cursor-pointer`}
+                  } hover:scale-105 transition rounded-[7px] flex flex-col gap-1 cursor-pointer`}
                   onClick={() => handleMarkerClick(luggageDeet, index)}
                 >
                   <div className="flex items-center justify-between">
-                    <h4 className="text-base">
-                      {`${findUserById(luggageDeet.user_id)?.firstname} ${
-                        findUserById(luggageDeet.user_id)?.lastname
-                      }`}
-                      's luggage
+                    <h4 className=" text-lg font-poppins font-semibold max-w-[20px]:">
+                      {luggageDeet.luggage_custom_name}
                     </h4>
-                    <div className="badge badge-primary text-white text-xs rounded-none">
+                    <div className="badge badge-primary badge-lg  text-white text-xs rounded-none font-poppins">
                       <RelativeTime shipmentDate={luggageDeet.timestamp} />
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <h4 className="text-base">
+                    <h4 className="text-base font-poppins text-[#ffffff8b] font-medium">
                       {luggageDeet.luggage_tag_number}
                     </h4>
                     <div
-                      className={`badge badge-outline text-xs ${
+                      className={`badge badge-outline text-xs font-poppins ${
                         luggageDeet.status === "In Range"
                           ? "text-green-200"
                           : luggageDeet.status === "Out of Range"
@@ -348,17 +390,104 @@ const LuggageTracking = () => {
                       {luggageDeet.status}
                     </div>
                   </div>
-                  <p className="text-xs">At {luggageDeet.currentLocation}</p>
-                  <p className="text-xs">
+                  <p className="text-xs text-[#ffffff8b]">
+                    At {luggageDeet.currentLocation}
+                  </p>
+                  <p className="text-xs text-[#ffffff8b]">
                     {formatStationarySince(luggageDeet.stationary_since)}
                   </p>
-                  <p className="text-xs">
+                  <p className="text-xs text-[#ffffff8b]">
                     Destination: {luggageDeet.destination}
                   </p>
                 </div>
               ))}
+              <div
+                onClick={() => setShowAddModal(true)}
+                className="p-4 bg-[#403e3ea3] hover:scale-105 transition rounded-[7px] flex flex-col gap-1 cursor-pointer text-center text white"
+              >
+                <FaPlusCircle className="text-2xl mx-auto " />
+                <p>Add a new Luggage</p>
+              </div>
             </div>
           </div>
+
+          {showAddModal && (
+            <div
+              className="fixed inset-0 flex items-center justify-center z-8000 bg-black bg-opacity-50"
+              style={{ zIndex: 1000 }}
+            >
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-semibold mb-4">Add New Luggage</h3>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleAddNewLuggage({
+                      luggage_custom_name: e.target.luggage_custom_name.value,
+                      luggage_tag_number: e.target.luggage_tag_number.value,
+                      destination: e.target.destination.value,
+                      user_id: userId,
+                    });
+                    window.location.reload();
+                  }}
+                >
+                  <div className="form-control mb-4">
+                    <label className="label">Luggage Name</label>
+                    <input
+                      name="luggage_custom_name"
+                      type="text"
+                      className="input input-bordered"
+                      required
+                    />
+                  </div>
+                  <div className="form-control mb-4">
+                    <label className="label">Tag Number</label>
+                    <input
+                      name="luggage_tag_number"
+                      type="text"
+                      className="input input-bordered"
+                      placeholder="Number provided on the tracking device"
+                      required
+                    />
+                  </div>
+                  <div className="form-control mb-4">
+                    <label className="label">Destination</label>
+                    <input
+                      name="destination"
+                      type="text"
+                      className="input input-bordered"
+                      required
+                    />
+                  </div>
+                  <div className="form-control mt-6">
+                    <button type="submit" className="btn btn-primary">
+                      Add Luggage
+                    </button>
+                  </div>
+                </form>
+                <div
+                  //tabIndex={0}
+                  role="button"
+                  className="absolute top-0 right-0 m-2 p-2 text-[#3B3F3F] hover:bg-gray-200 rounded-3xl"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
         </MapContainer>
       </div>
     </>

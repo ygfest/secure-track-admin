@@ -10,10 +10,11 @@ const UserComboBox = ({ options, onChange, value }) => {
       >
         {options.map((luggageOption) => (
           <option
+            className="hover:bg-green-300"
             key={luggageOption._id}
-            value={luggageOption.luggage_tag_number}
+            value={luggageOption.luggage_custom_name}
           >
-            {luggageOption.luggage_tag_number}
+            {luggageOption.luggage_custom_name}
           </option>
         ))}
       </select>

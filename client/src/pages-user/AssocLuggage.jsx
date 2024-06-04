@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LuggageIcon from "../assets/green_marker.png";
 
 const AssocLuggage = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [usersData, setUsersData] = useState([]);
+  const [userId, setUserId] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,12 +22,16 @@ const AssocLuggage = () => {
     Axios.defaults.withCredentials = true;
   }, []);
 
+  console.log(userId);
+
   useEffect(() => {
     const verifyToken = async () => {
       try {
         const response = await Axios.get("http://localhost:3000/auth/verify");
-        if (response.data.status) {
+        if (!response.data.status) {
           navigate("/user/luggage");
+        } else {
+          setUserId(response.data.user.userID);
         }
       } catch (err) {
         console.log("error verifying token");
@@ -38,9 +44,8 @@ const AssocLuggage = () => {
   useEffect(() => {
     async function fetchUsersData() {
       try {
-        const data = await fetch("http://localhost:3000/auth/users");
-        const dataJson = await data.json();
-        setUsersData(dataJson);
+        const data = await Axios.get("http://localhost:3000/auth/users");
+        setUsersData(data.data);
       } catch (error) {
         console.log("error fetching user data", error);
       }
@@ -52,13 +57,12 @@ const AssocLuggage = () => {
   useEffect(() => {
     async function fetchLuggageInfo() {
       try {
-        const response = await fetch(
+        const response = await Axios.get(
           "http://localhost:3000/luggage-router/luggage"
         );
-        const responseJson = await response.json();
-        setLuggageInfo(responseJson);
-        setFilteredData(responseJson); // Initially set filtered data to all luggage info
-        setTotalItems(responseJson.length); // Initially set total items count
+        setLuggageInfo(response.data);
+        setFilteredData(response.data);
+        setTotalItems(response.data.length);
       } catch (error) {
         console.log("error fetching luggage info", error);
       }
@@ -156,11 +160,11 @@ const AssocLuggage = () => {
     </div>
   );
 
-  const itemsPerPage = 6; // Set items per page
-  const totalItemsCount = filteredData.length; // Total filtered items count
+  const itemsPerPage = 6;
+  const totalItemsCount = filteredData.length;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItemsCount); // Ensure endIndex doesn't exceed totalItemsCount
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItemsCount);
 
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
@@ -236,7 +240,7 @@ const AssocLuggage = () => {
                           <div className="flex-shrink-0 h-10 w-10">
                             <img
                               className="h-10 w-10 rounded-full"
-                              src="https://img.daisyui.com/tailwind-css-component-profile-2@56w.png"
+                              src={LuggageIcon}
                               alt="Luggage"
                             />
                           </div>
@@ -322,7 +326,7 @@ const AssocLuggage = () => {
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
                   destination: e.target.destination.value,
-                  user_id: e.target.user_id.value,
+                  user_id: userId,
                 });
                 setShowAddModal(false);
               }}
@@ -354,20 +358,6 @@ const AssocLuggage = () => {
                   required
                 />
               </div>
-              <div className="form-control mb-4">
-                <label className="label">User</label>
-                <select
-                  name="user_id"
-                  className="select select-bordered"
-                  required
-                >
-                  {usersData.map((user) => (
-                    <option key={user._id} value={user._id}>
-                      {user.firstname} {user.lastname}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
                   Add
@@ -398,7 +388,7 @@ const AssocLuggage = () => {
                   luggage_tag_number: e.target.luggage_tag_number.value,
                   destination: e.target.destination.value,
                   status: e.target.status.value,
-                  user_id: e.target.user_id.value,
+                  user_id: userId,
                 });
                 setShowUpdateModal(false);
               }}
@@ -442,21 +432,6 @@ const AssocLuggage = () => {
                   defaultValue={currentLuggage.status}
                   required
                 />
-              </div>
-              <div className="form-control mb-4">
-                <label className="label">User</label>
-                <select
-                  name="user_id"
-                  className="select select-bordered"
-                  defaultValue={currentLuggage.user_id}
-                  required
-                >
-                  {usersData.map((user) => (
-                    <option key={user._id} value={user._id}>
-                      {user.firstname} {user.lastname}
-                    </option>
-                  ))}
-                </select>
               </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">

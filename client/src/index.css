@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* Import Poppins font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-/* App.css */
+/* Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,17 +14,16 @@
 }
 
 /* Ensure the root element fills the entire viewport */
-#root {
-  //min-width: 452px;
-  background-color: #f2f5f8;
-
-  font-family: poppins;
-}
-
 html,
 body,
 #root {
+  //background-color: #f2f5f8;
+  font-family: "Poppins", sans-serif; /* Ensure correct font family name and quotes */
   background-color: #f2f5f8;
+}
+
+p {
+  font-family: "Poppins", sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -39,10 +39,4 @@ body,
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(232, 231, 231, 0.29);
-}
-
- {
-  /*body::-webkit-scrollbar {
-  display: none;
-}*/
 }
