@@ -77,8 +77,15 @@ router.post('/signup', async (req, res) => {
     // Log the token to the console
     console.log("Generated Token (Signup):", token);
 
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000, // 60 minutes
+      sameSite: 'None', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
+    });
+    
     // Set the JWT token in a cookie with a maxAge of 60 minutes
-    res.cookie('token', token, { httpOnly: true, maxAge: 60 * 60 * 1000 }); // 60 minutes in milliseconds
+   
 
     return res.status(201).json({ message: "User registered successfully", token });
   } catch (error) {
@@ -139,6 +146,7 @@ router.post('/forgot-password', async (req, res) => {
         pass: 'okzt xvlg gdqu jqsa'
       }
     });
+
 
     var mailOptions = {
       from: 'stefanosanesteban1018@gmail.com',
