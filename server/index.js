@@ -13,7 +13,7 @@ const router = express.Router();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173", "https://vercel.com/ygfests-projects/secure-track-wa"],
+    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app"],
     credentials: true,
 }));
 app.use(cookieParser());
