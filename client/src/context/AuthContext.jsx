@@ -30,7 +30,8 @@ export const AuthContextProvider = ({ children }) => {
       return false;
     }
     try {
-      const response = await axios.get("http://localhost:3000/auth/verify", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.get(`${apiUrl}/auth/verify`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
