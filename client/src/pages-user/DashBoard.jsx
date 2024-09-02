@@ -55,8 +55,8 @@ const DashBoard = () => {
 
   useEffect(() => {
     const verifyToken = async () => {
-      const apiUrl = import.meta.env.VITE_API_URL;
       try {
+        const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/verify`);
         console.log("Verify token response:", response.data);
         if (!response.data.status) {
