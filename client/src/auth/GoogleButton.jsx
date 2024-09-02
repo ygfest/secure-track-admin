@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import googleLogo from "../assets/google.svg"; // Update the path to your Google logo image
 import "../index.css";
 
-const GOOGLE_CLIENT_ID =
-  "461824777742-po2apkad4t1enlpt0okjco80h84dhobs.apps.googleusercontent.com"; // Replace with your Google client ID
+// Replace with your Google client ID
 
 export default function GoogleButton() {
   const [isSigningIn, setIsSigningIn] = useState(false);
 
   const handleGoogleSignIn = () => {
     setIsSigningIn(true);
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${window.location.origin}/auth/callback&response_type=token&scope=openid%20email%20profile`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${window.location.origin}/auth/callback&response_type=token&scope=openid%20email%20profile`;
 
     window.location.href = authUrl;
   };
