@@ -11,6 +11,8 @@ const LuggageRouter = require('./routes/luggage');
 const app = express();
 const router = express.Router();
 
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app"],

@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 
 const router = express.Router();
 
+
 const verifyUser = (req, res, next) => {
   try {
     const token = req.cookies.token;
@@ -120,7 +121,12 @@ router.post('/signin', async (req, res) => {
     console.log("Generated Token (Signin):", token);
 
     // Set the JWT token in a cookie with a maxAge of 60 minutes
-    res.cookie('token', token, { httpOnly: true, maxAge: 60 * 60 * 1000 }); // 60 minutes in milliseconds
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000, // 60 minutes
+      sameSite: 'None', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
+    }); // 60 minutes in milliseconds
 
     return res.json({ status: true, message: "Login successful", token });
   } catch (error) {
