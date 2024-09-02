@@ -55,8 +55,9 @@ const DashBoard = () => {
 
   useEffect(() => {
     const verifyToken = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL;
       try {
-        const response = await axios.get("http://localhost:3000/auth/verify");
+        const response = await axios.get(`${apiUrl}/auth/verify`);
         console.log("Verify token response:", response.data);
         if (!response.data.status) {
           navigate("/user/");
@@ -77,9 +78,8 @@ const DashBoard = () => {
   useEffect(() => {
     async function fetchFallData() {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/luggage-router/fall-logs2"
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/luggage-router/fall-logs2`);
         setFallDetectData(response.data);
       } catch (error) {
         console.log("Error fetching fall data");
@@ -99,8 +99,9 @@ const DashBoard = () => {
   useEffect(() => {
     async function fetchTamperLogs() {
       try {
+        const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(
-          "http://localhost:3000/luggage-router/tamper-logs2"
+          `${apiUrl}/luggage-router/tamper-logs2`
         );
         setTamperData(response.data);
       } catch (error) {
@@ -120,9 +121,8 @@ const DashBoard = () => {
   useEffect(() => {
     async function fetchTempLogs() {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/luggage-router/temp-logs"
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/luggage-router/temp-logs`);
         setTempData(response.data);
       } catch (error) {
         console.log("Error fetching temp logs", error);
@@ -163,9 +163,8 @@ const DashBoard = () => {
   useEffect(() => {
     async function fetchLuggageInfo() {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/luggage-router/luggage"
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/luggage-router/luggage`);
         setLuggageInfo([
           { luggage_custom_name: "All", luggage_name: "All" },
           ...response.data,

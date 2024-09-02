@@ -65,7 +65,8 @@ export default function SignUp() {
     setIsPending(true);
 
     try {
-      const response = await Axios.post("http://localhost:3000/auth/signup", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.post(`${apiUrl}/auth/signup`, {
         ...formData,
       });
 

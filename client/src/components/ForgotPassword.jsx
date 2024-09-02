@@ -38,12 +38,10 @@ const ForgotPassword = () => {
     setIsSigningIn(true);
     try {
       const { email } = formData;
-      const response = await Axios.post(
-        "http://localhost:3000/auth/forgot-password",
-        {
-          email,
-        }
-      );
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const response = await Axios.post(`${apiUrl}/auth/forgot-password`, {
+        email,
+      });
 
       if (response.data.status) {
         setIsSigningIn(false);

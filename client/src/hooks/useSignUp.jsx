@@ -7,10 +7,8 @@ export const useSignup = () => {
 
   const signup = async (formData) => {
     try {
-      const response = await Axios.post(
-        "http://localhost:3000/auth/signup",
-        formData
-      );
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.post(`${apiUrl}/auth/signup`, formData);
       const { email, token } = response.data;
       const user = { email, token };
       localStorage.setItem("user", JSON.stringify(user));

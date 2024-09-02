@@ -107,9 +107,10 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
     ));
   };
 
+  const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
     axios
-      .get("http://localhost:3000/auth/logout")
+      .get(`${apiUrl}/auth/logout`)
       .then((res) => {
         if (res.data.status) {
           navigate("/sign-in");

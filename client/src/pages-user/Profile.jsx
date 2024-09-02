@@ -24,7 +24,8 @@ const Profile = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/auth/verify");
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.get(`${apiUrl}/auth/verify`);
         if (!response.data.status) {
           navigate("/sign-in");
         } else {
@@ -38,7 +39,8 @@ const Profile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/user/profile");
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.get(`${apiUrl}/user/profile`);
         setUserProfile(response.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -62,7 +64,8 @@ const Profile = () => {
     }
 
     try {
-      await Axios.put("http://localhost:3000/user/profile", formData, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      await Axios.put(`${apiUrl}/user/profile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

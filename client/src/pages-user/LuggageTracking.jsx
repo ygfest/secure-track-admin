@@ -115,7 +115,8 @@ const LuggageTracking = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/auth/verify");
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/auth/verify`);
         if (!response.data.status) {
           navigate("/user/tracking");
         } else {
@@ -201,7 +202,8 @@ const LuggageTracking = () => {
   useEffect(() => {
     const fetchUsersData = async () => {
       try {
-        const datas = await axios.get("http://localhost:3000/auth/users");
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const datas = await axios.get(`${apiUrl}/auth/users`);
         setUsersData(datas.data);
       } catch (error) {
         console.error("Error fetching users data:", error);
@@ -214,9 +216,8 @@ const LuggageTracking = () => {
   useEffect(() => {
     const fetchLuggageData = async () => {
       try {
-        const datas = await axios.get(
-          "http://localhost:3000/luggage-router/luggage"
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
         setLuggageDeets(datas.data);
       } catch (error) {
         console.error("Error fetching luggage data:", error);
@@ -274,8 +275,9 @@ const LuggageTracking = () => {
   const handleAddNewLuggage = async (newLuggage) => {
     console.log("clicked");
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await axios.post(
-        "http://localhost:3000/luggage-router/addluggage",
+        `${apiUrl}/luggage-router/addluggage`,
         newLuggage
       );
       setLuggageDeets([...luggageDeets, newLuggage]);

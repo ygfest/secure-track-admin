@@ -13,7 +13,7 @@ const router = express.Router();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://vercel.com/ygfests-projects/secure-track-wapp"],
     credentials: true,
 }));
 app.use(cookieParser());

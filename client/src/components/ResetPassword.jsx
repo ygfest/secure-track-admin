@@ -61,13 +61,11 @@ const ResetPassword = () => {
     setIsPending(true);
     try {
       const { password } = formData;
-      const response = await Axios.post(
-        "http://localhost:3000/auth/reset-password",
-        {
-          password,
-          token, // Pass the token in the request body
-        }
-      );
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const response = await Axios.post(`${apiUrl}/auth/reset-password`, {
+        password,
+        token, // Pass the token in the request body
+      });
 
       if (response.data.status) {
         setIsPending(false);

@@ -48,7 +48,8 @@ export default function SignInForm() {
     setIsSigningIn(true);
     try {
       const { email, password } = formData;
-      const response = await Axios.post("http://localhost:3000/auth/signin", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.post(`${apiUrl}/auth/signin`, {
         email,
         password,
       });

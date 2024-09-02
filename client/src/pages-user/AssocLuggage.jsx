@@ -27,7 +27,8 @@ const AssocLuggage = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/auth/verify");
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.get(`${apiUrl}/auth/verify`);
         if (!response.data.status) {
           navigate("/user/luggage");
         } else {
@@ -44,7 +45,8 @@ const AssocLuggage = () => {
   useEffect(() => {
     async function fetchUsersData() {
       try {
-        const data = await Axios.get("http://localhost:3000/auth/users");
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const data = await Axios.get(`${apiUrl}/auth/users`);
         setUsersData(data.data);
       } catch (error) {
         console.log("error fetching user data", error);
@@ -57,9 +59,8 @@ const AssocLuggage = () => {
   useEffect(() => {
     async function fetchLuggageInfo() {
       try {
-        const response = await Axios.get(
-          "http://localhost:3000/luggage-router/luggage"
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.get(`${apiUrl}/luggage-router/luggage`);
         setLuggageInfo(response.data);
         setFilteredData(response.data);
         setTotalItems(response.data.length);
@@ -131,8 +132,9 @@ const AssocLuggage = () => {
 
   const handleAddNew = async (luggageData) => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.post(
-        "http://localhost:3000/luggage-router/addluggage",
+        `${apiUrl}/luggage-router/addluggage`,
         luggageData
       );
       setLuggageInfo([...luggageInfo, response.data]);
@@ -146,8 +148,9 @@ const AssocLuggage = () => {
   console.log(luggageInfo.user_id);
   const handleUpdateLuggage = async (luggageData) => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
-        `http://localhost:3000/luggage-router/updateluggage/${luggageData._id}`,
+        `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
         luggageData
       );
       const updatedLuggageInfo = luggageInfo.map((item) =>
@@ -162,9 +165,8 @@ const AssocLuggage = () => {
 
   const handleDeleteLuggage = async (luggageId) => {
     try {
-      await Axios.delete(
-        `http://localhost:3000/luggage-router/deleteluggage/${luggageId}`
-      );
+      const apiUrl = import.meta.env.VITE_API_URL;
+      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${luggageId}`);
       const updatedLuggageInfo = luggageInfo.filter(
         (item) => item._id !== luggageId
       );
