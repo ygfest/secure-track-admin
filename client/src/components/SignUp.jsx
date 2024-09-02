@@ -66,9 +66,11 @@ export default function SignUp() {
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.post(`${apiUrl}/auth/signup`, {
-        ...formData,
-      });
+      const response = await Axios.post(
+        `${apiUrl}/auth/signup`,
+        { ...formData },
+        { withCredentials: true } // Ensure credentials (cookies) are included
+      );
 
       if (response.data.status) {
         setIsPending(false);

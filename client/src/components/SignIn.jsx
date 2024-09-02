@@ -49,11 +49,11 @@ export default function SignInForm() {
     try {
       const { email, password } = formData;
       const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.post(`${apiUrl}/auth/signin`, {
-        email,
-        password,
-      });
-
+      const response = await Axios.post(
+        `${apiUrl}/auth/signin`,
+        { email, password },
+        { withCredentials: true } // Ensure credentials (cookies) are included
+      );
       if (response.data.status) {
         setIsSigningIn(false);
         navigate("/user/");
