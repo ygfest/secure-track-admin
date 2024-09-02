@@ -15,12 +15,12 @@ const LuggageSchema = new Schema({
     latitude: { 
         type: Number, 
         required: true, 
-        default: 14.5213 
+        default: 14.5268427
     },
     longitude: { 
         type: Number, 
         required: true, 
-        default: 121.0137 
+        default: 121.0235876
     },
     timestamp: { 
         type: Date, 

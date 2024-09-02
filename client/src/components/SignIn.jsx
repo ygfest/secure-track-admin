@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import GoogleButton from "../auth/GoogleButton";
@@ -19,8 +19,6 @@ export default function SignInForm() {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  console.log(sessionExpired);
 
   const validate = () => {
     const newErrors = {};
@@ -67,7 +65,6 @@ export default function SignInForm() {
       if (error.response) {
         setErrors({ server: error.response.data.message });
         if (error.response.status === 401) {
-          // Assuming 401 is the status code for token expiration
           setSessionExpired(true);
         }
       } else if (error.request) {
@@ -86,7 +83,7 @@ export default function SignInForm() {
       {sessionExpired && (
         <TokenExpirationAlert onOkClick={() => setSessionExpired(false)} />
       )}
-      <div className="flex items-center justify-center min-h-screen ">
+      <div className="flex items-center justify-center min-h-screen">
         <form
           onSubmit={handleSubmit}
           className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-4"
@@ -169,7 +166,7 @@ export default function SignInForm() {
 
           <p className="text-center text-sm">
             Don't have an account?{" "}
-            <Link to="/sign-up" className="text-primary-500">
+            <Link to="/sign-up" className="text-primary-500 text-green-500">
               Sign up
             </Link>
           </p>

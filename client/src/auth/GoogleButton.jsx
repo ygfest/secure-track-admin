@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import googleLogo from "../assets/google.svg"; // Update the path to your Google logo image
 import "../index.css";
 
-const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"; // Replace with your Google client ID
+const GOOGLE_CLIENT_ID =
+  "461824777742-po2apkad4t1enlpt0okjco80h84dhobs.apps.googleusercontent.com"; // Replace with your Google client ID
 
 export default function GoogleButton() {
   const [isSigningIn, setIsSigningIn] = useState(false);

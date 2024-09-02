@@ -70,6 +70,41 @@ const AssocLuggage = () => {
     fetchLuggageInfo();
   }, []);
 
+  useEffect(() => {
+    const fetchCurrentLocations = async () => {
+      try {
+        const updatedLuggageDeets = await Promise.all(
+          luggageInfo.map(async (luggageLoc) => {
+            const response = await fetch(
+              `https://photon.komoot.io/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}`
+            );
+            if (response.ok) {
+              const data = await response.json();
+              if (data && data.features && data.features.length > 0) {
+                const properties = data.features[0].properties;
+                const locationName = `${properties.name}, ${properties.city} City`;
+                return { ...luggageLoc, currentLocation: locationName };
+              } else {
+                return { ...luggageLoc, currentLocation: "Unknown Location" };
+              }
+            } else {
+              console.error("Error fetching location:", response.status);
+              return { ...luggageLoc, currentLocation: "Unknown Location" };
+            }
+          })
+        );
+        setLuggageInfo(updatedLuggageDeets);
+        setFilteredData(updatedLuggageDeets);
+      } catch (error) {
+        console.error("Error fetching locations: ", error);
+      }
+    };
+
+    if (luggageInfo.length > 0) {
+      fetchCurrentLocations();
+    }
+  }, [luggageInfo]);
+
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
@@ -169,7 +204,7 @@ const AssocLuggage = () => {
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
   return (
-    <>
+    <div className="h-[100vh]">
       <NavigationBar />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-between mb-5">
@@ -263,7 +298,9 @@ const AssocLuggage = () => {
                           Owner
                         </span>
                       </td>
-                      <td className="py-3 px-6 text-left">Location here</td>
+                      <td className="py-3 px-6 text-left">
+                        {luggage.currentLocation}
+                      </td>
                       <td className="py-3 px-6 text-left">
                         {luggage.destination}
                       </td>
@@ -472,7 +509,7 @@ const AssocLuggage = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -12,6 +12,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { Icon, divIcon } from "leaflet";
 import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
+import debounce from "lodash.debounce"; // Ensure lodash.debounce is installed
 
 import hazardPinIcon from "../assets/aler-hazard.svg";
 import cargoIcon from "../assets/cargo.png";
@@ -135,10 +136,21 @@ const LuggageTracking = () => {
         const updatedLuggageDeets = await Promise.all(
           luggageDeets.map(async (luggageLoc) => {
             const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}&format=json`
+              `https://photon.komoot.io/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}`
             );
-            const data = await response.json();
-            return { ...luggageLoc, currentLocation: data.display_name };
+            if (response.ok) {
+              const data = await response.json();
+              if (data && data.features && data.features.length > 0) {
+                const properties = data.features[0].properties;
+                const locationName = `${properties.name}, ${properties.city}, ${properties.state}, ${properties.country}`;
+                return { ...luggageLoc, currentLocation: locationName };
+              } else {
+                return { ...luggageLoc, currentLocation: "Unknown Location" };
+              }
+            } else {
+              console.error("Error fetching location:", response.status);
+              return { ...luggageLoc, currentLocation: "Unknown Location" };
+            }
           })
         );
         setLuggageDeets(updatedLuggageDeets);
@@ -147,7 +159,17 @@ const LuggageTracking = () => {
       }
     };
 
-    fetchCurrentLocations();
+    // Debounce the API call to reduce stuttering
+    const debouncedFetchCurrentLocations = debounce(
+      fetchCurrentLocations,
+      9000
+    );
+    debouncedFetchCurrentLocations();
+
+    // Cleanup debounce on unmount
+    return () => {
+      debouncedFetchCurrentLocations.cancel();
+    };
   }, [luggageDeets]);
 
   const handleLocateUser = (map) => {
@@ -417,7 +439,9 @@ const LuggageTracking = () => {
               style={{ zIndex: 1000 }}
             >
               <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold mb-4">Add New Luggage</h3>
+                <h3 className="text-xl font-semibold font-poppins mb-4">
+                  Add New Luggage
+                </h3>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -431,7 +455,7 @@ const LuggageTracking = () => {
                   }}
                 >
                   <div className="form-control mb-4">
-                    <label className="label">Luggage Name</label>
+                    <label className="label font-poppins">Luggage Name</label>
                     <input
                       name="luggage_custom_name"
                       type="text"
@@ -440,17 +464,17 @@ const LuggageTracking = () => {
                     />
                   </div>
                   <div className="form-control mb-4">
-                    <label className="label">Tag Number</label>
+                    <label className="label font-poppins">Tag Number</label>
                     <input
                       name="luggage_tag_number"
                       type="text"
-                      className="input input-bordered"
-                      placeholder="Number provided on the tracking device"
+                      className="input input-bordered font-poppins"
+                      placeholder="You can see it in the tag"
                       required
                     />
                   </div>
                   <div className="form-control mb-4">
-                    <label className="label">Destination</label>
+                    <label className="label font-poppins">Destination</label>
                     <input
                       name="destination"
                       type="text"
@@ -459,13 +483,16 @@ const LuggageTracking = () => {
                     />
                   </div>
                   <div className="form-control mt-6">
-                    <button type="submit" className="btn btn-primary">
+                    <button
+                      type="submit"
+                      className="btn btn-primary font-poppins"
+                    >
                       Add Luggage
                     </button>
                   </div>
                 </form>
                 <div
-                  //tabIndex={0}
+                  tabIndex={0}
                   role="button"
                   className="absolute top-0 right-0 m-2 p-2 text-[#3B3F3F] hover:bg-gray-200 rounded-3xl"
                   onClick={() => setShowAddModal(false)}

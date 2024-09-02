@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 dotenv.config();
 const UserRouter = require('./routes/user');
-const LuggageRouter = require('./routes/luggage')  
+const LuggageRouter = require('./routes/luggage');
 
 const app = express();
 const router = express.Router();
@@ -18,24 +18,39 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use('/auth', UserRouter);  // Use UserRouter middleware
-app.use('/luggage-router', LuggageRouter)
+app.use('/luggage-router', LuggageRouter);
 
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/secure_track_db')
+// Enable Mongoose debug mode
+mongoose.set('debug', true);
+
+// MongoDB Atlas connection using Mongoose
+mongoose.connect(process.env.MONGO_STRING, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    connectTimeoutMS: 10000 // 10 seconds timeout
+})
     .then(() => {
-        console.log('Connected to MongoDB');
-    }).catch(err => {
-        console.error('Error connecting to MongoDB:', err);
+        console.log('Successfully connected to MongoDB Atlas');
+    })
+    .catch(err => {
+        console.error('Error connecting to MongoDB Atlas:', err.message);
     });
 
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose connected to MongoDB Atlas');
+});
 
+mongoose.connection.on('error', (err) => {
+    console.error('Mongoose connection error:', err);
+});
 
+mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected');
+});
 
-
-
-
-// MySQL connection
-{/*const connection = mysql.createConnection({
+// Uncomment and update this block for MySQL connection if needed
+/*
+const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
@@ -60,61 +75,24 @@ router.get('/strack', (req, res) => {
         res.json(results);
     });
 });
+*/
 
-{/*router.get('/users', (req, res) => {
-    connection.query('SELECT * FROM users_tbl', (error, results, fields) => {
-        if (error) {
-            console.error('Error executing query:', error);
-            res.status(500).send('Server error');
-            return;
-        }
-        res.json(results);
-    });
-});*/}
+// Additional Debugging for MongoClient Connection (if used)
+const { MongoClient } = require("mongodb");
+const client = new MongoClient(process.env.MONGO_STRING);
 
-{/*router.get('/luggage', (req, res) => {
-    connection.query('SELECT * FROM luggage_tbl', (error, results, fields) => {
-        if (error) {
-            console.error('Error executing query:', error);
-            res.status(500).send('Server error');
-            return;
-        }
-        res.json(results);
-    });
-});
+async function run() {
+    try {
+        await client.connect();
+        console.log("Successfully connected to Atlas using MongoClient");
+    } catch (err) {
+        console.error("MongoClient connection error:", err);
+    } finally {
+        await client.close();
+    }
+}
 
-router.get('/luggage-fall', (req, res) => {
-    connection.query('SELECT * FROM fall_detection_tbl', (error, results, fields) => {
-        if (error) {
-            console.error('Error executing query:', error);
-            res.status(500).send('Server error');
-            return;
-        }
-        res.json(results);
-    });
-});
-
-router.get('/luggage-intrusion', (req, res) => {
-    connection.query('SELECT * FROM intrusion_detection_tbl', (error, results, fields) => {
-        if (error) {
-            console.error('Error executing query:', error);
-            res.status(500).send('Server error');
-            return;
-        }
-        res.json(results);
-    });
-});
-
-router.get('/luggage-temp', (req, res) => {
-    connection.query('SELECT * FROM temperature_log_tbl', (error, results, fields) => {
-        if (error) {
-            console.error('Error executing query:', error);
-            res.status(500).send('Server error');
-            return;
-        }
-        res.json(results);
-    });
-});*/}
+run().catch(console.dir);
 
 app.use('/', router);
 
@@ -123,3 +101,4 @@ const port = process.env.PORT || 3001;  // Change to a different port if needed,
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
