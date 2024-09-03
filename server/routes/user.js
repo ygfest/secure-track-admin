@@ -83,6 +83,7 @@ router.post('/signup', async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
+      domain: 'abc.vercel.app'
     });
     
     // Set the JWT token in a cookie with a maxAge of 60 minutes
@@ -126,6 +127,7 @@ router.post('/signin', async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
+      domain: 'abc.vercel.app'
     }); // 60 minutes in milliseconds
 
     return res.json({ status: true, message: "Login successful", token });
