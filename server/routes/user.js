@@ -82,7 +82,7 @@ router.post('/signup', async (req, res) => {
       httpOnly: true,
       secure: true,
       maxAge: 60 * 60 * 1000, // 60 minutes
-      sameSite: 'none', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
+      sameSite: 'None', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
       domain: 'secure-track-wa.vercel.app'
     });
     
@@ -126,7 +126,7 @@ router.post('/signin', async (req, res) => {
       httpOnly: true,
       secure: true,
       maxAge: 60 * 60 * 1000, // 60 minutes
-      sameSite: 'none', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
+      sameSite: 'None', // 'None' if cross-origin requests, 'Lax' or 'Strict' otherwise
       domain: 'secure-track-wa.vercel.app'
     }); // 60 minutes in milliseconds
 
