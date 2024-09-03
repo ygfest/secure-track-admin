@@ -16,7 +16,7 @@ app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app"],
-    credentials: include,
+    credentials: true,
 }));
 app.use(cookieParser());
 app.use('/auth', UserRouter);  // Use UserRouter middleware
