@@ -21,6 +21,7 @@ import greenMarker from "../assets/green_marker.png";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useLocation } from "../context/LocationContext";
 
 // Create custom icons
 const hazardIcon = new Icon({
@@ -97,6 +98,7 @@ const RelativeTime = ({ shipmentDate }) => {
 };
 
 const LuggageTracking = () => {
+  //i want to get the isLocationOn in here
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -107,6 +109,9 @@ const LuggageTracking = () => {
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
   const navigate = useNavigate();
+  const [currentUserLat, setCurrentUserLat] = useState("");
+  const [currentUserLong, setCurrentUserLong] = useState("");
+  const { isLocationOn } = useLocation();
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -121,6 +126,8 @@ const LuggageTracking = () => {
           navigate("/user/tracking");
         } else {
           setUserId(response.data.user.userID);
+          setCurrentUserLat(response.data.user.latitude);
+          setCurrentUserLong(response.data.user.longitude);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -213,6 +220,8 @@ const LuggageTracking = () => {
     fetchUsersData();
   }, []);
 
+  const position = [currentUserLat, currentUserLong]; //get the usersData from the who is loggedin in the account how can filter or get that
+
   useEffect(() => {
     const fetchLuggageData = async () => {
       try {
@@ -288,9 +297,15 @@ const LuggageTracking = () => {
     }
   };
 
+  const getData = () => {};
+
+  console.log(`ISONLOCATION DEBUG: ${isLocationOn}`);
+  console.log(currentUserLat);
+
   return (
     <>
-      <NavBar />
+      <NavBar isLocationOn={getData} />
+
       <div className="flex-grow relative w-full h-full z-0 lg:rounded">
         <MapContainer
           center={[14.5092, 121.0144]}
@@ -363,6 +378,14 @@ const LuggageTracking = () => {
               </Marker>
             ))}
           </MarkerClusterGroup>
+          {isLocationOn && (
+            <Marker position={position}>
+              <Popup>
+                You are here <br />
+              </Popup>
+            </Marker>
+          )}
+
           <div
             onClick={() => setClicked((prevClick) => !prevClick)}
             className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${

@@ -55,8 +55,9 @@ export default function SignInForm() {
         { withCredentials: true } // Ensure credentials (cookies) are included
       );
       if (response.data.status) {
+        console.log("Navigiting HAHAHA");
         setIsSigningIn(false);
-        navigate("/user/");
+        navigate("/user");
       } else {
         setErrors({ server: response.data.message });
         setIsSigningIn(false);

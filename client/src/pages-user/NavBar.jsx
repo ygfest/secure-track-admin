@@ -9,11 +9,13 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import { useLocation } from "../context/LocationContext";
 
 const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
+  const { isLocationOn, toggleLocation } = useLocation();
   const navigate = useNavigate();
 
   const getAlertIcon = (alertType) => {
@@ -108,6 +110,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   };
 
   const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleLogout = () => {
     axios
       .get(`${apiUrl}/auth/logout`)
@@ -124,6 +127,44 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const toggleSideBar = () => setIsOpen(!isOpen);
 
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
+
+  const handleLocationToggle = () => {
+    // Invert the state using the toggleLocation function from context
+    toggleLocation();
+
+    if (navigator.geolocation) {
+      if (isLocationOn) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+
+            // Update the user's location in the backend
+            axios
+              .post(`${apiUrl}/auth/update-location`, {
+                latitude,
+                longitude,
+              })
+              .then((res) => {
+                console.log("Location updated successfully:", res.data);
+              })
+              .catch((err) => {
+                console.error("Error updating location:", err);
+                // Revert the state if there's an error
+                toggleLocation(); // This will revert the location state in context
+              });
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            // Revert the state if there's an error
+            toggleLocation(); // This will revert the location state in context
+          }
+        );
+      }
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+      toggleLocation(); // Revert the state in context if Geolocation is not supported
+    }
+  };
 
   return (
     <>
@@ -229,56 +270,68 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 10-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                 />
               </svg>
-              <span className="badge badge-xs badge-primary indicator-item"></span>
+              <span className="badge badge-xs badge-primary indicator-item">
+                8
+              </span>
             </div>
           </button>
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-              onClick={handleDropProfile}
-            >
-              <div className="w-10 rounded-full">
-                <img alt="Profile" src={Profile} />
-              </div>
+          {openNotif && (
+            <div className="fixed right-0 top-0 mt-16 mr-3 z-50 w-80 bg-[#202020e6] p-3 rounded-lg shadow-lg">
+              {renderNotifications()}
             </div>
+          )}
+        </div>
+
+        <div className="flex items-center">
+          <label
+            className="mr-2 md:mr-4 flex items-center cursor-pointer"
+            title="Update Location"
+          >
+            <span className="mr-1 text-xs md:text-sm">Location:</span>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={isLocationOn}
+              onChange={handleLocationToggle}
+            />
+          </label>
+
+          <div className="relative">
+            <img
+              src={Profile}
+              alt="Profile"
+              className="w-8 h-8 rounded-full cursor-pointer"
+              onClick={handleDropProfile}
+            />
             {isDropProfile && (
-              <ul
-                tabIndex={0}
-                className="mt-3 z-20 p-2 shadow menu menu-sm dropdown-content rounded-box w-52 bg-[#020202a0]"
-              >
-                <li>
-                  <Link to="/user/profile" className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </Link>
-                </li>
-                <li>
-                  <a>Settings</a>
-                </li>
-                <li>
-                  <a onClick={handleLogout}>Logout</a>
-                </li>
-              </ul>
+              <div className="absolute right-0 mt-2 w-40 bg-[#202020e6] p-2 rounded-lg shadow-lg z-50">
+                <ul className="menu menu-compact">
+                  <li>
+                    <Link
+                      to="/user/profile"
+                      className="link no-underline"
+                      onClick={handleDropProfile}
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="link no-underline"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
         </div>
       </div>
-      {openNotif && (
-        <div className="absolute top-16 right-0 w-96 bg-[#f2f5f8] shadow-lg rounded-lg z-10 p-4">
-          <h3 className="text-lg font-medium mb-2">Notifications</h3>
-          <div
-            className="overflow-y-auto"
-            style={{ maxHeight: "400px", overflowX: "hidden" }}
-          >
-            {renderNotifications()}
-          </div>
-        </div>
-      )}
     </>
   );
 };

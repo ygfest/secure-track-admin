@@ -11,7 +11,7 @@ const LuggageRouter = require('./routes/luggage');
 const app = express();
 const router = express.Router();
 
-app.set('trust proxy', 1);
+//app.set('trust proxy', 1);
 
 app.use(express.json());
 app.use(cors({

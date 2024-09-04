@@ -29,7 +29,15 @@ const userSchema = new mongoose.Schema({
   profile_dp: {
     type: String, 
     default: '', 
-  }
+  },
+ latitude: {
+  type: Number,
+  default: null
+ },
+ longitude: {
+  type: Number,
+  default: null
+ }
 });
 
 const User = mongoose.model('User', userSchema);

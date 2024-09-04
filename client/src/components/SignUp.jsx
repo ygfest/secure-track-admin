@@ -73,8 +73,9 @@ export default function SignUp() {
       );
 
       if (response.data.status) {
+        console.log("Navigating to dashBoard");
         setIsPending(false);
-        navigate("/user/");
+        navigate("/user");
       } else {
         setErrors({ server: response.data.message });
         setIsPending(false);
