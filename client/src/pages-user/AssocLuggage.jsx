@@ -140,6 +140,7 @@ const AssocLuggage = () => {
       setLuggageInfo([...luggageInfo, response.data]);
       setFilteredData([...filteredData, response.data]);
       setTotalItems(totalItems + 1);
+      window.location.reload();
     } catch (error) {
       console.log("error adding luggage", error);
     }
@@ -158,6 +159,7 @@ const AssocLuggage = () => {
       );
       setLuggageInfo(updatedLuggageInfo);
       setFilteredData(updatedLuggageInfo);
+      window.location.reload();
     } catch (error) {
       console.log("error updating luggage", error);
     }
@@ -173,6 +175,7 @@ const AssocLuggage = () => {
       setLuggageInfo(updatedLuggageInfo);
       setFilteredData(updatedLuggageInfo);
       setTotalItems(totalItems - 1);
+      window.location.reload();
     } catch (error) {
       console.log("error deleting luggage", error);
     }
@@ -327,7 +330,7 @@ const AssocLuggage = () => {
                             setShowUpdateModal(true);
                           }}
                         >
-                          Update
+                          Edit
                         </button>
                         <button
                           className="btn btn-sm btn-outline btn-danger"

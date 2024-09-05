@@ -9,7 +9,7 @@ const TempLogSchema = new Schema(
   {
     luggage_tag_number: { type: String, ref: "Luggage", required: true },
     temperature: { type: Number },
-    timeStamp: { type: Date, default: Date.now },
+    timeStamp: { type: Date, default: null },
   },
   {
     collection: "sensor_data",

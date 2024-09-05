@@ -6,6 +6,7 @@ import {
   Popup,
   useMapEvents,
   useMap,
+  Circle,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MarkerClusterGroup from "react-leaflet-cluster";
@@ -21,6 +22,7 @@ import greenMarker from "../assets/green_marker.png";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "../context/LocationContext";
 
 // Create custom icons
@@ -38,6 +40,8 @@ const luggageIcon = new Icon({
   iconUrl: greenMarker,
   iconSize: [40, 40],
 });
+
+const fillBlueOptions = { fillColor: "lime", color: "lime" };
 
 // Custom cluster icon
 const createClusterCustomIcon = (cluster) => {
@@ -112,6 +116,7 @@ const LuggageTracking = () => {
   const [currentUserLat, setCurrentUserLat] = useState("");
   const [currentUserLong, setCurrentUserLong] = useState("");
   const { isLocationOn } = useLocation();
+  const mapRef = useRef(null); // Ref to store the map instance
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -282,29 +287,52 @@ const LuggageTracking = () => {
   };
 
   const handleAddNewLuggage = async (newLuggage) => {
-    console.log("clicked");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await axios.post(
         `${apiUrl}/luggage-router/addluggage`,
         newLuggage
       );
-      setLuggageDeets([...luggageDeets, newLuggage]);
-      console.log("New Luggage Details: ", newLuggage);
+      if (response.status === 201) {
+        setLuggageDeets([...luggageDeets, newLuggage]);
+        console.log("New Luggage Details: ", newLuggage);
+        toast.success("Luggage added succesfully");
+        window.location.reload();
+      } else {
+        toast.error("Error adding Luggage");
+      }
       setShowAddModal(false);
     } catch (error) {
       console.log("error adding luggage", error);
+      toast.error("Error Adding Luggage");
     }
   };
 
-  const getData = () => {};
+  // Fly to user's location when `isLocationOn` is toggled
+
+  const FlyToUserLocation = ({
+    isLocationOn,
+    currentUserLat,
+    currentUserLong,
+  }) => {
+    const map = useMap(); // Hook call outside of useEffect
+
+    useEffect(() => {
+      if (isLocationOn && currentUserLat && currentUserLong) {
+        map.flyTo([currentUserLat, currentUserLong], 16, { animate: true });
+      }
+    }, [isLocationOn, currentUserLat, currentUserLong, map]); // Include map in dependency array
+
+    return null; // Component does not render anything
+  };
 
   console.log(`ISONLOCATION DEBUG: ${isLocationOn}`);
   console.log(currentUserLat);
 
   return (
     <>
-      <NavBar isLocationOn={getData} />
+      <NavBar />
+      <ToastContainer />
 
       <div className="flex-grow relative w-full h-full z-0 lg:rounded">
         <MapContainer
@@ -384,6 +412,14 @@ const LuggageTracking = () => {
                 You are here <br />
               </Popup>
             </Marker>
+          )}
+
+          {isLocationOn && (
+            <Circle
+              center={[currentUserLat, currentUserLong]}
+              pathOptions={fillBlueOptions}
+              radius={200}
+            />
           )}
 
           <div
@@ -476,7 +512,7 @@ const LuggageTracking = () => {
                       destination: e.target.destination.value,
                       user_id: userId,
                     });
-                    window.location.reload();
+                    //window.location.reload();
                   }}
                 >
                   <div className="form-control mb-4">
@@ -507,7 +543,13 @@ const LuggageTracking = () => {
                       required
                     />
                   </div>
-                  <div className="form-control mt-6">
+                  <div className="form-control mt-6 flex flex-row justify-center gap-4">
+                    <button
+                      className="btn"
+                      onClick={() => setShowAddModal(false)}
+                    >
+                      Cancel
+                    </button>
                     <button
                       type="submit"
                       className="btn btn-primary font-poppins"
