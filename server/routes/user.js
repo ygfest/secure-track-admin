@@ -102,7 +102,6 @@ router.post('/signin', async (req, res) => {
     await user.save();
 
     const token = jwt.sign({ id: user._id, email: user.email}, process.env.KEY, { expiresIn: '60m' });
-    window.localStorage.setItem('token', token);
 
     console.log("Generated Token (Signin):", token);
 
