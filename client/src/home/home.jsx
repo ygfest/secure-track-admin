@@ -1,6 +1,6 @@
 //import Image from "next/image";
 //import { Button } from "@nextui-org/react";
-import { LuUsers2 } from "react-icons/lu";
+import { FiUser } from "react-icons/fi";
 import { Link } from "react-router-dom";
 Link;
 
@@ -67,7 +67,7 @@ export default function Home() {
           <div className="flex w-full flex-wrap items-center justify-center gap-4">
             <div className="relative h-[140px] w-full overflow-hidden rounded-xl bg-[#F5F5F5] shadow-sm hover:shadow-md transition-shadow duration-200 md:h-[160px] md:w-[40%] lg:w-[30%]">
               <p className="absolute -bottom-2 -right-[1rem] z-0 -rotate-45 text-[5rem] text-[#D3D3D3]">
-                <LuUsers2 />
+                <FiUser />
               </p>
 
               <div className="absolute left-5 top-5 z-20 h-full w-[90%] space-y-1 ">
@@ -82,7 +82,7 @@ export default function Home() {
             </div>
             <div className="relative h-[140px] w-full overflow-hidden rounded-xl bg-[#F5F5F5] shadow-sm hover:shadow-md transition-shadow duration-200 md:h-[160px] md:w-[40%] lg:w-[30%]">
               <p className="absolute -bottom-2 -right-[1rem] z-0 -rotate-45 text-[5rem] text-[#D3D3D3]">
-                <LuUsers2 />
+                <FiUser />
               </p>
 
               <div className="absolute left-5 top-5 z-20 h-full w-[90%] space-y-1 ">
@@ -97,7 +97,7 @@ export default function Home() {
             </div>
             <div className="relative h-[140px] w-full overflow-hidden rounded-xl bg-[#F5F5F5] shadow-sm hover:shadow-md transition-shadow duration-200 md:h-[160px] md:w-[40%] lg:w-[30%]">
               <p className="absolute -bottom-2 -right-[1rem] z-0 -rotate-45 text-[5rem] text-[#D3D3D3]">
-                <LuUsers2 />
+                <FiUser />
               </p>
 
               <div className="absolute left-5 top-5 z-20 h-full w-[90%] space-y-1 ">
