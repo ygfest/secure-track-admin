@@ -168,7 +168,7 @@ export default function SignInForm() {
 
           <p className="text-center text-sm">
             Don't have an account?{" "}
-            <Link to="/sign-up" className="text-primary-500 text-green-500">
+            <Link to="/sign-up" className="text-primary font-bold">
               Sign up
             </Link>
           </p>

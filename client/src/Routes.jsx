@@ -13,7 +13,7 @@ import SignInForm from "./components/SignIn";
 import SignUpForm from "./components/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
-import AuthCallback from "./components/AuthCallBack";
+import Home from "./home/home";
 
 const AdminRoutes = () => {
   return (
@@ -42,11 +42,11 @@ const UserRoutes = () => {
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route path="/admin/*" element={<AdminRoutes />} />
       <Route path="/user/*" element={<UserRoutes />} />
       <Route path="/sign-in" element={<SignInForm />} />
       <Route path="/sign-up" element={<SignUpForm />} />
-      <Route path="/auth/callback" component={<AuthCallback />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>

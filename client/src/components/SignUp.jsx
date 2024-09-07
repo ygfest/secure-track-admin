@@ -88,10 +88,10 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex p-4 items-center justify-center min-h-screen">
       <form
         onSubmit={handleSubmit}
-        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-4"
+        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-0 md:gap-4"
       >
         <h2 className="flex text-2xl font-semibold justify-center md:justify-normal">
           Create your account
@@ -230,10 +230,7 @@ export default function SignUp() {
 
         <p className="text-center text-sm">
           Already have an account?{" "}
-          <Link
-            to="/sign-in"
-            className="text-primary-500 text-lime-500 font-bold"
-          >
+          <Link to="/sign-in" className="text-primary font-bold">
             Sign in
           </Link>
         </p>
