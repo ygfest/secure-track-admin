@@ -72,7 +72,7 @@ export default function Home() {
 
               <div className="absolute left-5 top-5 z-20 h-full w-[90%] space-y-1 ">
                 <p className="text-[1.1rem] font-bold text-[#3B3F3F]">
-                  User Feedback
+                  Estepano
                 </p>
                 <p className="text-sm leading-7 text-[#6D6D6D]">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eum
@@ -87,7 +87,7 @@ export default function Home() {
 
               <div className="absolute left-5 top-5 z-20 h-full w-[90%] space-y-1 ">
                 <p className="text-[1.1rem] font-bold text-[#3B3F3F]">
-                  User Feedback
+                  Estepano
                 </p>
                 <p className="text-sm leading-7 text-[#6D6D6D]">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eum
@@ -102,7 +102,7 @@ export default function Home() {
 
               <div className="absolute left-5 top-5 z-20 h-full w-[90%] space-y-1 ">
                 <p className="text-[1.1rem] font-bold text-[#3B3F3F]">
-                  User Feedback
+                  sunno_my_boi
                 </p>
                 <p className="text-sm leading-7 text-[#6D6D6D]">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eum
