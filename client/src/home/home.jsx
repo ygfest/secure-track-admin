@@ -10,7 +10,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative flex h-[80vh] w-full items-center justify-center">
         {/* pattern */}
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#dd0dba64,transparent_1px),linear-gradient(to_bottom,#dd0dba64,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#5CC90C,transparent_1px),linear-gradient(to_bottom,#5CC90C,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
         <nav
           className="fixed left-1/2 top-4 z-40 w-[90%] max-w-[1200px] -translate-x-1/2 
           rounded-3xl border-2 border-[#42393962] px-4 py-3 backdrop-blur-sm backdrop-saturate-150 md:bg-white"
