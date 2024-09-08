@@ -44,7 +44,7 @@ export default function Home() {
             </span>
             <br />
             <span className="bg-gradient-to-b from-[#32CD32] to-[#2E8B57] bg-clip-text text-transparent">
-              and Secure, Wherever You Go.
+              and Secured, Wherever You Go.
             </span>
           </h1>
           {/* <p className="mt-4 text-center text-[#ECEDEE]/80">
