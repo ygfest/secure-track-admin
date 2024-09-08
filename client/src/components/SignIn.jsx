@@ -88,7 +88,7 @@ export default function SignInForm() {
       <div className="flex items-center justify-center min-h-screen">
         <form
           onSubmit={handleSubmit}
-          className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-4"
+          className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-4 bg-white p-8 rounded-lg z-[50]"
         >
           <h2 className="flex text-2xl font-semibold justify-center md:justify-normal">
             Sign in to your account
