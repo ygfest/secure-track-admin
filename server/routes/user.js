@@ -76,7 +76,6 @@ router.post('/signup', async (req, res) => {
       secure: true,
       maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None',
-      domain: 'secure-track-wa.vercel.app', 
     });
 
     return res.status(201).json({ status: true, message: "User registered successfully", token });
@@ -111,7 +110,6 @@ router.post('/signin', async (req, res) => {
       secure: true,
       maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None',
-      domain: 'secure-track-wa.vercel.app', 
     });
 
     return res.json({ status: true, message: "Login successful", token });

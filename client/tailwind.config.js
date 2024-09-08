@@ -26,11 +26,11 @@ export default {
   daisyui: {
     themes: [{
       mytheme: {
-        "primary": "#5CC90C",  // green grey from your logo
-        "secondary": "#3B3F3F",  // grey
+        "primary": "#5CC90C",  /* green grey from your logo*/
+        "secondary": "#3B3F3F",  /* grey */
         "accent": "#FFD900",  
-        "neutral": "5CC90C",  // Neutral dark color
-        "base-100": "#ffffff",  // Base white background
+        "neutral": "5CC90C",  /* Neutral dark  */
+        "base-100": "#ffffff",  /* Base white*/
       },
     }],
   },
