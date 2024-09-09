@@ -15,7 +15,7 @@ const router = express.Router();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app", "https://secure-track-server.onrender.com", "https://secure-track-wapi.onrender.com"],
+    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app", "https://secure-track-wa-ygfests-projects.vercel.app/","https://secure-track-server.onrender.com", "https://secure-track-wapi.onrender.com"],
     credentials: true,
 }));
 app.use(cookieParser());
