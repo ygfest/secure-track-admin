@@ -128,7 +128,7 @@ const LuggageTracking = () => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/verify`);
         if (!response.data.status) {
-          navigate("/user/tracking");
+          navigate("/sign-in");
         } else {
           setUserId(response.data.user.userID);
           setCurrentUserLat(response.data.user.latitude);

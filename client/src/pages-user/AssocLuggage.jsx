@@ -28,17 +28,23 @@ const AssocLuggage = () => {
     const verifyToken = async () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/verify`);
+        const response = await Axios.get(`${apiUrl}/auth/verify`, {
+          withCredentials: true,
+        });
+
+        console.log("Verify token response:", response.data);
+
         if (!response.data.status) {
-          navigate("/user/luggage");
+          navigate("/sign-in");
         } else {
-          setUserId(response.data.user.userID);
+          console.log("Authorized");
         }
-      } catch (err) {
-        console.log("error verifying token");
+      } catch (error) {
+        console.error("Error verifying token:", error);
         navigate("/sign-in");
       }
     };
+
     verifyToken();
   }, [navigate]);
 
