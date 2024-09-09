@@ -14,6 +14,7 @@ import SignUpForm from "./components/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import Home from "./home/home";
+import { Link } from "react-router-dom";
 
 const AdminRoutes = () => {
   return (
