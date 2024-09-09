@@ -112,6 +112,9 @@ router.post('/signin', async (req, res) => {
       sameSite: 'None',
     });
 
+    console.log("Cookies sent:", req.cookies);
+
+
     return res.json({ status: true, message: "Login successful", token });
   } catch (error) {
     console.error("Error signing in:", error);
