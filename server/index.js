@@ -104,3 +104,8 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
+
+app.use("/", (req, res) => {
+    res.send("Server is running")
+});
+
