@@ -76,6 +76,7 @@ router.post('/signup', async (req, res) => {
       secure: true,
       maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None',
+      domain: 'secure-track-serva.vercel.app',
     });
 
     return res.status(201).json({ status: true, message: "User registered successfully", token });
@@ -110,6 +111,7 @@ router.post('/signin', async (req, res) => {
       secure: true,
       maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None',
+      domain: 'secure-track-serva.vercel.app',
     });
 
     console.log("Cookies sent:", req.cookies);

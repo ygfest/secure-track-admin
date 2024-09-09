@@ -51,9 +51,11 @@ export default function SignInForm() {
       const { email, password } = formData;
       const apiUrl = import.meta.env.VITE_API_URL;
 
+      // Define your custom headers here
       const headers = {
-        "Content-Type": "application/json", // Ensure the Content-Type is set
-        "Custom-Header": "YourHeaderValue", // Add your custom headers here
+        "Content-Type": "application/json", // Set Content-Type to JSON
+        Authorization: `Bearer ${yourAuthToken}`, // Example of adding an Authorization header
+        "Custom-Header": "YourHeaderValue", // Add any other custom headers you need
       };
 
       const response = await Axios.post(
@@ -61,12 +63,12 @@ export default function SignInForm() {
         { email, password },
         {
           withCredentials: true,
-          headers: headers, // Include headers here
+          headers: headers, // Include the headers here
         }
       );
 
       if (response.data.status) {
-        console.log("Navigiting HAHAHA");
+        console.log("Navigating HAHAHA");
         setIsSigningIn(false);
         navigate("/user");
       } else {
