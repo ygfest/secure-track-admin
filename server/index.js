@@ -15,18 +15,9 @@ const router = express.Router();
 
 app.use(express.json());
 app.use(cors({
-    origin: [
-        "http://localhost:5173", 
-        "https://secure-track-wa.vercel.app", 
-        "https://secure-track-wa-ygfests-projects.vercel.app",
-        "https://secure-track-serva.vercel.app"
-    ],
+    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
 }));
-
-
 app.use(cookieParser());
 app.use('/auth', UserRouter);  // Use UserRouter middleware
 app.use('/luggage-router', LuggageRouter);
