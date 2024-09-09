@@ -45,15 +45,26 @@ export default function SignInForm() {
     }
 
     Axios.defaults.withCredentials = true;
+
     setIsSigningIn(true);
     try {
       const { email, password } = formData;
       const apiUrl = import.meta.env.VITE_API_URL;
+
+      const headers = {
+        "Content-Type": "application/json", // Ensure the Content-Type is set
+        "Custom-Header": "YourHeaderValue", // Add your custom headers here
+      };
+
       const response = await Axios.post(
         `${apiUrl}/auth/signin`,
         { email, password },
-        { withCredentials: true } // Ensure credentials (cookies) are included
+        {
+          withCredentials: true,
+          headers: headers, // Include headers here
+        }
       );
+
       if (response.data.status) {
         console.log("Navigiting HAHAHA");
         setIsSigningIn(false);
