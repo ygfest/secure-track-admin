@@ -203,4 +203,25 @@ router.post('/update-location', verifyUser, async (req, res) => {
   }
 });
 
+router.delete('/delete-location', verifyUser, async (req, res) => {
+  const userId = req.user.id;
+
+  if (!userId) {
+    return res.status(400).json({ status: 'error', message: 'User ID not found' });
+  }
+
+  try {
+    // Use findByIdAndUpdate instead of findByIdAndDelete
+    await User.findByIdAndUpdate(userId, {
+      $unset: { latitude: '', longitude: '' } // This only removes the fields
+    });
+
+    res.json({ status: 'success', message: 'Location deleted successfully' });
+  } catch (error) {
+    console.error('Failed to delete location:', error);
+    res.status(500).json({ status: 'error', message: 'Failed to delete location' });
+  }
+});
+
+
 module.exports = router;

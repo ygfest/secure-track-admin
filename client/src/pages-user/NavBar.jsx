@@ -133,17 +133,15 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
     toggleLocation();
 
     if (navigator.geolocation) {
-      if (isLocationOn) {
+      if (!isLocationOn) {
+        // If location is off, get the current position and save it
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
 
             // Update the user's location in the backend
             axios
-              .post(`${apiUrl}/auth/update-location`, {
-                latitude,
-                longitude,
-              })
+              .post(`${apiUrl}/auth/update-location`, { latitude, longitude })
               .then((res) => {
                 console.log("Location updated successfully:", res.data);
               })
@@ -159,6 +157,17 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             toggleLocation(); // This will revert the location state in context
           }
         );
+      } else {
+        // If location is on, delete the location data
+        axios
+          .delete(`${apiUrl}/auth/delete-location`)
+          .then((res) => {
+            console.log("Location deleted successfully:", res.data);
+          })
+          .catch((err) => {
+            console.error("Error deleting location:", err);
+            toggleLocation(); // Revert the state if there's an error
+          });
       }
     } else {
       console.error("Geolocation is not supported by this browser.");
@@ -221,7 +230,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                     className="link no-underline"
                     onClick={toggleSideBar}
                   >
-                    Associated Luggage
+                    My Luggage
                   </Link>
                 </li>
                 <li>

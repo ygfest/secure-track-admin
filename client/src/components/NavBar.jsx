@@ -9,7 +9,7 @@ const handleSearch = () => {
   prompt("What are u looking for?");
 };
 let timeOfDay = 22;
-let greeting = "hello";
+let greeting = "henlo";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,7 +94,6 @@ const NavBar = () => {
                   Reports & Analytics
                 </Link>
               </li>
-              {/* Add more menu items as needed */}
             </ul>
           )}
         </div>

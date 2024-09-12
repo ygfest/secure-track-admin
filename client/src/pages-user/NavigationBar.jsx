@@ -252,7 +252,7 @@ const NavigationBar = ({
                 className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
                 onClick={toggleSideBar}
               >
-                Associated Luggage
+                My Luggage
               </a>
             </li>
             <li>

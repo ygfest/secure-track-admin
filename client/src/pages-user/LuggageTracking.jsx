@@ -102,7 +102,6 @@ const RelativeTime = ({ shipmentDate }) => {
 };
 
 const LuggageTracking = () => {
-  //i want to get the isLocationOn in here
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -113,8 +112,8 @@ const LuggageTracking = () => {
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
   const navigate = useNavigate();
-  const [currentUserLat, setCurrentUserLat] = useState("");
-  const [currentUserLong, setCurrentUserLong] = useState("");
+  const [currentUserLat, setCurrentUserLat] = useState(null);
+  const [currentUserLong, setCurrentUserLong] = useState(null);
   const { isLocationOn } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
 
@@ -131,8 +130,8 @@ const LuggageTracking = () => {
           navigate("/sign-in");
         } else {
           setUserId(response.data.user.userID);
-          setCurrentUserLat(response.data.user.latitude);
-          setCurrentUserLong(response.data.user.longitude);
+          setCurrentUserLat(Number(response.data.user.latitude));
+          setCurrentUserLong(Number(response.data.user.longitude));
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -318,7 +317,7 @@ const LuggageTracking = () => {
     const map = useMap(); // Hook call outside of useEffect
 
     useEffect(() => {
-      if (isLocationOn && currentUserLat && currentUserLong) {
+      if (isLocationOn && currentUserLat !== null && currentUserLong !== null) {
         map.flyTo([currentUserLat, currentUserLong], 16, { animate: true });
       }
     }, [isLocationOn, currentUserLat, currentUserLong, map]); // Include map in dependency array
@@ -406,21 +405,22 @@ const LuggageTracking = () => {
               </Marker>
             ))}
           </MarkerClusterGroup>
-          {isLocationOn && (
-            <Marker position={position}>
-              <Popup>
-                You are here <br />
-              </Popup>
-            </Marker>
-          )}
-
-          {isLocationOn && (
-            <Circle
-              center={[currentUserLat, currentUserLong]}
-              pathOptions={fillBlueOptions}
-              radius={200}
-            />
-          )}
+          {isLocationOn &&
+            currentUserLat !== null &&
+            currentUserLong !== null && (
+              <>
+                <Marker position={position}>
+                  <Popup>
+                    You are here <br />
+                  </Popup>
+                </Marker>
+                <Circle
+                  center={[currentUserLat, currentUserLong]}
+                  pathOptions={fillBlueOptions}
+                  radius={200}
+                />
+              </>
+            )}
 
           <div
             onClick={() => setClicked((prevClick) => !prevClick)}
