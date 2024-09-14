@@ -307,14 +307,12 @@ const LuggageTracking = () => {
     }
   };
 
-  // Fly to user's location when `isLocationOn` is toggled
-
   const FlyToUserLocation = ({
     isLocationOn,
     currentUserLat,
     currentUserLong,
   }) => {
-    const map = useMap(); // Hook call outside of useEffect
+    const map = useMap();
 
     useEffect(() => {
       if (isLocationOn && currentUserLat !== null && currentUserLong !== null) {
@@ -343,9 +341,10 @@ const LuggageTracking = () => {
           <TileLayer
             attribution={`&copy; 
             <a href="https://www.openstreetmap.org/copyright" className="bg-black text-white">OpenStreetMap</a> 
-            contributors`}
-            url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-            //url="https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png"
+                contributors`}
+            url={`https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${
+              import.meta.env.VITE_STADIA_API_KEY
+            }`}
           />
           <LocationMarker trackLocation={trackLocation} />
           <MarkerClusterGroup
