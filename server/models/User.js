@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() { return !this.googleId; }, // Password required if no Google ID
   },
   role: {
     type: String,
@@ -30,14 +30,19 @@ const userSchema = new mongoose.Schema({
     type: String, 
     default: '', 
   },
- latitude: {
-  type: Number,
-  default: null
- },
- longitude: {
-  type: Number,
-  default: null
- }
+  latitude: {
+    type: Number,
+    default: null
+  },
+  longitude: {
+    type: Number,
+    default: null
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true // Allows for users with either Google ID or email, but not both
+  }
 });
 
 const User = mongoose.model('User', userSchema);

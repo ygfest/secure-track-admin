@@ -15,6 +15,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import Home from "./home/home";
 import { Link } from "react-router-dom";
+import AuthCallback from "./pages-user/AuthCallBack";
 
 const AdminRoutes = () => {
   return (
@@ -50,6 +51,7 @@ const AppRoutes = () => {
       <Route path="/sign-up" element={<SignUpForm />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
     </Routes>
   );
 };

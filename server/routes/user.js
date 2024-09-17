@@ -122,6 +122,53 @@ router.post('/signin', async (req, res) => {
   }
 });
 
+router.post('/save-google-user', async (req, res) => {
+  console.log("Received request to /save-google-user");
+  const { googleId, email, firstName, lastName, picture } = req.body;
+
+  try {
+    let user = await User.findOne({ googleId });
+
+    if (!user) {
+      user = new User({
+        googleId,
+        email,
+        firstname: firstName,
+        lastname: lastName,
+        role: 'user',
+      });
+
+      await user.save();
+    } else {
+      user.email = email;
+      user.firstname = firstName;
+      user.lastname = lastName;
+
+      await user.save();
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id, email: user.email}, process.env.KEY, { expiresIn: '60m' });
+
+    console.log("Generated Token (Signin):", token);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 1000, // 60 minutes
+      sameSite: 'None',
+    });
+
+    console.log("Cookies sent:", req.cookies);
+
+    return res.status(200).json({ message: "User information saved successfully", token });
+  } catch (error) {
+    console.error("Error saving user information:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
   try {
