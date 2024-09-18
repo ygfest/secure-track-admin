@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
 import Profile from "../assets/sample_profile.jpg";
@@ -128,18 +128,15 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
 
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
 
-  const handleLocationToggle = () => {
-    // Invert the state using the toggleLocation function from context
-    toggleLocation();
+  // Manage location update interval
+  useEffect(() => {
+    let locationInterval = null;
 
-    if (navigator.geolocation) {
-      if (!isLocationOn) {
-        // If location is off, get the current position and save it
+    const updateLocation = () => {
+      if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-
-            // Update the user's location in the backend
             axios
               .post(`${apiUrl}/auth/update-location`, { latitude, longitude })
               .then((res) => {
@@ -147,201 +144,200 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
               })
               .catch((err) => {
                 console.error("Error updating location:", err);
-                // Revert the state if there's an error
-                toggleLocation(); // This will revert the location state in context
               });
           },
           (error) => {
             console.error("Error getting location:", error);
-            // Revert the state if there's an error
-            toggleLocation(); // This will revert the location state in context
           }
         );
       } else {
-        // If location is on, delete the location data
-        axios
-          .delete(`${apiUrl}/auth/delete-location`)
-          .then((res) => {
-            console.log("Location deleted successfully:", res.data);
-          })
-          .catch((err) => {
-            console.error("Error deleting location:", err);
-            toggleLocation(); // Revert the state if there's an error
-          });
+        console.error("Geolocation is not supported by this browser.");
       }
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-      toggleLocation(); // Revert the state in context if Geolocation is not supported
+    };
+
+    if (isLocationOn) {
+      updateLocation(); // Initial location update
+      locationInterval = setInterval(updateLocation, 60000); // Update every minute
+    } else if (locationInterval) {
+      clearInterval(locationInterval);
+      locationInterval = null;
     }
+
+    return () => {
+      if (locationInterval) {
+        clearInterval(locationInterval);
+      }
+    };
+  }, [isLocationOn]);
+
+  const handleLocationToggle = () => {
+    toggleLocation(); // Toggling state (on/off)
   };
 
   return (
-    <>
-      <div
-        className="navbar fixed top-2 left-0 right-0 pr-3 pl-3 flex justify-evenly rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
-        style={{ width: "98.90%" }}
-      >
-        <div className="sidebar fixed left-3 z-10 rounded-lg">
-          <div className="navbar-start dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle"
-              onClick={toggleSideBar}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h7"
-                />
-              </svg>
-            </div>
-            {isOpen && (
-              <ul className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
-                <li>
-                  <Link
-                    to="/user/"
-                    className="link no-underline"
-                    onClick={toggleSideBar}
-                  >
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/user/tracking"
-                    className="link no-underline"
-                    onClick={toggleSideBar}
-                  >
-                    Map
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/user/luggage"
-                    className="link no-underline"
-                    onClick={toggleSideBar}
-                  >
-                    My Luggage
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/user/profile"
-                    className="link no-underline"
-                    onClick={toggleSideBar}
-                  >
-                    Profile
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </div>
-        </div>
-
-        <div className="navbar-center flex-1 justify-center">
-          <div className="mr-0">
-            <Link
-              to="/user/"
-              className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
-            >
-              <span>Luggage Live Tracking</span>
-            </Link>
-          </div>
-          <div className="flex items-center ml-0">
-            <span className="mx-1 text-xs">Powered by</span>
-            <img src={Logo} alt="Secure Track" className="h-6" />
-          </div>
-        </div>
-
-        <div className="">
-          <button
+    <div
+      className="navbar fixed top-2 left-0 right-0 px-3 flex justify-between rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
+      style={{ width: "98.90%" }}
+    >
+      {/* Left: Burger Menu */}
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div
+            tabIndex={0}
+            role="button"
             className="btn btn-ghost btn-circle"
-            onClick={() => setOpenNotif((prevState) => !prevState)}
+            onClick={toggleSideBar}
           >
-            <div className="indicator">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 10-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-              <span className="badge badge-xs badge-primary indicator-item">
-                8
-              </span>
-            </div>
-          </button>
-          {openNotif && (
-            <div className="fixed right-0 top-0 mt-16 mr-3 z-50 w-80 bg-[#202020e6] p-3 rounded-lg shadow-lg">
-              {renderNotifications()}
-            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16M4 18h7"
+              />
+            </svg>
+          </div>
+          {isOpen && (
+            <ul className="menu dropdown-content mt-3 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
+              <li>
+                <Link
+                  to="/user/"
+                  className="link no-underline"
+                  onClick={toggleSideBar}
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/user/tracking"
+                  className="link no-underline"
+                  onClick={toggleSideBar}
+                >
+                  Map
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/user/luggage"
+                  className="link no-underline"
+                  onClick={toggleSideBar}
+                >
+                  My Luggage
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/user/profile"
+                  className="link no-underline"
+                  onClick={toggleSideBar}
+                >
+                  Profile
+                </Link>
+              </li>
+            </ul>
           )}
         </div>
+      </div>
 
-        <div className="flex items-center">
-          <label
-            className="mr-2 md:mr-4 flex items-center cursor-pointer"
-            title="Update Location"
-          >
-            <span className="mr-1 text-xs md:text-sm">Location:</span>
-            <input
-              type="checkbox"
-              className="toggle toggle-primary"
-              checked={isLocationOn}
-              onChange={handleLocationToggle}
-            />
-          </label>
+      {/* Center: Logo */}
+      <div className="navbar-center flex items-center justify-center">
+        <Link
+          to="/user/"
+          className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
+        >
+          <span className="text-sm">Powered by </span>
+          <img src={Logo} alt="Secure Track" className="h-8" />
+        </Link>
+      </div>
 
-          <div className="relative">
-            <img
-              src={Profile}
-              alt="Profile"
-              className="w-8 h-8 rounded-full cursor-pointer"
-              onClick={handleDropProfile}
-            />
-            {isDropProfile && (
-              <div className="absolute right-0 mt-2 w-40 bg-[#202020e6] p-2 rounded-lg shadow-lg z-50">
-                <ul className="menu menu-compact">
-                  <li>
-                    <Link
-                      to="/user/profile"
-                      className="link no-underline"
-                      onClick={handleDropProfile}
-                    >
-                      Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      className="link no-underline"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
+      {/* Right: Location, Notification, Profile */}
+      <div className="navbar-end flex items-center space-x-4">
+        <label
+          className="flex items-center cursor-pointer"
+          title="Update Location"
+        >
+          <span className="text-xs md:text-sm">Location:</span>
+          <input
+            type="checkbox"
+            className="toggle toggle-primary ml-1"
+            checked={isLocationOn}
+            onChange={handleLocationToggle}
+          />
+        </label>
+
+        {/* Notification Icon */}
+        <button
+          className="btn btn-ghost btn-circle"
+          onClick={() => setOpenNotif(!openNotif)}
+        >
+          <div className="indicator">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 00-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m0 0v1a3 3 0 006 0v-1m-6 0h6"
+              />
+            </svg>
+            {(tempData?.length ||
+              tamperData?.length ||
+              fallDetectData?.length) && (
+              <span className="badge badge-xs badge-primary indicator-item"></span>
             )}
           </div>
+        </button>
+        {/* Notifications Popup */}
+        {openNotif && (
+          <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
+            <h3 className="font-bold text-lg mb-3">Notifications</h3>
+            {renderNotifications()}
+          </div>
+        )}
+
+        {/* Profile Icon */}
+        <div className="dropdown dropdown-end">
+          <label
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+            onClick={handleDropProfile}
+          >
+            <div className="w-10 rounded-full">
+              <img src={Profile} alt="Profile" />
+            </div>
+          </label>
+          {isDropProfile && (
+            <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
+              <li>
+                <Link
+                  to="/user/profile"
+                  className="justify-between"
+                  onClick={handleDropProfile}
+                >
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

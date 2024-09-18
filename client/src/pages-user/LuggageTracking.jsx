@@ -13,7 +13,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { Icon, divIcon } from "leaflet";
 import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
-import debounce from "lodash.debounce"; // Ensure lodash.debounce is installed
+import debounce from "lodash.debounce";
 
 import hazardPinIcon from "../assets/aler-hazard.svg";
 import cargoIcon from "../assets/cargo.png";
@@ -25,7 +25,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "../context/LocationContext";
 
-// Create custom icons
 const hazardIcon = new Icon({
   iconUrl: hazardPinIcon,
   iconSize: [40, 40],
@@ -43,7 +42,6 @@ const luggageIcon = new Icon({
 
 const fillBlueOptions = { fillColor: "lime", color: "lime" };
 
-// Custom cluster icon
 const createClusterCustomIcon = (cluster) => {
   return divIcon({
     html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
