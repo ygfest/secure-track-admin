@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
 import Profile from "../assets/sample_profile.jpg";
@@ -9,6 +9,11 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import { parse, format } from "date-fns";
+
+const formatDate = (dateObj) => {
+  return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
+};
 
 const NavigationBar = ({
   luggageInfo,
@@ -20,28 +25,12 @@ const NavigationBar = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
-  const navigate = useNavigate();
+  const [alerts, setAlerts] = useState([]);
 
   const toggleSideBar = () => setIsOpen(!isOpen);
   const toggleProfile = () => {
     setIsOpenProfile(!isOpenProfile);
     setOpenNotif(false);
-  };
-
-  axios.defaults.withCredentials = true;
-
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const handleLogout = () => {
-    axios
-      .get(`${apiUrl}/auth/logout`)
-      .then((res) => {
-        if (res.data.status) {
-          navigate("/sign-in");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const getAlertIcon = (alertType) => {
@@ -73,45 +62,66 @@ const NavigationBar = ({
     }
   };
 
-  const renderNotifications = () => {
-    const alerts = [];
+  const updateAlerts = () => {
+    const newAlerts = [];
 
-    tempData.forEach((temp) => {
+    // Default empty arrays if props are undefined
+    const tempArray = tempData || [];
+    const tamperArray = tamperData || [];
+    const fallArray = fallDetectData || [];
+
+    tempArray.forEach((temp) => {
       if (temp.temperature > 30) {
-        alerts.push({
+        newAlerts.push({
           type: "High Temperature",
           criticality: "Critical",
           description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: temp.timestamp,
+          timestamp: new Date(temp.timestamp),
         });
       } else if (temp.temperature < 10) {
-        alerts.push({
+        newAlerts.push({
           type: "Low Temperature",
           criticality: "Warning",
           description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: temp.timestamp,
+          timestamp: new Date(temp.timestamp),
         });
       }
     });
 
-    tamperData.forEach((tamper) => {
-      alerts.push({
+    tamperArray.forEach((tamper) => {
+      newAlerts.push({
         type: "Tamper Detected",
         criticality: "Critical",
         description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: tamper.timestamp,
+        timestamp: new Date(tamper.timestamp),
       });
     });
 
-    fallDetectData.forEach((fall) => {
-      alerts.push({
+    fallArray.forEach((fall) => {
+      newAlerts.push({
         type: "Fall Detected",
         criticality: "Info",
         description: `Fall detected in ${fall.luggage_custom_name}`,
-        timestamp: fall.timestamp,
+        timestamp: new Date(fall.fall_time),
       });
     });
 
+    return newAlerts;
+  };
+
+  useEffect(() => {
+    const newAlerts = updateAlerts();
+
+    // Check if there are new alerts
+    if (newAlerts.length > alerts.length) {
+      setAlerts(newAlerts);
+      setOpenNotif(true); // Open notifications panel when new alerts arrive
+    } else {
+      setAlerts(newAlerts); // Just update alerts
+    }
+  }, [tempData, tamperData, fallDetectData]); // Runs when tempData, tamperData, or fallDetectData change
+
+  const renderNotifications = () => {
     return alerts.map((alert, index) => (
       <div key={index} className="card w-full bg-[#f2f5f8] shadow-xl mb-2">
         <div className="card-body flex items-start">
@@ -127,7 +137,7 @@ const NavigationBar = ({
             </h4>
             <p className="text-xs">{alert.description}</p>
             <p className="text-xs text-gray-500">
-              {new Date(alert.timestamp).toLocaleString()}
+              {formatDate(alert.timestamp)}
             </p>
           </div>
         </div>
@@ -287,8 +297,10 @@ const NavigationBar = ({
         </div>
       </div>
       {openNotif && (
-        <div className="absolute top-16 right-0 w-96 bg-white shadow-lg rounded-lg z-10 p-4">
-          <h3 className="text-lg font-medium mb-2">Notifications</h3>
+        <div className="fixed top-16 right-0 w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
+          <h3 className="text-lg font-medium mb-2 text-gray-800">
+            Notifications
+          </h3>
           <div
             className="overflow-y-auto"
             style={{ maxHeight: "400px", overflowX: "hidden" }}

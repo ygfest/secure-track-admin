@@ -87,28 +87,33 @@ router.get('/fall-logs1', verifyUser, async (req, res) => {
 // Fetch fall detection logs route for admin
 router.get('/fall-logs2', verifyUser, async (req, res) => {
   try {
-    const user = await User.findOne({email: req.user.email})
-    if(!user){
-      return res.status(404).json({status: false, message: "user not found"})
+    const user = await User.findOne({ email: req.user.email });
+    if (!user) {
+      return res.status(404).json({ status: false, message: "User not found" });
     }
-    const luggageList = await Luggage.find({user_id: user._id})
-    if(luggageList.length === 0){
-      return res.status(404).json({status: false, message: "luggage not found"})
+
+    const luggageList = await Luggage.find({ user_id: user._id });
+    if (luggageList.length === 0) {
+      return res.status(404).json({ status: false, message: "Luggage not found" });
     }
+
     const fallLogs = [];
-    for (const luggage of luggageList){
-      const logs = await FallDetectionLog.find({luggage_tag_number: luggage.luggage_tag_number}).lean();
+    for (const luggage of luggageList) {
+      const logs = await FallDetectionLog.find({ luggage_tag_number: luggage.luggage_tag_number }).lean();
       logs.forEach(log => {
         log.luggage_custom_name = luggage.luggage_custom_name;
-      })
+        console.log('Fall Time:', log.fall_time); // Log to check format
+      });
       fallLogs.push(...logs);
     }
+
     res.json(fallLogs);
   } catch (error) {
     console.error('Error fetching fall detection logs:', error);
     res.status(500).send('Server error');
   }
 });
+
 
 // Fetch tamper detection logs route
 router.get('/tamper-logs1', verifyUser, async (req, res) => {

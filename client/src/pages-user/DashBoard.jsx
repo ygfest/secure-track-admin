@@ -91,7 +91,7 @@ const DashBoard = () => {
     }
 
     fetchFallData();
-  }, []);
+  }, [fallDetectData]);
 
   const totalFall =
     selectedLuggage === "All"
