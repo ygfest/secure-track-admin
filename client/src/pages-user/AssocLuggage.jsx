@@ -38,6 +38,7 @@ const AssocLuggage = () => {
           navigate("/sign-in");
         } else {
           console.log("Authorized");
+          setUserId(response.data.user.userID);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -87,26 +88,21 @@ const AssocLuggage = () => {
             );
             if (response.ok) {
               const data = await response.json();
-              if (data && data.features && data.features.length > 0) {
+              if (data.features.length > 0) {
                 const properties = data.features[0].properties;
                 const locationName = `${properties.name}, ${properties.city} City`;
                 return { ...luggageLoc, currentLocation: locationName };
-              } else {
-                return { ...luggageLoc, currentLocation: "Unknown Location" };
               }
-            } else {
-              console.error("Error fetching location:", response.status);
-              return { ...luggageLoc, currentLocation: "Unknown Location" };
             }
+            return { ...luggageLoc, currentLocation: "Unknown Location" };
           })
         );
         setLuggageInfo(updatedLuggageDeets);
         setFilteredData(updatedLuggageDeets);
       } catch (error) {
-        console.error("Error fetching locations: ", error);
+        console.error("Error fetching locations:", error);
       }
     };
-
     if (luggageInfo.length > 0) {
       fetchCurrentLocations();
     }
@@ -132,8 +128,8 @@ const AssocLuggage = () => {
     });
 
     setFilteredData(filtered);
-    setTotalItems(filtered.length); // Update total items count after filtering
-    setCurrentPage(1); // Reset current page to 1 after filtering
+    setTotalItems(filtered.length);
+    setCurrentPage(1);
   };
 
   const handleAddNew = async (luggageData) => {
@@ -143,16 +139,16 @@ const AssocLuggage = () => {
         `${apiUrl}/luggage-router/addluggage`,
         luggageData
       );
-      setLuggageInfo([...luggageInfo, response.data]);
-      setFilteredData([...filteredData, response.data]);
-      setTotalItems(totalItems + 1);
+      setLuggageInfo((prev) => [...prev, response.data]);
+      setFilteredData((prev) => [...prev, response.data]);
+      setTotalItems((prev) => prev + 1);
+      setShowAddModal(false);
       window.location.reload();
     } catch (error) {
-      console.log("error adding luggage", error);
+      console.error("Error adding luggage", error);
     }
   };
 
-  console.log(luggageInfo.user_id);
   const handleUpdateLuggage = async (luggageData) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -160,14 +156,20 @@ const AssocLuggage = () => {
         `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
         luggageData
       );
-      const updatedLuggageInfo = luggageInfo.map((item) =>
-        item._id === luggageData._id ? response.data : item
+      setLuggageInfo((prev) =>
+        prev.map((item) =>
+          item._id === luggageData._id ? response.data : item
+        )
       );
-      setLuggageInfo(updatedLuggageInfo);
-      setFilteredData(updatedLuggageInfo);
+      setFilteredData((prev) =>
+        prev.map((item) =>
+          item._id === luggageData._id ? response.data : item
+        )
+      );
+      setShowUpdateModal(false);
       window.location.reload();
     } catch (error) {
-      console.log("error updating luggage", error);
+      console.error("Error updating luggage", error);
     }
   };
 
@@ -175,15 +177,13 @@ const AssocLuggage = () => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${luggageId}`);
-      const updatedLuggageInfo = luggageInfo.filter(
-        (item) => item._id !== luggageId
-      );
-      setLuggageInfo(updatedLuggageInfo);
-      setFilteredData(updatedLuggageInfo);
-      setTotalItems(totalItems - 1);
+      setLuggageInfo((prev) => prev.filter((item) => item._id !== luggageId));
+      setFilteredData((prev) => prev.filter((item) => item._id !== luggageId));
+      setTotalItems((prev) => prev - 1);
+      setShowDeleteModal(false);
       window.location.reload();
     } catch (error) {
-      console.log("error deleting luggage", error);
+      console.error("Error deleting luggage", error);
     }
   };
 
@@ -505,7 +505,7 @@ const AssocLuggage = () => {
             <p>Are you sure you want to delete this luggage?</p>
             <div className="modal-action">
               <button
-                className="btn btn-danger"
+                className="btn btn-danger bg-red-500 text-white"
                 onClick={() => {
                   handleDeleteLuggage(currentLuggage._id);
                   setShowDeleteModal(false);

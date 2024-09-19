@@ -178,7 +178,7 @@ router.get('/temp-logs', verifyUser, async(req, res) => {
       });
       tempLogs.push(...logs);
     }
-    // Ensure we send the response back
+   
     res.json(tempLogs);
   } catch (error) {
     console.error('Error fetching temperature logs:', error);
@@ -188,11 +188,12 @@ router.get('/temp-logs', verifyUser, async(req, res) => {
 
 
 
-// Add new luggage route
+
 router.post('/addluggage', verifyUser, async (req, res) => {
   const { luggage_custom_name, luggage_tag_number, destination, user_id } = req.body;
+  console.log('Add Luggage Request:', req.body);
 
-  // Validate the input data
+
   if (!luggage_custom_name || !luggage_tag_number || !destination || !user_id) {
     return res.status(400).json({ status: false, message: "All fields are required" });
   }
@@ -224,6 +225,7 @@ router.put('/updateluggage/:id', verifyUser, async (req, res) => {
   }
 
   try {
+    // Update luggage in database
     const updatedLuggage = await Luggage.findByIdAndUpdate(luggageId, {
       luggage_custom_name,
       luggage_tag_number,
