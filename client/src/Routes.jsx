@@ -1,10 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import MapComponent from "./pages-admin/MapComponent";
-import AdminLuggageTracking from "./pages-admin/AdminLuggageTracking";
+import AdminLuggageTracking from "./pages-admin/LuggageTracking";
 import ADashBoard from "./pages-admin/DashBoard";
-import CargoManagement from "./pages-admin/CargoManagement";
 import UserManagement from "./pages-admin/UserManagement";
 import ReportsAnalyticsPage from "./pages-admin/ReportsAnalyticsPage";
+import AdminAssocLuggage from "./pages-admin/AssocLuggage";
+
 import UserDashboard from "./pages-user/DashBoard"; // Assuming you have a UserDashboard component
 import LuggageTracking from "./pages-user/LuggageTracking";
 import Profile from "./pages-user/Profile"; // Assuming you have a UserProfile component
@@ -21,9 +22,9 @@ const AdminRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<ADashBoard />} />
-      <Route path="/tracking" element={<MapComponent />} />
-      <Route path="/cargo-management" element={<CargoManagement />} />
-      <Route path="/livetracking" element={<AdminLuggageTracking />} />
+
+      <Route path="/luggage" element={<AdminAssocLuggage />} />
+      <Route path="/tracking" element={<AdminLuggageTracking />} />
       <Route path="/user-management" element={<UserManagement />} />
       <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
     </Routes>

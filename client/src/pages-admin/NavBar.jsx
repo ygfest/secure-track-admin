@@ -1,25 +1,119 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
-const handeAlert = () => {
-  alert("May sunog!");
-};
+import Profile from "../assets/sample_profile.jpg";
+import {
+  FaThermometerHalf,
+  FaLock,
+  FaShieldAlt,
+  FaExclamationTriangle,
+} from "react-icons/fa";
+import { useLocation } from "../context/LocationContext";
 
-const handleSearch = () => {
-  prompt("What are u looking for?");
-};
-let timeOfDay = 22;
-let greeting = "hello";
-
-const NavBar = () => {
+const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
+  const [openNotif, setOpenNotif] = useState(false);
+  const { isLocationOn, toggleLocation } = useLocation();
   const navigate = useNavigate();
+
+  const getAlertIcon = (alertType) => {
+    switch (alertType) {
+      case "High Temperature":
+      case "Low Temperature":
+        return <FaThermometerHalf className="text-primary text-2xl mr-2" />;
+      case "Fall Detected":
+        return <FaExclamationTriangle className="text-primary text-2xl mr-2" />;
+      case "Tamper Detected":
+        return <FaShieldAlt className="text-primary text-2xl mr-2" />;
+      default:
+        return <FaLock className="text-primary text-2xl mr-2" />;
+    }
+  };
+
+  const getAlertColor = (alertType) => {
+    switch (alertType) {
+      case "High Temperature":
+        return "badge-danger";
+      case "Low Temperature":
+        return "badge-warning";
+      case "Fall Detected":
+        return "badge-info";
+      case "Tamper Detected":
+        return "badge-danger";
+      default:
+        return "badge-primary";
+    }
+  };
+
+  const renderNotifications = () => {
+    const alerts = [];
+
+    tempData?.forEach((temp) => {
+      if (temp.temperature > 30) {
+        alerts.push({
+          type: "High Temperature",
+          criticality: "Critical",
+          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
+          timestamp: temp.timestamp,
+        });
+      } else if (temp.temperature < 10) {
+        alerts.push({
+          type: "Low Temperature",
+          criticality: "Warning",
+          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
+          timestamp: temp.timestamp,
+        });
+      }
+    });
+
+    tamperData?.forEach((tamper) => {
+      alerts.push({
+        type: "Tamper Detected",
+        criticality: "Critical",
+        description: `Tamper detected in ${tamper.luggage_custom_name}`,
+        timestamp: tamper.timestamp,
+      });
+    });
+
+    fallDetectData?.forEach((fall) => {
+      alerts.push({
+        type: "Fall Detected",
+        criticality: "Info",
+        description: `Fall detected in ${fall.luggage_custom_name}`,
+        timestamp: fall.timestamp,
+      });
+    });
+
+    return alerts.map((alert, index) => (
+      <div key={index} className="card w-full bg-base-100 shadow-xl mb-2">
+        <div className="card-body flex items-start">
+          <div className="mr-4">{getAlertIcon(alert.type)}</div>
+          <div className="flex-1">
+            <h4 className="card-title text-base flex items-center">
+              {alert.type}
+              <div
+                className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
+              >
+                {alert.criticality}
+              </div>
+            </h4>
+            <p className="text-xs">{alert.description}</p>
+            <p className="text-xs text-gray-500">
+              {new Date(alert.timestamp).toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </div>
+    ));
+  };
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleLogout = () => {
     axios
-      .get("http://localhost:3000/auth/logout")
+      .get(`${apiUrl}/auth/logout`)
       .then((res) => {
         if (res.data.status) {
           navigate("/sign-in");
@@ -34,13 +128,60 @@ const NavBar = () => {
 
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
 
+  // Manage location update interval
+  useEffect(() => {
+    let locationInterval = null;
+
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            axios
+              .post(`${apiUrl}/auth/update-location`, { latitude, longitude })
+              .then((res) => {
+                console.log("Location updated successfully:", res.data);
+              })
+              .catch((err) => {
+                console.error("Error updating location:", err);
+              });
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    if (isLocationOn) {
+      updateLocation(); // Initial location update
+      locationInterval = setInterval(updateLocation, 60000); // Update every minute
+    } else if (locationInterval) {
+      clearInterval(locationInterval);
+      locationInterval = null;
+    }
+
+    return () => {
+      if (locationInterval) {
+        clearInterval(locationInterval);
+      }
+    };
+  }, [isLocationOn]);
+
+  const handleLocationToggle = () => {
+    toggleLocation(); // Toggling state (on/off)
+  };
+
   return (
     <div
-      className="navbar fixed top-2 left-0 right-0 pr-3 pl-3 flex justify-evenly rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
+      className="navbar fixed top-2 left-0 right-0 px-3 flex justify-between rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
       style={{ width: "98.90%" }}
     >
-      <div className="sidebar fixed left-3 z-10 rounded-lg">
-        <div className="navbar-start dropdown">
+      {/* Left: Burger Menu */}
+      <div className="navbar-start">
+        <div className="dropdown">
           <div
             tabIndex={0}
             role="button"
@@ -63,10 +204,10 @@ const NavBar = () => {
             </svg>
           </div>
           {isOpen && (
-            <ul className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
+            <ul className="menu dropdown-content mt-3 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
               <li>
                 <Link
-                  to="/user/"
+                  to="/admin/"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -75,7 +216,7 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/user/tracking"
+                  to="/admin/tracking"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
@@ -84,54 +225,58 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/user/luggage"
+                  to="/admin/luggage"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
-                  Associated Luggage
+                  My Luggage
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/user/profile"
+                  to="/admin/profile"
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
                   Profile
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/user/reports-analytics"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
-                >
-                  Reports & Analytics
-                </Link>
-              </li>
-              {/* Add more menu items as needed */}
             </ul>
           )}
         </div>
       </div>
 
-      <div className="navbar-center flex-1 justify-center">
-        <div className="mr-0">
-          <Link
-            to="/user/"
-            className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
-          >
-            <span>Luggage Live Tracking</span>
-          </Link>
-        </div>
-        <div className="flex items-center ml-0">
-          <span className="mx-1 text-xs">Powered by</span>
-          <img src={Logo} alt="Secure Track" className="h-6" />
-        </div>
+      {/* Center: Logo */}
+      <div className="navbar-center flex items-center justify-center">
+        <Link
+          to="/user/"
+          className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
+        >
+          <span className="text-sm">Powered by </span>
+          <img src={Logo} alt="Secure Track" className="h-8" />
+        </Link>
       </div>
 
-      <div className="">
-        <button className="btn btn-ghost btn-circle">
+      {/* Right: Location, Notification, Profile */}
+      <div className="navbar-end flex items-center space-x-4">
+        <label
+          className="flex items-center cursor-pointer"
+          title="Update Location"
+        >
+          <span className="text-xs md:text-sm">Location:</span>
+          <input
+            type="checkbox"
+            className="toggle toggle-primary ml-1"
+            checked={isLocationOn}
+            onChange={handleLocationToggle}
+          />
+        </label>
+
+        {/* Notification Icon */}
+        <button
+          className="btn btn-ghost btn-circle"
+          onClick={() => setOpenNotif(!openNotif)}
+        >
           <div className="indicator">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -144,44 +289,49 @@ const NavBar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 00-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m0 0v1a3 3 0 006 0v-1m-6 0h6"
               />
             </svg>
-            <span className="badge badge-xs badge-primary indicator-item"></span>
+            {(tempData?.length ||
+              tamperData?.length ||
+              fallDetectData?.length) && (
+              <span className="badge badge-xs badge-primary indicator-item"></span>
+            )}
           </div>
         </button>
+        {/* Notifications Popup */}
+        {openNotif && (
+          <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
+            <h3 className="font-bold text-lg mb-3">Notifications</h3>
+            {renderNotifications()}
+          </div>
+        )}
+
+        {/* Profile Icon */}
         <div className="dropdown dropdown-end">
-          <div
+          <label
             tabIndex={0}
             role="button"
             className="btn btn-ghost btn-circle avatar"
             onClick={handleDropProfile}
           >
             <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              />
+              <img src={Profile} alt="Profile" />
             </div>
-          </div>
+          </label>
           {isDropProfile && (
-            <ul
-              tabIndex={0}
-              className="mt-3 z-20 p-2 shadow menu menu-sm dropdown-content rounded-box w-52 bg-[#020202a0] "
-            >
+            <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
               <li>
-                <Link to="/user/profile">
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
+                <Link
+                  to="/admin/profile"
+                  className="justify-between"
+                  onClick={handleDropProfile}
+                >
+                  Profile
                 </Link>
               </li>
               <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a onClick={handleLogout}>Logout</a>
+                <button onClick={handleLogout}>Logout</button>
               </li>
             </ul>
           )}

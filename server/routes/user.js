@@ -115,7 +115,7 @@ router.post('/signin', async (req, res) => {
     console.log("Cookies sent:", req.cookies);
 
 
-    return res.json({ status: true, message: "Login successful", token });
+    return res.json({ status: true, message: "Login successful", token, user: {email: user.email, role: user.role} });
   } catch (error) {
     console.error("Error signing in:", error);
     return res.status(500).json({ message: "Server error" });
@@ -155,7 +155,7 @@ router.post('/save-google-user', async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 1000, // 60 minutes
+      maxAge: 60 * 60 * 1000,
       sameSite: 'None',
     });
 

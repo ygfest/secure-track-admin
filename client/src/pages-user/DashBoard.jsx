@@ -437,7 +437,8 @@ const DashBoard = () => {
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaThermometerHalf className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{`${displayTemp}°C`}</h2>
+              <h2 className="text-3xl font-bold">{`-`}</h2>
+              {/*<h2 className="text-3xl font-bold">{`${displayTemp}°C`}</h2>*/}
               <p className="text-gray-600">{tempTitle}</p>
             </div>
           </div>

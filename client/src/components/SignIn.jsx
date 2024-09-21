@@ -68,7 +68,11 @@ export default function SignInForm() {
       if (response.data.status) {
         console.log("Navigiting HAHAHA");
         setIsSigningIn(false);
-        navigate("/user");
+        if (response.data.user.role === "user") {
+          navigate("/user");
+        } else if (response.data.user.role === "admin") {
+          navigate("/admin");
+        }
       } else {
         setErrors({ server: response.data.message });
         setIsSigningIn(false);

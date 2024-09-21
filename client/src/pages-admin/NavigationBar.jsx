@@ -138,7 +138,8 @@ const NavigationBar = ({
     }
   }, [tempData, tamperData, fallDetectData]); // Runs when tempData, tamperData, or fallDetectData change
 
-  const renderNotifications = () => {
+  {
+    /* const renderNotifications = () => {
     return alerts
       .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp descending
       .map((alert, index) => (
@@ -163,7 +164,8 @@ const NavigationBar = ({
         </div>
       ));
   };
-
+*/
+  }
   return (
     <>
       <div className="navbar-container bg-base-100 h-16 z-10 shadow-sm relative bordered">
@@ -252,15 +254,15 @@ const NavigationBar = ({
           </div>
         </div>
         <div
-          className={`sidebar bg-white h-screen w-64 fixed left-0 top-0 shadow-lg ${
+          className={`sidebar bg-secondary h-screen w-64 fixed left-0 top-0 shadow-lg ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 ease-in-out`}
         >
           <ul className="mt-6">
             <li>
               <a
-                href="/user/"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
+                href="/admin/"
+                className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Dashboard
@@ -268,8 +270,8 @@ const NavigationBar = ({
             </li>
             <li>
               <a
-                href="/user/tracking"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
+                href="/admin/tracking"
+                className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Live Tracking
@@ -277,17 +279,26 @@ const NavigationBar = ({
             </li>
             <li>
               <a
-                href="/user/luggage"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
+                href="/admin/luggage"
+                className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
-                My Luggage
+                Luggage Management
+              </a>
+            </li>
+            <li>
+              <a
+                href="/admin/user-management"
+                className="block p-4 text-white hover:bg-zinc-800"
+                onClick={toggleSideBar}
+              >
+                User Accounts
               </a>
             </li>
             <li>
               <a
                 href="/user/profile"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
+                className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Profile
@@ -324,7 +335,7 @@ const NavigationBar = ({
             className="overflow-y-auto"
             style={{ maxHeight: "400px", overflowX: "hidden" }}
           >
-            {renderNotifications()}
+            {/* {renderNotifications()}*/}
           </div>
         </div>
       )}
