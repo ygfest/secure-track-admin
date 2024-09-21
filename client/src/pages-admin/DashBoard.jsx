@@ -48,6 +48,7 @@ const DashBoard = () => {
   const [selectedLuggage, setSelectedLuggage] = useState("All");
   const [userFirstName, setUserFirstName] = useState("");
   const [tempData, setTempData] = useState([]);
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -78,6 +79,17 @@ const DashBoard = () => {
 
     verifyToken();
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchUsersData = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${apiUrl}/auth/users`);
+      setUserData(res.data);
+    };
+    fetchUsersData();
+  }, []);
+
+  const numOfUsers = userData.length;
 
   useEffect(() => {
     async function fetchFallData() {
@@ -181,6 +193,8 @@ const DashBoard = () => {
     }
     fetchLuggageInfo();
   }, []);
+
+  const numOfLuggage = luggageInfo.length;
 
   const displayStat =
     selectedLuggage === "All"
@@ -432,30 +446,30 @@ const DashBoard = () => {
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaMapMarkerAlt className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{displayStat}</h2>
-              <p className="text-gray-600">Geofence Status</p>
+              <h2 className="text-3xl font-bold">{numOfUsers}</h2>
+              <p className="text-gray-600">Registered Users</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaThermometerHalf className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{`-`}</h2>
+              <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
               {/*<h2 className="text-3xl font-bold">{`${displayTemp}°C`}</h2>*/}
-              <p className="text-gray-600">{tempTitle}</p>
+              <p className="text-gray-600">Luggage Registered</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaShieldAlt className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{totalTamper}</h2>
-              <p className="text-gray-600">Possible Intrusions Detected</p>
+              <p className="text-gray-600">Device Anomalies</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaExclamationTriangle className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{totalFall}</h2>
-              <p className="text-gray-600">Falls Detected</p>
+              <p className="text-gray-600">User Reports</p>
             </div>
           </div>
         </div>

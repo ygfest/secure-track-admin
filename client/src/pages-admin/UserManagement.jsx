@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "../pages-admin/NavigationBar";
 
 const UserManagement = () => {
   const [usersData, setUsersData] = useState([]);
