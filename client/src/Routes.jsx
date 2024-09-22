@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import MapComponent from "./pages-admin/MapComponent";
 import AdminLuggageTracking from "./pages-admin/LuggageTracking";
 import ADashBoard from "./pages-admin/DashBoard";
-import UserManagement from "./pages-admin/UserManagement";
+import UserManagement from "./pages-admin/user-management";
 import ReportsAnalyticsPage from "./pages-admin/ReportsAnalyticsPage";
 import AdminAssocLuggage from "./pages-admin/AssocLuggage";
 
