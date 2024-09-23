@@ -15,8 +15,34 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
+  const [profileDp, setProfileDp] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
   const navigate = useNavigate();
+
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/auth/verify`, {
+          withCredentials: true,
+        });
+
+        console.log("Verify token response:", response.data);
+
+        if (!response.data.status) {
+          navigate("/sign-in");
+        } else {
+          setProfileDp(response.data.user.profile_dp);
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+        navigate("/sign-in");
+      }
+    };
+
+    verifyToken();
+  }, [navigate]);
 
   const getAlertIcon = (alertType) => {
     switch (alertType) {
@@ -316,7 +342,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             onClick={handleDropProfile}
           >
             <div className="w-10 rounded-full">
-              <img src={Profile} alt="Profile" />
+              <img src={profileDp} alt="Profile" />
             </div>
           </label>
           {isDropProfile && (
