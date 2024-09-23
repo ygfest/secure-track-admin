@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
   },
   profile_dp: {
     type: String, 
-    default: '', 
   },
   latitude: {
     type: Number,

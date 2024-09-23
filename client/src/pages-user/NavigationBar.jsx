@@ -26,6 +26,7 @@ const NavigationBar = ({
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
   const [alerts, setAlerts] = useState([]);
+  const [profileDp, setProfileDp] = useState("");
   const navigate = useNavigate();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
@@ -35,6 +36,29 @@ const NavigationBar = ({
   };
 
   axios.defaults.withCredentials = true;
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/auth/verify`, {
+          withCredentials: true,
+        });
+
+        console.log("Verify token response:", response.data);
+
+        if (!response.data.status) {
+          navigate("/sign-in");
+        } else {
+          setProfileDp(response.data.user.profile_dp);
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+        navigate("/sign-in");
+      }
+    };
+
+    verifyToken();
+  }, [navigate]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
@@ -224,7 +248,7 @@ const NavigationBar = ({
                 onClick={toggleProfile}
               >
                 <div className="w-10 rounded-full">
-                  <img alt="Profile" src={Profile} />
+                  <img alt="Profile" src={profileDp} />
                 </div>
               </div>
               {isOpenProfile && (

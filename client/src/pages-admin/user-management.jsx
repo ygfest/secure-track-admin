@@ -53,10 +53,12 @@ const UserManagement = () => {
     async function fetchUsersData() {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const data = await Axios.get(`${apiUrl}/auth/users`);
-        const dataJson = await data.json();
+        const response = await Axios.get(`${apiUrl}/auth/users`, {
+          withCredentials: true,
+        });
+        const dataJson = response.data;
         setUsersData(dataJson);
-        setFilteredData(dataJson); // Initially set filtered data to all datap
+        setFilteredData(dataJson);
         setTotalItems(dataJson.length);
       } catch (error) {
         console.log("error fetching user data", error);
@@ -85,8 +87,7 @@ const UserManagement = () => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
 
-    const filtered = luggageInfo.filter((luggage) => {
-      const user = usersData.find((user) => user._id === luggage.user_id);
+    const filtered = usersData.filter((user) => {
       const fullName = user
         ? `${user.firstname.toLowerCase()} ${user.lastname.toLowerCase()}`
         : "";
@@ -94,9 +95,7 @@ const UserManagement = () => {
       return (
         fullName.includes(searchTerm) ||
         (user && user.firstname.toLowerCase().includes(searchTerm)) ||
-        (user && user.lastname.toLowerCase().includes(searchTerm)) ||
-        luggage.luggage_custom_name.toLowerCase().includes(searchTerm) ||
-        luggage.luggage_tag_number.toLowerCase().includes(searchTerm)
+        (user && user.lastname.toLowerCase().includes(searchTerm))
       );
     });
 
@@ -146,12 +145,12 @@ const UserManagement = () => {
     }
   };
 
-  const handleDeleteLuggage = async (luggageId) => {
+  const handleDeleteLuggage = async (userId) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${luggageId}`);
-      setLuggageInfo((prev) => prev.filter((item) => item._id !== luggageId));
-      setFilteredData((prev) => prev.filter((item) => item._id !== luggageId));
+      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${userId}`);
+      setLuggageInfo((prev) => prev.filter((item) => item._id !== userId));
+      setFilteredData((prev) => prev.filter((item) => item._id !== userId));
       setTotalItems((prev) => prev - 1);
       setShowDeleteModal(false);
       window.location.reload();
@@ -479,7 +478,7 @@ const UserManagement = () => {
               <button
                 className="btn btn-danger bg-red-500 text-white"
                 onClick={() => {
-                  handleDeleteLuggage(currentLuggage._id);
+                  handleDeleteLuggage(currentUser._id);
                   setShowDeleteModal(false);
                 }}
               >

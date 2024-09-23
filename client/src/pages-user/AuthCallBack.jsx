@@ -43,6 +43,7 @@ export default function AuthCallback() {
                 email: response.data.email,
                 firstName: response.data.given_name,
                 lastName: response.data.family_name,
+                picture: response.data.picture,
               },
               {
                 withCredentials: true, // This is necessary for sending cookies with the request

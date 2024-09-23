@@ -7,8 +7,9 @@ const cookieParser = require('cookie-parser');
 dotenv.config();
 const UserRouter = require('./routes/user');
 const LuggageRouter = require('./routes/luggage');
-
+const uploadRouter = require('./routes/uploadthing')
 const app = express();
+const { createRouteHandler } = require('uploadthing/express');
 const router = express.Router();
 
 
@@ -18,9 +19,14 @@ app.use(cors({
     credentials: true,
 }));
 app.use(cookieParser());
+
+// Route handling
 app.use('/auth', UserRouter); 
 app.use('/luggage-router', LuggageRouter);
-
+app.use('/api/uploadthing', createRouteHandler({
+    router: uploadRouter,
+    config: {}, 
+}));
 
 mongoose.set('debug', true);
 
@@ -68,6 +74,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
 
 
 /*

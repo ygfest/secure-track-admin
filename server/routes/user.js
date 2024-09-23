@@ -29,7 +29,7 @@ router.get('/verify', verifyUser, async (req, res) => {
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname, userID: user._id, latitude: user.latitude, longitude: user.longitude } });
+    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp } });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
@@ -78,7 +78,7 @@ router.post('/signup', async (req, res) => {
       sameSite: 'None',
     });
 
-    return res.status(201).json({ status: true, message: "User registered successfully", token });
+    return res.status(201).json({ status: true, message: "User registered successfully", token, user: {email: user.email, role: user.role} });
   } catch (error) {
     console.error("Error registering user:", error);
     return res.status(500).json({ message: "Server error" });
@@ -115,7 +115,7 @@ router.post('/signin', async (req, res) => {
     console.log("Cookies sent:", req.cookies);
 
 
-    return res.json({ status: true, message: "Login successful", token, user: {email: user.email, role: user.role} });
+    return res.json({ status: true, message: "Login successful", token, user: {email: user.email, role: user.role } });
   } catch (error) {
     console.error("Error signing in:", error);
     return res.status(500).json({ message: "Server error" });
@@ -136,15 +136,12 @@ router.post('/save-google-user', async (req, res) => {
         firstname: firstName,
         lastname: lastName,
         role: 'user',
+        profile_dp: picture,
       });
 
       await user.save();
-    } else {
-      user.email = email;
-      user.firstname = firstName;
-      user.lastname = lastName;
-
-      await user.save();
+      console.log("User saved to MongoDB:", user);
+      
     }
 
     // Generate JWT token
@@ -155,7 +152,7 @@ router.post('/save-google-user', async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000, // 60 minutes
       sameSite: 'None',
     });
 

@@ -157,7 +157,7 @@ export default function SignInForm() {
             {errors.server && <p className="text-red-500">{errors.server}</p>}
 
             <p className="text-sm">
-              <Link to="/u/forgot-password" className="text-primary-500">
+              <Link to="/forgot-password" className="text-primary-500">
                 Forgot Password?
               </Link>
             </p>
