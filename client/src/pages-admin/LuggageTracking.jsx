@@ -222,7 +222,11 @@ const AdminLuggageTracking = () => {
     fetchUsersData();
   }, []);
 
-  const position = [currentUserLat, currentUserLong]; //get the usersData from the who is loggedin in the account how can filter or get that
+  const position = [currentUserLat, currentUserLong];
+  const ownerName =
+    usersData._id === luggageDeets.user_id
+      ? `${usersData.firstname} ${usersData.lastname}`
+      : null;
 
   useEffect(() => {
     const fetchLuggageData = async () => {
@@ -376,7 +380,18 @@ const AdminLuggageTracking = () => {
                       </span>{" "}
                       <br />
                       <span className="font-poppins">
-                        Destination: {luggage.destination}{" "}
+                        Owner:{" "}
+                        {usersData.find((user) => user._id === luggage.user_id)
+                          ? `${
+                              usersData.find(
+                                (user) => user._id === luggage.user_id
+                              ).firstname
+                            } ${
+                              usersData.find(
+                                (user) => user._id === luggage.user_id
+                              ).lastname
+                            }`
+                          : "Unknown Owner"}
                       </span>
                       <br />
                       <span
@@ -477,7 +492,18 @@ const AdminLuggageTracking = () => {
                     {formatStationarySince(luggageDeet.stationary_since)}
                   </p>
                   <p className="text-xs text-[#ffffff8b]">
-                    Destination: {luggageDeet.destination}
+                    Owner:{" "}
+                    {usersData.find((user) => user._id === luggageDeet.user_id)
+                      ? `${
+                          usersData.find(
+                            (user) => user._id === luggageDeet.user_id
+                          ).firstname
+                        } ${
+                          usersData.find(
+                            (user) => user._id === luggageDeet.user_id
+                          ).lastname
+                        }`
+                      : "Unknown Owner"}
                   </p>
                 </div>
               ))}

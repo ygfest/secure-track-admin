@@ -277,7 +277,7 @@ const LuggageTracking = () => {
                       {findUserById(luggage.user_id)?.lastname}'s luggage <br />
                       Tracking Number: {luggage.luggage_tag_number} <br />
                       Location: {luggage.currentLocation} <br />
-                      Destination: {luggage.destination}
+                      Owner: {luggage.user_id}
                       <br />
                       Status: {luggage.status}
                     </>

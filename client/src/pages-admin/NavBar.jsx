@@ -229,7 +229,16 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   className="link no-underline"
                   onClick={toggleSideBar}
                 >
-                  My Luggage
+                  Luggage Management
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/user-management"
+                  className="link no-underline"
+                  onClick={toggleSideBar}
+                >
+                  Users Management
                 </Link>
               </li>
               <li>
