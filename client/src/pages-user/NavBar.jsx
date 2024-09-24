@@ -16,6 +16,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
   const [profileDp, setProfileDp] = useState("");
+  const [profileName, setProfileName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
           navigate("/sign-in");
         } else {
           setProfileDp(response.data.user.profile_dp);
+          setProfileName(response.data.user.firstname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -341,9 +343,15 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             className="btn btn-ghost btn-circle avatar"
             onClick={handleDropProfile}
           >
-            <div className="w-10 rounded-full">
-              <img src={profileDp} alt="Profile" />
-            </div>
+            {profileDp ? (
+              <div className="w-10 rounded-full">
+                <img src={profileDp} alt="Profile" />
+              </div>
+            ) : (
+              <div className="w-14 pt-1 rounded-full flex justify-center items-center bg-gray-300 text-gray-800 text-xl font-bold border-4 border-white ">
+                {profileName && profileName.charAt(0).toUpperCase()}
+              </div>
+            )}
           </label>
           {isDropProfile && (
             <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">

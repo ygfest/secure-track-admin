@@ -27,6 +27,7 @@ const NavigationBar = ({
   const [openNotif, setOpenNotif] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const [profileDp, setProfileDp] = useState("");
+  const [profileName, setProfileName] = useState("");
   const navigate = useNavigate();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
@@ -50,6 +51,7 @@ const NavigationBar = ({
           navigate("/sign-in");
         } else {
           setProfileDp(response.data.user.profile_dp);
+          setProfileName(response.data.user.firstname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -247,9 +249,15 @@ const NavigationBar = ({
                 className="btn btn-ghost btn-circle avatar"
                 onClick={toggleProfile}
               >
-                <div className="w-10 rounded-full">
-                  <img alt="Profile" src={profileDp} />
-                </div>
+                {profileDp ? (
+                  <div className="w-10 rounded-full">
+                    <img alt="Profile" src={profileDp} />
+                  </div>
+                ) : (
+                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
+                    {profileName && profileName.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
               {isOpenProfile && (
                 <ul
