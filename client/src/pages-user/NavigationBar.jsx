@@ -28,6 +28,7 @@ const NavigationBar = ({
   const [alerts, setAlerts] = useState([]);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
+  const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const navigate = useNavigate();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
@@ -158,7 +159,8 @@ const NavigationBar = ({
     // Check if there are new alerts
     if (newAlerts.length > alerts.length) {
       setAlerts(newAlerts);
-      setOpenNotif(true); // Open notifications panel when new alerts arrive
+      //setOpenNotif(true); // Open notifications panel when new alerts arrive
+      setIsSeenNotifications(false);
     } else {
       setAlerts(newAlerts); // Just update alerts
     }
@@ -188,6 +190,11 @@ const NavigationBar = ({
           </div>
         </div>
       ));
+  };
+
+  const handleNotifClick = () => {
+    setOpenNotif(!openNotif);
+    setIsSeenNotifications(true); // Mark notifications as seen
   };
 
   return (
@@ -222,7 +229,7 @@ const NavigationBar = ({
           <div className="flex-none gap-2">
             <button
               className="btn btn-ghost btn-circle"
-              onClick={() => setOpenNotif((prevState) => !prevState)}
+              onClick={handleNotifClick}
             >
               <div className="indicator">
                 <svg
@@ -239,7 +246,9 @@ const NavigationBar = ({
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                <span className="badge badge-xs badge-primary indicator-item"></span>
+                {!isSeenNotifications && (
+                  <span className="badge badge-xs badge-primary indicator-item"></span>
+                )}
               </div>
             </button>
             <div className="dropdown dropdown-end">

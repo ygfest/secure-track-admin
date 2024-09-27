@@ -88,15 +88,15 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex p-4 items-center justify-center min-h-screen">
+    <div className="flex p-4 items-center justify-center min-h-screen bg-white">
       <form
         onSubmit={handleSubmit}
-        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-0 md:gap-4"
+        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-0 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-lg"
       >
         <h2 className="flex text-2xl font-semibold justify-center md:justify-normal">
           Create your account
         </h2>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <label htmlFor="firstname" className="text-sm">
             First Name
           </label>
@@ -228,7 +228,7 @@ export default function SignUp() {
 
         <GoogleButton />
 
-        <p className="text-center text-sm">
+        <p className="text-center text-sm mt-2">
           Already have an account?{" "}
           <Link to="/sign-in" className="text-primary font-bold">
             Sign in
