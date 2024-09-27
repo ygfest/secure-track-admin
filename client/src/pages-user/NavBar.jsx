@@ -199,7 +199,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   }, [isLocationOn]);
 
   const handleLocationToggle = () => {
-    toggleLocation(); // Toggling state (on/off)
+    toggleLocation();
   };
 
   return (
