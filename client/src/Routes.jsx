@@ -28,7 +28,7 @@ const AdminRoutes = () => {
       <Route path="/tracking" element={<AdminLuggageTracking />} />
       <Route path="/user-management" element={<UserManagement />} />
       <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
-      <Route path="/admin-profile" element={<AdminProfile />} />
+      <Route path="/profile" element={<AdminProfile />} />
     </Routes>
   );
 };

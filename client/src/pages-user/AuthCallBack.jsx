@@ -51,8 +51,19 @@ export default function AuthCallback() {
               }
             );
 
+            const userRoleResponse = await axios.get(`${apiUrl}/auth/verify`, {
+              withCredentials: true,
+            });
+
+            const userRole = userRoleResponse.data.user.role;
+            console.log(userRole);
+
             // Redirect to home or dashboard
-            navigate("/user");
+            if (userRole === "admin") {
+              navigate("/admin");
+            } else {
+              navigate("/user");
+            }
           } catch (err) {
             console.error("Error saving user info:", err);
             setError("Failed to save user information.");

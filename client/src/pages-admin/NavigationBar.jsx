@@ -25,6 +25,8 @@ const NavigationBar = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
+  const [adminProfileDp, setAdminProfileDp] = useState("");
+  const [adminProfileName, setAdminProfileName] = useState("");
   const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
@@ -36,6 +38,29 @@ const NavigationBar = ({
   };
 
   axios.defaults.withCredentials = true;
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/auth/verify`, {
+          withCredentials: true,
+        });
+        console.log(response.data);
+        if (!response.data.status) {
+          navigate("/sign-in");
+        } else {
+          setAdminProfileDp(response.data.user.profile_dp);
+          setAdminProfileName(response.data.user.firstname);
+          console.log("admin name: ", adminProfileName);
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+        navigate("/sign-in");
+      }
+    };
+    verifyToken();
+  }, [navigate]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
@@ -234,9 +259,16 @@ const NavigationBar = ({
                 className="btn btn-ghost btn-circle avatar"
                 onClick={toggleProfile}
               >
-                <div className="w-10 rounded-full">
-                  <img alt="Profile" src={Profile} />
-                </div>
+                {adminProfileDp ? (
+                  <div className="w-10 rounded-full">
+                    <img alt="Profile" src={adminProfileDp} />
+                  </div>
+                ) : (
+                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
+                    {adminProfileName &&
+                      adminProfileName.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
               {isOpenProfile && (
                 <ul
@@ -306,7 +338,7 @@ const NavigationBar = ({
             </li>
             <li>
               <a
-                href="/admin/admin-profile"
+                href="/admin/profile"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
