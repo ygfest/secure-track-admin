@@ -263,9 +263,10 @@ const UserManagement = () => {
                             <div className="text-sm font-medium text-gray-900">
                               {user.firstname} {user.lastname}
                             </div>
-                            <div className="text-sm text-gray-500">
-                              no. of reg lugagge?
-                            </div>
+                            <span className="badge badge-ghost badge-sm">
+                              Joined{" "}
+                              {new Date(user.createdAt).toLocaleDateString()}
+                            </span>
                           </div>
                         </div>
                       </td>

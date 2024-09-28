@@ -29,7 +29,7 @@ router.get('/verify', verifyUser, async (req, res) => {
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt } });
+    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt } });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
