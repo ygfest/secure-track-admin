@@ -134,6 +134,12 @@ const AdminAssocLuggage = () => {
     setCurrentPage(1);
   };
 
+  const user = usersData.find((user) => user._id === currentLuggage?.user_id);
+
+  const ownerName = user
+    ? user.firstname + " " + user.lastname
+    : "Unknown Owner";
+
   const handleAddNew = async (luggageData) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -264,7 +270,6 @@ const AdminAssocLuggage = () => {
                   <th className="py-3 px-6 text-left">Luggage Name</th>
                   <th className="py-3 px-6 text-left">Associated with</th>
                   <th className="py-3 px-6 text-left">Location</th>
-                  <th className="py-3 px-6 text-left">Destination</th>
                   <th className="py-3 px-6 text-left">Status</th>
                   <th className="py-3 px-6 text-left">Action</th>
                   <th className="py-3 px-6"></th>
@@ -313,9 +318,6 @@ const AdminAssocLuggage = () => {
                       </td>
                       <td className="py-3 px-6 text-left">
                         {luggage.currentLocation}
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        {luggage.destination}
                       </td>
                       <td className="py-3 px-6 text-left">
                         <span
@@ -464,12 +466,12 @@ const AdminAssocLuggage = () => {
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Destination</label>
+                <label className="label">Owner Name</label>
                 <input
-                  name="destination"
+                  name="luggage_owner_name"
                   type="text"
                   className="input input-bordered"
-                  defaultValue={currentLuggage.destination}
+                  defaultValue={ownerName}
                   required
                 />
               </div>
