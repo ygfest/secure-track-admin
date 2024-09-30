@@ -16,7 +16,29 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
   const { isLocationOn, toggleLocation } = useLocation();
+  const [adminProfileDp, setAdminProfileDp] = useState("");
+  const [adminProfile, setAdminProfile] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/auth/verify`, {
+          withCredentials: true,
+        });
+        if (!response.data.status) {
+          navigate("/sign-in");
+        } else {
+          setAdminProfile(response.data.user.firstname);
+          setAdminProfileDp(response.data.user.profile_dp);
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+      }
+    };
+    verifyToken();
+  }, [navigate]);
 
   const getAlertIcon = (alertType) => {
     switch (alertType) {
@@ -171,7 +193,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   }, [isLocationOn]);
 
   const handleLocationToggle = () => {
-    toggleLocation(); // Toggling state (on/off)
+    toggleLocation();
   };
 
   return (
@@ -324,9 +346,15 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             className="btn btn-ghost btn-circle avatar"
             onClick={handleDropProfile}
           >
-            <div className="w-10 rounded-full">
-              <img src={Profile} alt="Profile" />
-            </div>
+            {adminProfileDp ? (
+              <div className="w-10 rounded-full">
+                <img src={adminProfileDp} alt="Profile" />
+              </div>
+            ) : (
+              <div className="w-12 rounded-full bg-zinc-400 text-white text-large">
+                {adminProfile && adminProfile.charAt(0).toUpperCase()}
+              </div>
+            )}
           </label>
           {isDropProfile && (
             <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
