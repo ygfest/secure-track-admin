@@ -104,40 +104,41 @@ const UserManagement = () => {
     setCurrentPage(1);
   };
 
-  const handleAddNew = async (luggageData) => {
+  const handleAddNew = async (userInfo) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.post(
-        `${apiUrl}/luggage-router/addluggage`,
-        luggageData
+        `${apiUrl}/auth/admin-user-register`,
+        userInfo
       );
-      setLuggageInfo((prev) => [...prev, response.data]);
-      setFilteredData((prev) => [...prev, response.data]);
+
+      // Add new user to state
+      setUsersData((prev) => [...prev, response.data.user]);
+      setFilteredData((prev) => [...prev, response.data.user]);
       setTotalItems((prev) => prev + 1);
+
+      // Close modal and refresh
       setShowAddModal(false);
       window.location.reload();
     } catch (error) {
-      console.error("Error adding luggage", error);
+      console.error("Error adding user", error);
     }
   };
 
-  const handleUpdateLuggage = async (luggageData) => {
+  const handleUpdateLuggage = async (userInfo) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
-        `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
-        luggageData
+        `${apiUrl}/auth/updateuser/${userInfo._id}`,
+        userInfo
       );
-      setLuggageInfo((prev) =>
-        prev.map((item) =>
-          item._id === luggageData._id ? response.data : item
-        )
+      setUsersData((prev) =>
+        prev.map((item) => (item._id === userInfo._id ? response.data : item))
       );
       setFilteredData((prev) =>
-        prev.map((item) =>
-          item._id === luggageData._id ? response.data : item
-        )
+        prev.map((item) => (item._id === userInfo._id ? response.data : item))
       );
+
       setShowUpdateModal(false);
       window.location.reload();
     } catch (error) {
@@ -343,37 +344,55 @@ const UserManagement = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 handleAddNew({
-                  luggage_custom_name: e.target.luggage_custom_name.value,
-                  luggage_tag_number: e.target.luggage_tag_number.value,
-                  destination: e.target.destination.value,
-                  user_id: userId,
+                  firstname: e.target.firstname.value,
+                  lastname: e.target.lastname.value,
+                  email: e.target.email.value,
+                  password: e.target.password.value,
                 });
                 setShowAddModal(false);
               }}
             >
               <div className="form-control mb-4">
-                <label className="label">Luggage Name</label>
+                <label className="label">First Name</label>
                 <input
-                  name="luggage_custom_name"
+                  name="firstname"
                   type="text"
                   className="input input-bordered"
                   required
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Tag Number</label>
+                <label className="label">Last Name</label>
                 <input
-                  name="luggage_tag_number"
+                  name="lastname"
                   type="text"
                   className="input input-bordered"
                   required
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Destination</label>
+                <label className="label">Email</label>
                 <input
-                  name="destination"
-                  type="text"
+                  name="email"
+                  type="email"
+                  className="input input-bordered"
+                  required
+                />
+              </div>
+              <div className="form-control mb-4">
+                <label className="label">Password</label>
+                <input
+                  name="password"
+                  type="password"
+                  className="input input-bordered"
+                  required
+                />
+              </div>
+              <div className="form-control mb-4">
+                <label className="label">Confirm Password</label>
+                <input
+                  name="confirmed_password"
+                  type="password"
                   className="input input-bordered"
                   required
                 />

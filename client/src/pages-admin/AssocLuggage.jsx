@@ -8,7 +8,6 @@ const AdminAssocLuggage = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [usersData, setUsersData] = useState([]);
-  const [userId, setUserId] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,12 +16,11 @@ const AdminAssocLuggage = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentLuggage, setCurrentLuggage] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState("");
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
   }, []);
-
-  console.log(userId);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -38,7 +36,6 @@ const AdminAssocLuggage = () => {
           navigate("/sign-in");
         } else {
           console.log("Authorized");
-          setUserId(response.data.user.userID);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -135,6 +132,7 @@ const AdminAssocLuggage = () => {
   };
 
   const user = usersData.find((user) => user._id === currentLuggage?.user_id);
+  const userId = user?._id;
 
   const ownerName = user
     ? user.firstname + " " + user.lastname
@@ -438,9 +436,9 @@ const AdminAssocLuggage = () => {
                   _id: currentLuggage._id,
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
-                  destination: e.target.destination.value,
+                  luggage_owner_name: e.target.luggage_owner_name.value,
                   status: e.target.status.value,
-                  user_id: userId,
+                  user_id: userId, //the userId should be the _id of the user
                 });
                 setShowUpdateModal(false);
               }}
@@ -473,7 +471,10 @@ const AdminAssocLuggage = () => {
                   className="input input-bordered"
                   defaultValue={ownerName}
                   required
-                />
+                />{" "}
+                i want a drop down component for this but initially display the
+                ownername (dropdown when clicked list the names of all users
+                name available by mapping)
               </div>
               <div className="form-control mb-4">
                 <label className="label">Status</label>

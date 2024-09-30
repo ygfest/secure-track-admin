@@ -85,6 +85,34 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+router.post('/admin-user-register', async (req, res) => {
+  const { firstname, lastname, email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user = new User({
+      firstname,
+      lastname,
+      email,
+      password: hashedPassword,
+      role: 'user',
+    });
+
+    await user.save();
+
+    return res.status(201).json({ status: true, message: "User registered successfully", user: {email: user.email, role: user.role} });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
   try {
