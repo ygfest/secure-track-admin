@@ -22,8 +22,6 @@ const UserManagement = () => {
     Axios.defaults.withCredentials = true;
   }, []);
 
-  console.log(userId);
-
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -38,7 +36,6 @@ const UserManagement = () => {
           navigate("/sign-in");
         } else {
           console.log("Authorized");
-          setUserId(response.data.user.userID);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -142,14 +139,14 @@ const UserManagement = () => {
       setShowUpdateModal(false);
       window.location.reload();
     } catch (error) {
-      console.error("Error updating luggage", error);
+      console.error("Error updating user", error);
     }
   };
 
   const handleDeleteLuggage = async (userId) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${userId}`);
+      await Axios.delete(`${apiUrl}/auth/deleteuser/${userId}`);
       setLuggageInfo((prev) => prev.filter((item) => item._id !== userId));
       setFilteredData((prev) => prev.filter((item) => item._id !== userId));
       setTotalItems((prev) => prev - 1);
@@ -417,58 +414,57 @@ const UserManagement = () => {
       {showUpdateModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Update Luggage</h3>
+            <h3 className="text-xl font-semibold mb-4">Edit User</h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleUpdateLuggage({
-                  _id: currentLuggage._id,
-                  luggage_custom_name: e.target.luggage_custom_name.value,
-                  luggage_tag_number: e.target.luggage_tag_number.value,
-                  destination: e.target.destination.value,
-                  status: e.target.status.value,
-                  user_id: userId,
+                  _id: currentUser._id,
+                  firstname: e.target.firstname.value,
+                  lastname: e.target.lastname.value,
+                  email: e.target.email.value,
+                  phone: e.target.phone.value,
                 });
                 setShowUpdateModal(false);
               }}
             >
               <div className="form-control mb-4">
-                <label className="label">Luggage Name</label>
+                <label className="label"> Firstname</label>
                 <input
-                  name="luggage_custom_name"
+                  name="firstname"
                   type="text"
                   className="input input-bordered"
-                  defaultValue={currentLuggage.luggage_custom_name}
+                  defaultValue={currentUser.firstname}
                   required
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Tag Number</label>
+                <label className="label">Lastname</label>
                 <input
-                  name="luggage_tag_number"
+                  name="lastname"
                   type="text"
                   className="input input-bordered"
-                  defaultValue={currentLuggage.luggage_tag_number}
+                  defaultValue={currentUser.lastname}
                   required
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Destination</label>
+                <label className="label">Email</label>
                 <input
-                  name="destination"
-                  type="text"
+                  name="email"
+                  type="email"
                   className="input input-bordered"
-                  defaultValue={currentLuggage.destination}
+                  defaultValue={currentUser.email}
                   required
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Status</label>
+                <label className="label">Phone Number</label>
                 <input
-                  name="status"
+                  name="phone"
                   type="text"
                   className="input input-bordered"
-                  defaultValue={currentLuggage.status}
+                  defaultValue={currentUser.phone}
                   required
                 />
               </div>
@@ -493,7 +489,7 @@ const UserManagement = () => {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Confirm Delete</h3>
-            <p>Are you sure you want to delete this luggage?</p>
+            <p>Are you sure you want to delete this user?</p>
             <div className="modal-action">
               <button
                 className="btn btn-danger bg-red-500 text-white"

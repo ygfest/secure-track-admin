@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const Luggage = require('../models/Luggage');
 
 const router = express.Router();
 
@@ -293,6 +294,34 @@ router.delete('/delete-location', verifyUser, async (req, res) => {
     res.status(500).json({ status: 'error', message: 'Failed to delete location' });
   }
 });
+
+
+router.put('/updateuser/:id', verifyUser, async (req, res) => {
+  const{firstname, lastname, email, phone} = req.body;
+  const userId = req.params.id;
+
+  if(!firstname || !lastname || !email || phone){
+    return res.status(400).json({status: false, message: "All fields are required"})
+  }
+
+  try {
+    const updatedUser = await Luggage.findByIdAndUpdate(userId, {
+      firstname,
+      lastname,
+      email,
+      phone
+    }, {new: true});
+
+    if(!updatedUser){
+      return res.status(404).json({status: false, message: "User not found"})
+    }
+    res.json(updatedUser)
+    
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).send('Server error');
+  }
+})
 
 
 module.exports = router;
