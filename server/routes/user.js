@@ -297,31 +297,52 @@ router.delete('/delete-location', verifyUser, async (req, res) => {
 
 
 router.put('/updateuser/:id', verifyUser, async (req, res) => {
-  const{firstname, lastname, email, phone} = req.body;
+  const { firstname, lastname, email, phone } = req.body;
   const userId = req.params.id;
 
-  if(!firstname || !lastname || !email || phone){
-    return res.status(400).json({status: false, message: "All fields are required"})
+  // Corrected the conditional to only check if any required fields are missing
+  if (!firstname || !lastname || !email) {
+    return res.status(400).json({ status: false, message: "All fields are required" });
   }
 
   try {
-    const updatedUser = await Luggage.findByIdAndUpdate(userId, {
-      firstname,
-      lastname,
-      email,
-      phone
-    }, {new: true});
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstname,
+        lastname,
+        email,
+        phone
+      },
+      { new: true }
+    );
 
-    if(!updatedUser){
-      return res.status(404).json({status: false, message: "User not found"})
+    if (!updatedUser) {
+      return res.status(404).json({ status: false, message: "User not found" });
     }
-    res.json(updatedUser)
-    
+
+    res.json(updatedUser);
   } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).send('Server error');
+    console.error("Error updating user:", error);
+    res.status(500).send("Server error");
+  }
+});
+
+router.delete('/deleteuser/:id', verifyUser, async(req, res) => {
+  const userId = req.params.id;
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    
+    if(!deletedUser) {
+      return res.status(404).json({status: false, message: "User not found"});
+    }
+    res.json({status: true, message: "User deleted successfully"});
+  } catch (error) {
+    console.error("Error deleting user:", error)
+    res.status(500).send("Server error");
   }
 })
+
 
 
 module.exports = router;

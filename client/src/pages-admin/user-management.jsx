@@ -124,6 +124,7 @@ const UserManagement = () => {
 
   const handleUpdateLuggage = async (userInfo) => {
     try {
+      console.log(userInfo); // Add this line for debugging
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
         `${apiUrl}/auth/updateuser/${userInfo._id}`,
@@ -135,11 +136,10 @@ const UserManagement = () => {
       setFilteredData((prev) =>
         prev.map((item) => (item._id === userInfo._id ? response.data : item))
       );
-
       setShowUpdateModal(false);
       window.location.reload();
     } catch (error) {
-      console.error("Error updating user", error);
+      console.error("Error updating user", error.response?.data || error);
     }
   };
 
@@ -275,7 +275,10 @@ const UserManagement = () => {
                           idk yet
                         </span>
                       </td>
-                      <td className="py-3 px-6 text-left">0965662532</td>
+
+                      <td className="py-3 px-6 text-left">
+                        {user.phone ? user.phone : "No phone number"}
+                      </td>
                       <td className="py-3 px-6 text-left">
                         <button
                           className={`btn btn-outline btn-xs ${

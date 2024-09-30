@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: function() { return !this.googleId; }, // Password required if no Google ID
   },
+  phone: {
+    type: String,
+  },
   role: {
     type: String,
     default: "user", 
