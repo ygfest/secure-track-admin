@@ -29,6 +29,14 @@ export default function SignUp() {
   const validate = () => {
     const newErrors = {};
 
+    if (!formData.firstname) {
+      newErrors.firstname = "First name is required";
+    }
+
+    if (!formData.lastname) {
+      newErrors.lastname = "Last name is required";
+    }
+
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -36,7 +44,8 @@ export default function SignUp() {
     }
 
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (!passwordRegex.test(formData.password)) {
@@ -73,7 +82,7 @@ export default function SignUp() {
       );
 
       if (response.data.status) {
-        console.log("Navigating to dashBoard");
+        console.log("Navigating to dashboard");
         setIsPending(false);
         navigate("/user");
       } else {
@@ -97,33 +106,42 @@ export default function SignUp() {
           Create your account
         </h2>
         <div className="flex flex-col gap-2">
-          <label htmlFor="firstname" className="text-sm">
-            First Name
-          </label>
-          <input
-            type="text"
-            name="firstname"
-            className="input input-bordered"
-            value={formData.firstname}
-            onChange={handleChange}
-            placeholder="Enter your first name"
-          />
-          {errors.firstname && (
-            <p className="text-red-500">{errors.firstname}</p>
-          )}
+          <div className="flex flex-row">
+            <label htmlFor="firstname" className="text-sm mr-2">
+              First Name
+            </label>
+            <label htmlFor="lastname" className="text-sm">
+              Last Name
+            </label>
+          </div>
 
-          <label htmlFor="lastname" className="text-sm">
-            Last Name
-          </label>
-          <input
-            type="text"
-            name="lastname"
-            className="input input-bordered"
-            value={formData.lastname}
-            onChange={handleChange}
-            placeholder="Enter your last name"
-          />
-          {errors.lastname && <p className="text-red-500">{errors.lastname}</p>}
+          <div className="flex flex-row gap-2">
+            <input
+              type="text"
+              name="firstname"
+              id="firstname"
+              className="input input-bordered"
+              value={formData.firstname}
+              onChange={handleChange}
+              placeholder="Enter your first name"
+            />
+            {errors.firstname && (
+              <p className="text-red-500">{errors.firstname}</p>
+            )}
+
+            <input
+              type="text"
+              name="lastname"
+              id="lastname"
+              className="input input-bordered"
+              value={formData.lastname}
+              onChange={handleChange}
+              placeholder="Enter your last name"
+            />
+            {errors.lastname && (
+              <p className="text-red-500">{errors.lastname}</p>
+            )}
+          </div>
 
           <label htmlFor="email" className="text-sm">
             Email
@@ -131,6 +149,7 @@ export default function SignUp() {
           <input
             type="email"
             name="email"
+            id="email"
             className="input input-bordered"
             value={formData.email}
             onChange={handleChange}
@@ -145,6 +164,7 @@ export default function SignUp() {
             <input
               type={isPasswordVisible ? "text" : "password"}
               name="password"
+              id="password"
               className="w-full pr-4"
               style={{
                 paddingTop: "calc(0.675rem - 1px)",
@@ -175,6 +195,7 @@ export default function SignUp() {
             <input
               type={isConfirmPasswordVisible ? "text" : "password"}
               name="confirmPassword"
+              id="confirmPassword"
               className="w-full pr-4"
               style={{
                 paddingTop: "calc(0.675rem - 1px)",
@@ -230,7 +251,7 @@ export default function SignUp() {
 
         <p className="text-center text-sm mt-2">
           Already have an account?{" "}
-          <Link to="/sign-in" className="text-primary font-bold">
+          <Link to="/sign-in" className="font-semibold text-primary">
             Sign in
           </Link>
         </p>
