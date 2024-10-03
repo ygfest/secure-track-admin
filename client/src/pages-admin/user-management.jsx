@@ -251,11 +251,18 @@ const UserManagement = () => {
                       <td className="py-3 px-6 text-left">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={user.profile_dp}
-                              alt="Luggage"
-                            />
+                            {user.profile_dp ? (
+                              <img
+                                className="h-10 w-10 rounded-full"
+                                src={user.profile_dp}
+                                alt="Luggage"
+                              />
+                            ) : (
+                              <div className="flex h-10 w-10 bg-zinc-400 rounded-full justify-center items-center text-lg text-white">
+                                {user.firstname.charAt(0).toUpperCase()}
+                                {user.lastname.charAt(0)}
+                              </div>
+                            )}
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">

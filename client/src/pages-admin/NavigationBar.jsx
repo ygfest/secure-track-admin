@@ -26,7 +26,8 @@ const NavigationBar = ({
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
   const [adminProfileDp, setAdminProfileDp] = useState("");
-  const [adminProfileName, setAdminProfileName] = useState("");
+  const [adminProfileFirstName, setAdminProfileFirstName] = useState("");
+  const [adminProfileLastName, setAdminProfileLastName] = useState("");
   const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
@@ -51,8 +52,8 @@ const NavigationBar = ({
           navigate("/sign-in");
         } else {
           setAdminProfileDp(response.data.user.profile_dp);
-          setAdminProfileName(response.data.user.firstname);
-          console.log("admin name: ", adminProfileName);
+          setAdminProfileFirstName(response.data.user.firstname);
+          setAdminProfileLastName(response.data.user.lastname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -264,9 +265,14 @@ const NavigationBar = ({
                     <img alt="Profile" src={adminProfileDp} />
                   </div>
                 ) : (
-                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
-                    {adminProfileName &&
-                      adminProfileName.charAt(0).toUpperCase()}
+                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
+                    {adminProfileFirstName &&
+                      adminProfileLastName &&
+                      `${adminProfileFirstName
+                        .charAt(0)
+                        .toUpperCase()}${adminProfileLastName
+                        .charAt(0)
+                        .toUpperCase()}`}
                   </div>
                 )}
               </div>

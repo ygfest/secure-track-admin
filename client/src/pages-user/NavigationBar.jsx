@@ -28,6 +28,7 @@ const NavigationBar = ({
   const [alerts, setAlerts] = useState([]);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
+  const [profileLastName, setProfileLastName] = useState("");
   const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const navigate = useNavigate();
 
@@ -53,6 +54,7 @@ const NavigationBar = ({
         } else {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
+          setProfileLastName(response.data.user.lastname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -263,8 +265,9 @@ const NavigationBar = ({
                     <img alt="Profile" src={profileDp} />
                   </div>
                 ) : (
-                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
+                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
                     {profileName && profileName.charAt(0).toUpperCase()}
+                    {profileLastName && profileLastName.charAt(0)}
                   </div>
                 )}
               </div>

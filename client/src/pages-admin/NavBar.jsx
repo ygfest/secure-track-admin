@@ -18,6 +18,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const { isLocationOn, toggleLocation } = useLocation();
   const [adminProfileDp, setAdminProfileDp] = useState("");
   const [adminProfile, setAdminProfile] = useState("");
+  const [adminLastName, setAdminLastName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
         } else {
           setAdminProfile(response.data.user.firstname);
           setAdminProfileDp(response.data.user.profile_dp);
+          setAdminLastName(response.data.user.lastname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -277,7 +279,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
         </div>
       </div>
 
-      {/* Center: Logo */}
       <div className="navbar-center flex items-center justify-center">
         <Link
           to="/user/"
@@ -287,8 +288,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
           <img src={Logo} alt="Secure Track" className="h-8" />
         </Link>
       </div>
-
-      {/* Right: Location, Notification, Profile */}
       <div className="navbar-end flex items-center space-x-4">
         <label
           className="flex items-center cursor-pointer"
@@ -303,7 +302,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
           />
         </label>
 
-        {/* Notification Icon */}
         <button
           className="btn btn-ghost btn-circle"
           onClick={() => setOpenNotif(!openNotif)}
@@ -330,7 +328,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             )}
           </div>
         </button>
-        {/* Notifications Popup */}
         {openNotif && (
           <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
             <h3 className="font-bold text-lg mb-3">Notifications</h3>
@@ -338,7 +335,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
           </div>
         )}
 
-        {/* Profile Icon */}
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
@@ -351,8 +347,9 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                 <img src={adminProfileDp} alt="Profile" />
               </div>
             ) : (
-              <div className="w-12 rounded-full bg-zinc-400 text-white text-large">
+              <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
                 {adminProfile && adminProfile.charAt(0).toUpperCase()}
+                {adminLastName && adminLastName.charAt(0)}
               </div>
             )}
           </label>

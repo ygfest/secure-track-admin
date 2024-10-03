@@ -17,6 +17,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [openNotif, setOpenNotif] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
+  const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
   const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
         } else {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
+          setProfileLastName(response.data.user.lastname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -348,8 +350,9 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                 <img src={profileDp} alt="Profile" />
               </div>
             ) : (
-              <div className="w-14 pt-1 rounded-full flex justify-center items-center bg-gray-300 text-gray-800 text-xl font-bold border-4 border-white ">
+              <div className="w-14 pt-1 rounded-full flex justify-center items-center bg-gray-300 text-gray-800 text-xl border-4 border-white ">
                 {profileName && profileName.charAt(0).toUpperCase()}
+                {profileLastName && profileLastName.charAt(0)}
               </div>
             )}
           </label>
