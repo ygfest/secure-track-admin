@@ -307,49 +307,49 @@ const NavigationBar = ({
         >
           <ul className="mt-6">
             <li>
-              <a
-                href="/admin/"
+              <Link
+                to="/admin/"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Dashboard
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/admin/tracking"
+              <Link
+                to="/admin/tracking"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Live Tracking
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/admin/luggage"
+              <Link
+                to="/admin/luggage"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Luggage Management
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/admin/user-management"
+              <Link
+                to="/admin/user-management"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 User Accounts
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/admin/profile"
+              <Link
+                to="/admin/profile"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
                 Profile
-              </a>
+              </Link>
             </li>
             <li
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-200 rounded-full"

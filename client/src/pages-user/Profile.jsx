@@ -107,9 +107,9 @@ const Profile = () => {
       <Toaster
         position="top-right"
         toastOptions={{
-          duration: 3000, // Set duration for how long each toast stays
+          duration: 3000,
           style: {
-            margin: "5px 0", // Space between toasts
+            margin: "5px 0",
           },
         }}
       />
