@@ -302,40 +302,40 @@ const NavigationBar = ({
         >
           <ul className="mt-6">
             <li>
-              <a
-                href="/user/"
+              <Link
+                to="/user/"
                 className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
                 onClick={toggleSideBar}
               >
                 Dashboard
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/user/tracking"
+              <Link
+                to="/user/tracking"
                 className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
                 onClick={toggleSideBar}
               >
                 Live Tracking
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/user/luggage"
+              <Link
+                to="/user/luggage"
                 className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
                 onClick={toggleSideBar}
               >
                 My Luggage
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/user/profile"
+              <Link
+                to="/user/profile"
                 className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
                 onClick={toggleSideBar}
               >
                 Profile
-              </a>
+              </Link>
             </li>
             <li
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-200 rounded-full"
