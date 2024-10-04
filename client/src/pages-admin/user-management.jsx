@@ -46,37 +46,34 @@ const UserManagement = () => {
     verifyToken();
   }, [navigate]);
 
-  useEffect(() => {
-    async function fetchUsersData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/users`, {
-          withCredentials: true,
-        });
-        const dataJson = response.data;
-        setUsersData(dataJson);
-        setFilteredData(dataJson);
-        setTotalItems(dataJson.length);
-      } catch (error) {
-        console.log("error fetching user data", error);
-      }
+  async function fetchUsersData() {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.get(`${apiUrl}/auth/users`, {
+        withCredentials: true,
+      });
+      const dataJson = await response.data;
+      setUsersData(dataJson);
+      setFilteredData(dataJson);
+      setTotalItems(dataJson.length);
+    } catch (error) {
+      console.log("error fetching user data", error);
     }
+  }
+  async function fetchLuggageInfo() {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.get(
+        `${apiUrl}/luggage-router/luggage-admin`
+      );
+      setLuggageInfo(response.data);
+    } catch (error) {
+      console.log("error fetching luggage info", error);
+    }
+  }
 
+  useEffect(() => {
     fetchUsersData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(
-          `${apiUrl}/luggage-router/luggage-admin`
-        );
-        setLuggageInfo(response.data);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
     fetchLuggageInfo();
   }, []);
 
@@ -103,28 +100,25 @@ const UserManagement = () => {
 
   const handleAddNew = async (userInfo) => {
     try {
+      console.log("User info to add:", userInfo);
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.post(
         `${apiUrl}/auth/admin-user-register`,
         userInfo
       );
-
-      // Add new user to state
       setUsersData((prev) => [...prev, response.data.user]);
       setFilteredData((prev) => [...prev, response.data.user]);
       setTotalItems((prev) => prev + 1);
-
-      // Close modal and refresh
+      fetchUsersData();
       setShowAddModal(false);
-      window.location.reload();
     } catch (error) {
-      console.error("Error adding user", error);
+      console.error("Error adding user", error.response?.data || error);
     }
   };
 
   const handleUpdateLuggage = async (userInfo) => {
     try {
-      console.log(userInfo); // Add this line for debugging
+      console.log(userInfo);
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
         `${apiUrl}/auth/updateuser/${userInfo._id}`,
@@ -137,7 +131,6 @@ const UserManagement = () => {
         prev.map((item) => (item._id === userInfo._id ? response.data : item))
       );
       setShowUpdateModal(false);
-      window.location.reload();
     } catch (error) {
       console.error("Error updating user", error.response?.data || error);
     }
@@ -151,7 +144,6 @@ const UserManagement = () => {
       setFilteredData((prev) => prev.filter((item) => item._id !== userId));
       setTotalItems((prev) => prev - 1);
       setShowDeleteModal(false);
-      window.location.reload();
     } catch (error) {
       console.error("Error deleting luggage", error);
     }
@@ -259,8 +251,8 @@ const UserManagement = () => {
                               />
                             ) : (
                               <div className="flex h-10 w-10 bg-zinc-400 rounded-full justify-center items-center text-lg text-white">
-                                {user.firstname.charAt(0).toUpperCase()}
-                                {user.lastname.charAt(0)}
+                                {user.firstname?.charAt(0).toUpperCase()}
+                                {user.lastname?.charAt(0)}
                               </div>
                             )}
                           </div>
