@@ -48,6 +48,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
+
 router.post('/signup', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
 
@@ -366,6 +367,15 @@ router.post('/user-report', verifyUser, async(req, res) => {
     res.status(500).json({status: false, message: "Server error"});
   }
 });
+
+router.get('/reports', async (req, res) => {
+  try {
+    const reports = await Report.find();
+    res.json(reports)
+  } catch (error) {
+    console.error("Error fetching reports:", error)
+  }
+})
 
 
 module.exports = router;

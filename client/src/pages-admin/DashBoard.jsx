@@ -46,6 +46,7 @@ const DashBoard = () => {
   const [fallDetectData, setFallDetectData] = useState([]);
   const [tamperData, setTamperData] = useState([]);
   const [selectedLuggage, setSelectedLuggage] = useState("All");
+  const [reportsData, setReportsData] = useState([]);
   const [userFirstName, setUserFirstName] = useState("");
   const [tempData, setTempData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -421,6 +422,29 @@ const DashBoard = () => {
     },
   };
 
+  useEffect(() => {
+    async function fetchReports() {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/auth/reports`, {
+          withCredentials: true,
+        });
+        setReportsData(response.data);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    }
+    fetchReports();
+  }, []);
+
+  const deviceReports = reportsData.filter(
+    (report) => report.type === "device-anomaly"
+  ).length;
+
+  const softwareReports = reportsData.filter(
+    (report) => report.type === "software-anomaly"
+  ).length;
+
   return (
     <>
       <NavigationBar
@@ -461,15 +485,15 @@ const DashBoard = () => {
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaShieldAlt className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{totalTamper}</h2>
+              <h2 className="text-3xl font-bold">{deviceReports}</h2>
               <p className="text-gray-600">Device Anomalies</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaExclamationTriangle className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{totalFall}</h2>
-              <p className="text-gray-600">User Reports</p>
+              <h2 className="text-3xl font-bold">{softwareReports}</h2>
+              <p className="text-gray-600">Software Reports</p>
             </div>
           </div>
         </div>
