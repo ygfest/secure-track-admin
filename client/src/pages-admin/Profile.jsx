@@ -24,7 +24,7 @@ const AdminProfile = () => {
   const [report, setReport] = useState({
     type: "device-anomaly", // Default value for the dropdown
     title: "",
-    message: "",
+    description: "",
   });
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const AdminProfile = () => {
         toast.error("Error submitting report");
       } else {
         toast.success("Successfully submitted");
-        setReport({ type: "device-anomaly", title: "", message: "" });
+        setReport({ type: "device-anomaly", title: "", description: "" });
       }
     } catch (error) {
       console.error("Error submitting report:", error);
@@ -213,9 +213,9 @@ const AdminProfile = () => {
 
             <textarea
               placeholder="Describe the issue"
-              value={report.message}
+              value={report.description}
               onChange={(e) =>
-                setReport({ ...report, message: e.target.value })
+                setReport({ ...report, description: e.target.value })
               }
               className="w-full p-2 border rounded-md"
               rows="4"

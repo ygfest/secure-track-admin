@@ -345,17 +345,17 @@ router.delete('/deleteuser/:id', verifyUser, async(req, res) => {
 })
 
 router.post('/user-report', verifyUser, async(req, res) => {
-  const {type, title, message, userId} = req.body;
+  const {type, title, description, userId} = req.body;
 
-  if (!type || !title || !message || !userId) {
-    console.error("Missing fields:", {type, title, message, userId});
+  if (!type || !title || !description || !userId) {
+    console.error("Missing fields:", {type, title, description, userId});
     return res.status(400).json({status: false, message: "All fields are required"});
   }
   try {
     const newReport = new Report({
       type,
       title,
-      message,
+      description,
       userId
     });
 
