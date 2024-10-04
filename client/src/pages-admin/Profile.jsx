@@ -16,13 +16,13 @@ const AdminProfile = () => {
     bio: "",
     profile_dp: "",
     backgroundImage: "",
-    userID: "", //get this to be the userId
+    userID: "",
   });
   const [editMode, setEditMode] = useState(false);
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [report, setReport] = useState({
-    type: "device-anomaly", // Default value for the dropdown
+    type: "device-anomaly",
     title: "",
     description: "",
   });
@@ -81,8 +81,6 @@ const AdminProfile = () => {
         ...report,
         userId: userProfile.userID,
       };
-
-      // Correct the response check
       const response = await Axios.post(
         `${apiUrl}/auth/user-report`,
         reportData
@@ -108,7 +106,15 @@ const AdminProfile = () => {
   return (
     <>
       <NavigationBar />
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            margin: "5px 0",
+          },
+        }}
+      />
       <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <div className="relative">
@@ -188,7 +194,6 @@ const AdminProfile = () => {
           </div>
           <hr className="border-t-2 border-primary my-6" />
           <form onSubmit={handleReportSubmit} className="space-y-4">
-            {/* Dropdown Menu for Type */}
             <label htmlFor="type">Select Anomaly Type:</label>
             <select
               id="type"
