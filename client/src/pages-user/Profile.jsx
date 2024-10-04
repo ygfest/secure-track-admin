@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaGithub, FaFacebook } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import NavigationBar from "./NavigationBar";
+import { toast } from "sonner";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -15,13 +16,15 @@ const Profile = () => {
     bio: "",
     profile_dp: "",
     backgroundImage: "",
+    userID: "",
   });
   const [editMode, setEditMode] = useState(false);
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [report, setReport] = useState({
+    type: "device-anomaly",
     title: "",
-    message: "",
+    description: "",
   });
 
   useEffect(() => {
@@ -71,10 +74,26 @@ const Profile = () => {
 
   const handleReportSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.post(`${apiUrl}/auth/user-report`, report);
-      setReport({ title: "", message: "" });
+
+      const reportData = {
+        ...report,
+        userId: userProfile.userID,
+      };
+      const response = await Axios.post(
+        `${apiUrl}/auth/user-report`,
+        reportData
+      );
+      if (response.status !== 201) {
+        toast.error("Error submitting report");
+      } else {
+        toast.success("Report submitted successfully");
+        setReport({ type: "device-anomaly", title: "", description: "" });
+      }
+
+      setReport({ title: "", description: "" });
     } catch (error) {
       console.error("Error submitting report:", error);
     }
@@ -166,6 +185,18 @@ const Profile = () => {
           <hr className="border-t-2 border-primary my-6" />
           <form onSubmit={handleReportSubmit} className="space-y-4">
             <h3 className="text-xl font-bold">Report an Issue</h3>
+            <select
+              id="type"
+              name="type"
+              value={report.type}
+              onChange={(e) => setReport({ ...report, type: e.target.value })}
+              className="w-full p-2 border rounded-md"
+              required
+            >
+              <option value="device-anomaly">Device Anomaly</option>
+              <option value="software-anomaly">Software Anomaly</option>
+            </select>
+
             <input
               type="text"
               placeholder="Title"
@@ -176,9 +207,9 @@ const Profile = () => {
             />
             <textarea
               placeholder="Describe the issue"
-              value={report.message}
+              value={report.description}
               onChange={(e) =>
-                setReport({ ...report, message: e.target.value })
+                setReport({ ...report, description: e.target.value })
               }
               className="w-full p-2 border rounded-md"
               rows="4"
