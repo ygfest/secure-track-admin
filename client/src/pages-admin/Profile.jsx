@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaGithub, FaFacebook } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import NavigationBar from "./NavigationBar";
+import { toast, Toaster } from "sonner";
 
 const AdminProfile = () => {
   const navigate = useNavigate();
@@ -15,11 +16,13 @@ const AdminProfile = () => {
     bio: "",
     profile_dp: "",
     backgroundImage: "",
+    userID: "", //get this to be the userId
   });
   const [editMode, setEditMode] = useState(false);
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [report, setReport] = useState({
+    type: "device-anomaly", // Default value for the dropdown
     title: "",
     message: "",
   });
@@ -73,12 +76,31 @@ const AdminProfile = () => {
     e.preventDefault();
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.post(`${apiUrl}/auth/user-report`, report);
-      setReport({ title: "", message: "" });
+
+      const reportData = {
+        ...report,
+        userId: userProfile.userID,
+      };
+
+      // Correct the response check
+      const response = await Axios.post(
+        `${apiUrl}/auth/user-report`,
+        reportData
+      );
+
+      if (response.status !== 201) {
+        toast.error("Error submitting report");
+      } else {
+        toast.success("Successfully submitted");
+        setReport({ type: "device-anomaly", title: "", message: "" });
+      }
     } catch (error) {
       console.error("Error submitting report:", error);
+      toast.error("Error submitting report");
     }
   };
+
+  console.log("User ID:", userProfile.userID);
 
   const getSocialUsername = (url) =>
     new URL(url).pathname.split("").slice(1).join("");
@@ -86,6 +108,7 @@ const AdminProfile = () => {
   return (
     <>
       <NavigationBar />
+      <Toaster position="top-right" />
       <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <div className="relative">
@@ -165,7 +188,20 @@ const AdminProfile = () => {
           </div>
           <hr className="border-t-2 border-primary my-6" />
           <form onSubmit={handleReportSubmit} className="space-y-4">
-            <h3 className="text-xl font-bold">Report an Issue</h3>
+            {/* Dropdown Menu for Type */}
+            <label htmlFor="type">Select Anomaly Type:</label>
+            <select
+              id="type"
+              name="type"
+              value={report.type}
+              onChange={(e) => setReport({ ...report, type: e.target.value })}
+              className="w-full p-2 border rounded-md"
+              required
+            >
+              <option value="device-anomaly">Device Anomaly</option>
+              <option value="software-anomaly">Software Anomaly</option>
+            </select>
+
             <input
               type="text"
               placeholder="Title"
@@ -174,6 +210,7 @@ const AdminProfile = () => {
               className="w-full p-2 border rounded-md"
               required
             />
+
             <textarea
               placeholder="Describe the issue"
               value={report.message}

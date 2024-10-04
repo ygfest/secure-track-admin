@@ -4,6 +4,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const Luggage = require('../models/Luggage');
+const Report = require('../models/Report');
 
 const router = express.Router();
 
@@ -343,6 +344,28 @@ router.delete('/deleteuser/:id', verifyUser, async(req, res) => {
   }
 })
 
+router.post('/user-report', verifyUser, async(req, res) => {
+  const {type, title, message, userId} = req.body;
+
+  if (!type || !title || !message || !userId) {
+    console.error("Missing fields:", {type, title, message, userId});
+    return res.status(400).json({status: false, message: "All fields are required"});
+  }
+  try {
+    const newReport = new Report({
+      type,
+      title,
+      message,
+      userId
+    });
+
+    const savedReport = await newReport.save();
+    res.status(201).json(savedReport);
+  } catch (error) {
+    console.error("Error registering report:", error);
+    res.status(500).json({status: false, message: "Server error"});
+  }
+});
 
 
 module.exports = router;
