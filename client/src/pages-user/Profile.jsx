@@ -104,7 +104,15 @@ const Profile = () => {
   return (
     <>
       <NavigationBar />
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000, // Set duration for how long each toast stays
+          style: {
+            margin: "5px 0", // Space between toasts
+          },
+        }}
+      />
       <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <div className="relative">
