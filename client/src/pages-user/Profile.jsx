@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaGithub, FaFacebook } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import NavigationBar from "./NavigationBar";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -92,10 +92,9 @@ const Profile = () => {
         toast.success("Report submitted successfully");
         setReport({ type: "device-anomaly", title: "", description: "" });
       }
-
-      setReport({ title: "", description: "" });
     } catch (error) {
       console.error("Error submitting report:", error);
+      toast.error("Error submitting report");
     }
   };
 
@@ -105,6 +104,7 @@ const Profile = () => {
   return (
     <>
       <NavigationBar />
+      <Toaster position="top-right" />
       <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <div className="relative">
