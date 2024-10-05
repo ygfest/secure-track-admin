@@ -106,7 +106,7 @@ const AssocLuggage = () => {
     if (luggageInfo.length > 0) {
       fetchCurrentLocations();
     }
-  }, [luggageInfo]);
+  }, []);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
