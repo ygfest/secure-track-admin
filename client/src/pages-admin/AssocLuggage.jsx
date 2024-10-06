@@ -105,7 +105,7 @@ const AdminAssocLuggage = () => {
     if (luggageInfo.length > 0) {
       fetchCurrentLocations();
     }
-  }, [luggageInfo]);
+  }, []);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -122,7 +122,8 @@ const AdminAssocLuggage = () => {
         (user && user.firstname.toLowerCase().includes(searchTerm)) ||
         (user && user.lastname.toLowerCase().includes(searchTerm)) ||
         luggage.luggage_custom_name.toLowerCase().includes(searchTerm) ||
-        luggage.luggage_tag_number.toLowerCase().includes(searchTerm)
+        luggage.luggage_tag_number.toLowerCase().includes(searchTerm) ||
+        luggage.status.toLowerCase().includes(searchTerm)
       );
     });
 
@@ -471,10 +472,7 @@ const AdminAssocLuggage = () => {
                   className="input input-bordered"
                   defaultValue={ownerName}
                   required
-                />{" "}
-                i want a drop down component for this but initially display the
-                ownername (dropdown when clicked list the names of all users
-                name available by mapping)
+                />
               </div>
               <div className="form-control mb-4">
                 <label className="label">Status</label>

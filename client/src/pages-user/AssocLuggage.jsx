@@ -106,7 +106,7 @@ const AssocLuggage = () => {
     if (luggageInfo.length > 0) {
       fetchCurrentLocations();
     }
-  }, []);
+  }, [luggageInfo]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -123,7 +123,8 @@ const AssocLuggage = () => {
         (user && user.firstname.toLowerCase().includes(searchTerm)) ||
         (user && user.lastname.toLowerCase().includes(searchTerm)) ||
         luggage.luggage_custom_name.toLowerCase().includes(searchTerm) ||
-        luggage.luggage_tag_number.toLowerCase().includes(searchTerm)
+        luggage.luggage_tag_number.toLowerCase().includes(searchTerm) ||
+        luggage.status.toLowerCase().includes(searchTerm)
       );
     });
 
