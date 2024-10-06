@@ -221,11 +221,11 @@ router.post('/addluggage', verifyUser, async (req, res) => {
 
 // Update luggage route
 router.put('/updateluggage/:id', verifyUser, async (req, res) => {
-  const { luggage_custom_name, luggage_tag_number, destination, status, user_id } = req.body;
+  const { luggage_custom_name, luggage_tag_number, status, user_id } = req.body;
   const luggageId = req.params.id;
 
   // Validate the input data
-  if (!luggage_custom_name || !luggage_tag_number || !destination || !status || !user_id) {
+  if (!luggage_custom_name || !luggage_tag_number || !status || !user_id) {
     return res.status(400).json({ status: false, message: "All fields are required" });
   }
 
@@ -234,7 +234,6 @@ router.put('/updateluggage/:id', verifyUser, async (req, res) => {
     const updatedLuggage = await Luggage.findByIdAndUpdate(luggageId, {
       luggage_custom_name,
       luggage_tag_number,
-      destination,
       status,
       user_id
     }, { new: true });

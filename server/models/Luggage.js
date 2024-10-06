@@ -42,7 +42,6 @@ const LuggageSchema = new Schema({
     },
     destination: { 
         type: String, 
-        required: true
     },
     updatedAt: {  
         type: Date,

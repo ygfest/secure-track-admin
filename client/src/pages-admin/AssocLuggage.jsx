@@ -105,7 +105,7 @@ const AdminAssocLuggage = () => {
     if (luggageInfo.length > 0) {
       fetchCurrentLocations();
     }
-  }, []);
+  }, [luggageInfo]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -134,6 +134,7 @@ const AdminAssocLuggage = () => {
 
   const user = usersData.find((user) => user._id === currentLuggage?.user_id);
   const userId = user?._id;
+  console.log(userId);
 
   const ownerName = user
     ? user.firstname + " " + user.lastname
@@ -439,7 +440,7 @@ const AdminAssocLuggage = () => {
                   luggage_tag_number: e.target.luggage_tag_number.value,
                   luggage_owner_name: e.target.luggage_owner_name.value,
                   status: e.target.status.value,
-                  user_id: userId, //the userId should be the _id of the user
+                  user_id: userId,
                 });
                 setShowUpdateModal(false);
               }}
