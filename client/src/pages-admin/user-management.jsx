@@ -89,7 +89,8 @@ const UserManagement = () => {
       return (
         fullName.includes(searchTerm) ||
         (user && user.firstname.toLowerCase().includes(searchTerm)) ||
-        (user && user.lastname.toLowerCase().includes(searchTerm))
+        (user && user.lastname.toLowerCase().includes(searchTerm)) ||
+        (user && user.role.toLowerCase().includes(searchTerm))
       );
     });
 
