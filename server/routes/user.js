@@ -31,7 +31,7 @@ router.get('/verify', verifyUser, async (req, res) => {
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname,role: user.role, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt } });
+    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname,role: user.role, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt, phone: user.phone } });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
@@ -376,6 +376,28 @@ router.get('/reports', async (req, res) => {
     console.error("Error fetching reports:", error)
   }
 })
+
+router.put('/edit-profile', async (req, res) => {
+  const { profile_dp, firstname, lastname, phone, userId } = req.body; // Extract userId here
+  console.log("req body:",req.body);
+
+  try {
+    const editedProfileData = await User.findByIdAndUpdate(
+      userId, // Use the userId from the request body
+      { profile_dp, firstname, lastname, phone },
+      { new: true } // Return the updated document
+    );
+
+    if (!editedProfileData) {
+      return res.status(400).json({ status: false, message: "User not found" });
+    }
+
+    res.status(200).json({ status: true, message: "Profile updated successfully", user: editedProfileData });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ status: false, message: "Internal server error" });
+  }
+});
 
 
 module.exports = router;

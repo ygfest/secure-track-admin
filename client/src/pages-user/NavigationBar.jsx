@@ -285,7 +285,7 @@ const NavigationBar = ({
                     </Link>
                   </li>
                   <li>
-                    <a>Settings</a>
+                    <Link to="/user/profile/edit">Settings</Link>
                   </li>
                   <li>
                     <a onClick={handleLogout}>Logout</a>

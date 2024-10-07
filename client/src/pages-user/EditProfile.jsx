@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
-import { FiSettings } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
 import { CiCamera } from "react-icons/ci";
 
@@ -17,6 +16,7 @@ const EditProfile = ({ userProfile }) => {
     profile_dp: "",
     backgroundImage: "",
     userID: "",
+    phone: "",
   });
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
 
@@ -40,21 +40,24 @@ const EditProfile = ({ userProfile }) => {
     }
   };
 
-  const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("firstname", profileData.firstname);
-    formData.append("lastname", profileData.lastname);
-    if (newProfilePhoto) {
-      formData.append("profile_dp", newProfilePhoto);
-    }
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    const editedProfileData = {
+      userId: profileData.userID,
+      firstname: profileData.firstname,
+      lastname: profileData.lastname,
+      phone: profileData.phone,
+      ...(newProfilePhoto && { profile_dp: newProfilePhoto }),
+    };
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.put(`${apiUrl}/user/profile`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      await Axios.put(`${apiUrl}/auth/edit-profile`, editedProfileData, {
+        headers: { "Content-Type": "application/json" },
       });
       toast.success("Profile updated successfully");
-      navigate("/profile");
+      navigate("/user/profile");
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Error updating profile");
@@ -79,12 +82,18 @@ const EditProfile = ({ userProfile }) => {
       />
       <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSave}>
             <h3 className="text-xl font-bold">Edit Profile</h3>
-            <button className="mx-auto">
+            <button type="button" className="mx-auto">
               <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600">
                 <CiCamera className="h-240" />
               </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="hidden" // Hide the file input
+              />
             </button>
 
             <input
@@ -108,15 +117,14 @@ const EditProfile = ({ userProfile }) => {
             <input
               type="text"
               value={profileData.phone}
-              onChange={(e) =>
-                setProfileData({ ...profileData, lastname: e.target.value })
+              onChange={
+                (e) => setProfileData({ ...profileData, phone: e.target.value }) // Correct the state key here
               }
               placeholder="Phone number"
               className="w-full p-2 border rounded-md"
             />
             <button
-              type="button"
-              onClick={handleSave}
+              type="submit" // Change to submit button to trigger form submission
               className="w-full bg-secondary text-white py-2 rounded-md"
             >
               Save Changes
