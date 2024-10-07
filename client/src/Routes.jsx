@@ -17,6 +17,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import Home from "./home/home";
 import AuthCallback from "./pages-user/AuthCallBack";
+import EditProfile from "./pages-user/EditProfile";
 
 const AppRoutes = ({ loadingBarRef }) => {
   const location = useLocation();
@@ -62,6 +63,7 @@ const UserRoutes = () => {
       <Route path="/" element={<UserDashboard />} />
       <Route path="/tracking" element={<LuggageTracking />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/edit" element={<EditProfile />} />
       <Route path="/luggage" element={<AssocLuggage />} />
     </Routes>
   );

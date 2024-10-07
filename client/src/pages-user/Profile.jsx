@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaGithub, FaFacebook } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import NavigationBar from "./NavigationBar";
 import { toast, Toaster } from "sonner";
@@ -18,9 +17,7 @@ const Profile = () => {
     backgroundImage: "",
     userID: "",
   });
-  const [editMode, setEditMode] = useState(false);
-  const [newProfilePhoto, setNewProfilePhoto] = useState(null);
-  const [newPassword, setNewPassword] = useState("");
+
   const [report, setReport] = useState({
     type: "device-anomaly",
     title: "",
@@ -47,41 +44,11 @@ const Profile = () => {
     }
   };
 
-  const handlePhotoChange = (e) => {
-    setNewProfilePhoto(e.target.files[0]);
-  };
-
-  const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("firstname", userProfile.firstname);
-    formData.append("lastname", userProfile.lastname);
-    formData.append("password", newPassword);
-    if (newProfilePhoto) {
-      formData.append("profile_dp", newProfilePhoto);
-    }
-
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.put(`${apiUrl}/user/profile`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setEditMode(false);
-      verifyToken();
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
-
   const handleReportSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-
-      const reportData = {
-        ...report,
-        userId: userProfile.userID,
-      };
+      const reportData = { ...report, userId: userProfile.userID };
       const response = await Axios.post(
         `${apiUrl}/auth/user-report`,
         reportData
@@ -97,9 +64,6 @@ const Profile = () => {
       toast.error("Error submitting report");
     }
   };
-
-  const getSocialUsername = (url) =>
-    new URL(url).pathname.split("").slice(1).join("");
 
   return (
     <>
@@ -135,22 +99,6 @@ const Profile = () => {
                   {userProfile.firstname.charAt(0).toUpperCase()}
                 </div>
               )}
-              {editMode && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="mb-4"
-                />
-              )}
-              {editMode && (
-                <button
-                  onClick={() => setEditMode(!editMode)}
-                  className="rounded-full p-2 bg-gray-300"
-                >
-                  <FiSettings className="text-lg" />
-                </button>
-              )}
             </div>
           </div>
           <div className="flex flex-col gap-4 mt-4">
@@ -161,33 +109,13 @@ const Profile = () => {
               {userProfile.email} • Joined{" "}
               {new Date(userProfile.createdAt).toLocaleDateString()}
             </p>
-            {userProfile.bio && (
-              <p className="text-center">{userProfile.bio}</p>
-            )}
             <div className="flex justify-end mt-4">
-              {editMode ? (
-                <>
-                  <button
-                    onClick={handleSave}
-                    className="bg-primary text-white px-4 py-2 rounded-md mr-2"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => setEditMode(false)}
-                    className="bg-secondary text-white px-4 py-2 rounded-md"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => setEditMode(true)}
-                  className="bg-primary text-white px-4 py-2 rounded-md"
-                >
-                  Edit
-                </button>
-              )}
+              <button
+                onClick={() => navigate("/user/profile/edit")}
+                className="rounded-full p-2 bg-gray-300"
+              >
+                <FiSettings className="text-lg" />
+              </button>
             </div>
           </div>
           <hr className="border-t-2 border-primary my-6" />
