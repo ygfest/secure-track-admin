@@ -36,7 +36,7 @@ const AdminProfile = () => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.get(`${apiUrl}/auth/verify`);
-      if (!response.data.status) {
+      if (!response.data.status || response.data.user.role !== "admin") {
         navigate("/sign-in");
       } else {
         setUserProfile(response.data.user);

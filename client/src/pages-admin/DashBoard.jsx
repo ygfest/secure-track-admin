@@ -65,7 +65,7 @@ const DashBoard = () => {
 
         console.log("Verify token response:", response.data);
 
-        if (!response.data.status) {
+        if (!response.data.status || response.data.user.role !== "admin") {
           navigate("/sign-in");
         } else {
           setUserFirstName(
