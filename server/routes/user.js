@@ -209,15 +209,15 @@ router.post('/forgot-password', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'stefanosanesteban1018@gmail.com',
-        pass: 'okzt xvlg gdqu jqsa'
+        user: process.env.GOOGLE_USER,
+        pass: process.env.GOOGLE_PASS_KEY,
       }
     });
 
     const mailOptions = {
-      from: 'stefanosanesteban1018@gmail.com',
+      from: process.env.GOOGLE_USER,
       to: email,
-      subject: 'Reset Password',
+      subject: 'Secure Track Account Reset Password',
       text: `http://localhost:5173/reset-password/${token}`
     };
 
