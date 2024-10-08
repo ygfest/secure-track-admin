@@ -34,7 +34,7 @@ const AssocLuggage = () => {
 
         console.log("Verify token response:", response.data);
 
-        if (!response.data.status) {
+        if (!response.data.status || response.data.user.role !== "user") {
           navigate("/sign-in");
         } else {
           console.log("Authorized");

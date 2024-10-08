@@ -29,7 +29,7 @@ const EditProfile = ({ userProfile }) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.get(`${apiUrl}/auth/verify`);
-      if (!response.data.status) {
+      if (!response.data.status || response.data.user.role !== "user") {
         navigate("/sign-in");
       } else {
         setProfileData(response.data.user);

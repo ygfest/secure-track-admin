@@ -124,7 +124,7 @@ const LuggageTracking = () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/verify`);
-        if (!response.data.status) {
+        if (!response.data.status || response.data.user.role !== "user") {
           navigate("/sign-in");
         } else {
           setUserId(response.data.user.userID);
