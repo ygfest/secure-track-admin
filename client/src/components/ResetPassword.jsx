@@ -61,7 +61,7 @@ const ResetPassword = () => {
     setIsPending(true);
     try {
       const { password } = formData;
-      const apiUrl = process.env.REACT_APP_API_URL;
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.post(`${apiUrl}/auth/reset-password`, {
         password,
         token, // Pass the token in the request body

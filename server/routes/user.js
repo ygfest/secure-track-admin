@@ -201,7 +201,7 @@ router.post('/forgot-password', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not registered" });
+      return res.status(404).json({ status: false, message: "User not registered" });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.KEY, { expiresIn: '5m' });
@@ -218,7 +218,7 @@ router.post('/forgot-password', async (req, res) => {
       from: 'stefanosanesteban1018@gmail.com',
       to: email,
       subject: 'Reset Password',
-      text: `http://localhost:5173/u/reset-password/${token}`
+      text: `http://localhost:5173/reset-password/${token}`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -229,7 +229,7 @@ router.post('/forgot-password', async (req, res) => {
       }
     });
 
-    res.json({ message: "Email sent successfully" });
+    res.json({status: true, message: "Email sent successfully" });
   } catch (err) {
     console.error("Error in forgot password:", err);
     res.status(500).json({ message: "Server error" });

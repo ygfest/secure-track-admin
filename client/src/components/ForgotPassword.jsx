@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     setIsSigningIn(true);
     try {
       const { email } = formData;
-      const apiUrl = import.meta.env.REACT_APP_API_URL;
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.post(`${apiUrl}/auth/forgot-password`, {
         email,
       });
