@@ -375,9 +375,6 @@ const LuggageTracking = () => {
                         Location: {luggage.currentLocation}
                       </span>{" "}
                       <br />
-                      <span className="font-poppins">
-                        Destination: {luggage.destination}{" "}
-                      </span>
                       <br />
                       <span
                         className={`font-poppins ${
@@ -475,9 +472,6 @@ const LuggageTracking = () => {
                   </p>
                   <p className="text-xs text-[#ffffff8b]">
                     {formatStationarySince(luggageDeet.stationary_since)}
-                  </p>
-                  <p className="text-xs text-[#ffffff8b]">
-                    Destination: {luggageDeet.destination}
                   </p>
                 </div>
               ))}
