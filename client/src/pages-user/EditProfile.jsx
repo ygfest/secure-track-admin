@@ -82,7 +82,7 @@ const EditProfile = ({ userProfile }) => {
           },
         }}
       />
-      <div className="min-h-screen flex flex-col items-center py-8 mx-8 bg-gray-100">
+      <div className="min-h-screen flex flex-col items-center py-6 mx-4 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <form className="space-y-4" onSubmit={handleSave}>
             <h3 className="text-xl font-bold">Edit Profile</h3>

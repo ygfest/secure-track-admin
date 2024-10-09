@@ -29,6 +29,7 @@ const NavigationBar = ({
   const [adminProfileFirstName, setAdminProfileFirstName] = useState("");
   const [adminProfileLastName, setAdminProfileLastName] = useState("");
   const [isSeenNotifications, setIsSeenNotifications] = useState(false);
+  const [showLogoutConfirmation, setIsShowLogoutConfirmation] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
 
@@ -293,7 +294,9 @@ const NavigationBar = ({
                     <a>Settings</a>
                   </li>
                   <li>
-                    <a onClick={handleLogout}>Logout</a>
+                    <a onClick={() => setIsShowLogoutConfirmation(true)}>
+                      Logout
+                    </a>
                   </li>
                 </ul>
               )}
@@ -383,6 +386,29 @@ const NavigationBar = ({
             style={{ maxHeight: "400px", overflowX: "hidden" }}
           >
             {/* {renderNotifications()}*/}
+          </div>
+        </div>
+      )}
+      {showLogoutConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 md:w-[30%] rounded-lg shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">Log out?</h3>
+            <p>Are you sure you want to log out?</p>
+            <div className="modal-action">
+              {" "}
+              <button
+                className="btn btn-danger bg-red-500 text-white"
+                onClick={handleLogout}
+              >
+                Log out
+              </button>
+              <button
+                className="btn"
+                onClick={() => setIsShowLogoutConfirmation(false)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

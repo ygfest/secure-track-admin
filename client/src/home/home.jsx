@@ -13,22 +13,20 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#5CC90C,transparent_1px),linear-gradient(to_bottom,#5CC90C,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
         <nav
           className="fixed left-1/2 top-4 z-40 w-[90%] max-w-[1200px] -translate-x-1/2 
-          rounded-3xl border-2 border-[#42393962] px-4 py-3 backdrop-blur-sm backdrop-saturate-150 md:bg-white"
+  rounded-3xl border-2 border-[#42393962] px-4 py-3 backdrop-blur-sm backdrop-saturate-150 
+  bg-white md:px-8 md:py-4"
         >
           <header className="flex w-full items-center justify-between">
             <img src="/st-logo.png" alt="logo" width={120} height={35} />
 
-            <div className="flex gap-4">
+            <div className="flex gap-2 md:gap-4 items-center">
               <Link to="/sign-in">
-                <button className="font-medium p-2 rounded-lg text-primary hover:bg-zinc-200">
+                <button className="font-medium min-w-[80px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200">
                   Sign in
                 </button>
               </Link>
-              <Link to="sign-up">
-                <button
-                  href="/sign-up"
-                  className="p-2 font-medium text-white bg-primary hover:bg-[#5bc90ce6] rounded-lg"
-                >
+              <Link to="/sign-up">
+                <button className="p-2 text-sm md:text-base font-medium text-white bg-primary hover:bg-[#5bc90ce6] rounded-lg min-w-[100px] md:min-w-[120px]">
                   Create an account
                 </button>
               </Link>

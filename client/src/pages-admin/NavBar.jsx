@@ -199,179 +199,181 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   };
 
   return (
-    <div
-      className="navbar fixed top-2 left-0 right-0 px-3 flex justify-between rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
-      style={{ width: "98.90%" }}
-    >
-      {/* Left: Burger Menu */}
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle"
-            onClick={toggleSideBar}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <>
+      <div
+        className="navbar fixed top-2 left-0 right-0 px-3 flex justify-between rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
+        style={{ width: "98.90%" }}
+      >
+        {/* Left: Burger Menu */}
+        <div className="navbar-start">
+          <div className="dropdown">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
+              onClick={toggleSideBar}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7"
-              />
-            </svg>
-          </div>
-          {isOpen && (
-            <ul className="menu dropdown-content mt-3 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
-              <li>
-                <Link
-                  to="/admin/"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/tracking"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
-                >
-                  Map
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/luggage"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
-                >
-                  Luggage Management
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/user-management"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
-                >
-                  Users Management
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/profile"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
-                >
-                  Profile
-                </Link>
-              </li>
-            </ul>
-          )}
-        </div>
-      </div>
-
-      <div className="navbar-center flex items-center justify-center">
-        <Link
-          to="/user/"
-          className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
-        >
-          <span className="text-sm">Powered by </span>
-          <img src={Logo} alt="Secure Track" className="h-8" />
-        </Link>
-      </div>
-      <div className="navbar-end flex items-center space-x-4">
-        <label
-          className="flex items-center cursor-pointer"
-          title="Update Location"
-        >
-          <span className="text-xs md:text-sm">Location:</span>
-          <input
-            type="checkbox"
-            className="toggle toggle-primary ml-1"
-            checked={isLocationOn}
-            onChange={handleLocationToggle}
-          />
-        </label>
-
-        <button
-          className="btn btn-ghost btn-circle"
-          onClick={() => setOpenNotif(!openNotif)}
-        >
-          <div className="indicator">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 00-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m0 0v1a3 3 0 006 0v-1m-6 0h6"
-              />
-            </svg>
-            {(tempData?.length ||
-              tamperData?.length ||
-              fallDetectData?.length) && (
-              <span className="badge badge-xs badge-primary indicator-item"></span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h7"
+                />
+              </svg>
+            </div>
+            {isOpen && (
+              <ul className="menu dropdown-content mt-3 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
+                <li>
+                  <Link
+                    to="/admin/"
+                    className="link no-underline"
+                    onClick={toggleSideBar}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/tracking"
+                    className="link no-underline"
+                    onClick={toggleSideBar}
+                  >
+                    Map
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/luggage"
+                    className="link no-underline"
+                    onClick={toggleSideBar}
+                  >
+                    Luggage Management
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/user-management"
+                    className="link no-underline"
+                    onClick={toggleSideBar}
+                  >
+                    Users Management
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/profile"
+                    className="link no-underline"
+                    onClick={toggleSideBar}
+                  >
+                    Profile
+                  </Link>
+                </li>
+              </ul>
             )}
           </div>
-        </button>
-        {openNotif && (
-          <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
-            <h3 className="font-bold text-lg mb-3">Notifications</h3>
-            {renderNotifications()}
-          </div>
-        )}
+        </div>
 
-        <div className="dropdown dropdown-end">
+        <div className="navbar-center flex items-center justify-center">
+          <Link
+            to="/user/"
+            className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
+          >
+            <span className="text-sm">Powered by </span>
+            <img src={Logo} alt="Secure Track" className="h-8" />
+          </Link>
+        </div>
+        <div className="navbar-end flex items-center space-x-4">
           <label
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-            onClick={handleDropProfile}
+            className="flex items-center cursor-pointer"
+            title="Update Location"
           >
-            {adminProfileDp ? (
-              <div className="w-10 rounded-full">
-                <img src={adminProfileDp} alt="Profile" />
-              </div>
-            ) : (
-              <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
-                {adminProfile && adminProfile.charAt(0).toUpperCase()}
-                {adminLastName && adminLastName.charAt(0)}
-              </div>
-            )}
+            <span className="text-xs md:text-sm">Location:</span>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary ml-1"
+              checked={isLocationOn}
+              onChange={handleLocationToggle}
+            />
           </label>
-          {isDropProfile && (
-            <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
-              <li>
-                <Link
-                  to="/admin/profile"
-                  className="justify-between"
-                  onClick={handleDropProfile}
-                >
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
-            </ul>
+
+          <button
+            className="btn btn-ghost btn-circle"
+            onClick={() => setOpenNotif(!openNotif)}
+          >
+            <div className="indicator">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 00-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m0 0v1a3 3 0 006 0v-1m-6 0h6"
+                />
+              </svg>
+              {(tempData?.length ||
+                tamperData?.length ||
+                fallDetectData?.length) && (
+                <span className="badge badge-xs badge-primary indicator-item"></span>
+              )}
+            </div>
+          </button>
+          {openNotif && (
+            <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
+              <h3 className="font-bold text-lg mb-3">Notifications</h3>
+              {renderNotifications()}
+            </div>
           )}
+
+          <div className="dropdown dropdown-end">
+            <label
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+              onClick={handleDropProfile}
+            >
+              {adminProfileDp ? (
+                <div className="w-10 rounded-full">
+                  <img src={adminProfileDp} alt="Profile" />
+                </div>
+              ) : (
+                <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
+                  {adminProfile && adminProfile.charAt(0).toUpperCase()}
+                  {adminLastName && adminLastName.charAt(0)}
+                </div>
+              )}
+            </label>
+            {isDropProfile && (
+              <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
+                <li>
+                  <Link
+                    to="/admin/profile"
+                    className="justify-between"
+                    onClick={handleDropProfile}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              </ul>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

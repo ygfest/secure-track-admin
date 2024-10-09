@@ -100,126 +100,132 @@ export default function SignUp() {
     <div className="flex p-4 items-center justify-center min-h-screen bg-white">
       <form
         onSubmit={handleSubmit}
-        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-0 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-lg"
+        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-4 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-lg"
       >
         <h2 className="flex text-2xl font-semibold justify-center md:justify-normal">
           Create your account
         </h2>
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-row">
-            <label htmlFor="firstname" className="text-sm mr-2">
-              First Name
+        <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            {/* First Name */}
+            <div className="flex flex-col">
+              <label htmlFor="firstname" className="text-sm mb-1">
+                First Name
+              </label>
+              <input
+                type="text"
+                name="firstname"
+                id="firstname"
+                className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                value={formData.firstname}
+                onChange={handleChange}
+                placeholder="Enter your first name"
+              />
+              {errors.firstname && (
+                <p className="text-red-500">{errors.firstname}</p>
+              )}
+            </div>
+
+            {/* Last Name */}
+            <div className="flex flex-col">
+              <label htmlFor="lastname" className="text-sm mb-1">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastname"
+                id="lastname"
+                className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                value={formData.lastname}
+                onChange={handleChange}
+                placeholder="Enter your last name"
+              />
+              {errors.lastname && (
+                <p className="text-red-500">{errors.lastname}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col">
+            <label htmlFor="email" className="text-sm mb-1">
+              Email
             </label>
-            <label htmlFor="lastname" className="text-sm">
-              Last Name
+            <input
+              type="email"
+              name="email"
+              id="email"
+              className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+            />
+            {errors.email && <p className="text-red-500">{errors.email}</p>}
+          </div>
+
+          {/* Password */}
+          <div className="flex flex-col">
+            <label htmlFor="password" className="text-sm mb-1">
+              Password
             </label>
-          </div>
-
-          <div className="flex flex-row gap-2">
-            <input
-              type="text"
-              name="firstname"
-              id="firstname"
-              className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-              value={formData.firstname}
-              onChange={handleChange}
-              placeholder="Enter your first name"
-            />
-            {errors.firstname && (
-              <p className="text-red-500">{errors.firstname}</p>
-            )}
-
-            <input
-              type="text"
-              name="lastname"
-              id="lastname"
-              className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-              value={formData.lastname}
-              onChange={handleChange}
-              placeholder="Enter your last name"
-            />
-            {errors.lastname && (
-              <p className="text-red-500">{errors.lastname}</p>
+            <div className="relative">
+              <input
+                type={isPasswordVisible ? "text" : "password"}
+                name="password"
+                id="password"
+                className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+              />
+              {isPasswordVisible ? (
+                <EyeOutlined
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setIsPasswordVisible(false)}
+                />
+              ) : (
+                <EyeInvisibleOutlined
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setIsPasswordVisible(true)}
+                />
+              )}
+            </div>
+            {errors.password && (
+              <p className="text-red-500">{errors.password}</p>
             )}
           </div>
 
-          <label htmlFor="email" className="text-sm">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-          />
-          {errors.email && <p className="text-red-500">{errors.email}</p>}
-
-          <label htmlFor="password" className="text-sm">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              type={isPasswordVisible ? "text" : "password"}
-              name="password"
-              id="password"
-              className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-              style={{
-                paddingTop: "calc(0.675rem - 1px)",
-                paddingBottom: "calc(0.375rem - 1px)",
-              }}
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
-            {isPasswordVisible ? (
-              <EyeOutlined
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                onClick={() => setIsPasswordVisible(false)}
+          {/* Confirm Password */}
+          <div className="flex flex-col">
+            <label htmlFor="confirmPassword" className="text-sm mb-1">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                type={isConfirmPasswordVisible ? "text" : "password"}
+                name="confirmPassword"
+                id="confirmPassword"
+                className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
               />
-            ) : (
-              <EyeInvisibleOutlined
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                onClick={() => setIsPasswordVisible(true)}
-              />
+              {isConfirmPasswordVisible ? (
+                <EyeOutlined
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setIsConfirmPasswordVisible(false)}
+                />
+              ) : (
+                <EyeInvisibleOutlined
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setIsConfirmPasswordVisible(true)}
+                />
+              )}
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500">{errors.confirmPassword}</p>
             )}
           </div>
-          {errors.password && <p className="text-red-500">{errors.password}</p>}
-
-          <label htmlFor="confirmPassword" className="text-sm">
-            Confirm Password
-          </label>
-          <div className="relative">
-            <input
-              type={isConfirmPasswordVisible ? "text" : "password"}
-              name="confirmPassword"
-              id="confirmPassword"
-              className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-              style={{
-                paddingTop: "calc(0.675rem - 1px)",
-                paddingBottom: "calc(0.375rem - 1px)",
-              }}
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-            />
-            {isConfirmPasswordVisible ? (
-              <EyeOutlined
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                onClick={() => setIsConfirmPasswordVisible(false)}
-              />
-            ) : (
-              <EyeInvisibleOutlined
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                onClick={() => setIsConfirmPasswordVisible(true)}
-              />
-            )}
-          </div>
-          {errors.confirmPassword && (
-            <p className="text-red-500">{errors.confirmPassword}</p>
-          )}
 
           {errors.server && <p className="text-red-500">{errors.server}</p>}
 
