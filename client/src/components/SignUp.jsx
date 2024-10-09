@@ -120,7 +120,7 @@ export default function SignUp() {
               type="text"
               name="firstname"
               id="firstname"
-              className="input input-bordered"
+              className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
               value={formData.firstname}
               onChange={handleChange}
               placeholder="Enter your first name"
@@ -133,7 +133,7 @@ export default function SignUp() {
               type="text"
               name="lastname"
               id="lastname"
-              className="input input-bordered"
+              className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
               value={formData.lastname}
               onChange={handleChange}
               placeholder="Enter your last name"
@@ -150,7 +150,7 @@ export default function SignUp() {
             type="email"
             name="email"
             id="email"
-            className="input input-bordered"
+            className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
             value={formData.email}
             onChange={handleChange}
             placeholder="Enter your email"
@@ -160,12 +160,12 @@ export default function SignUp() {
           <label htmlFor="password" className="text-sm">
             Password
           </label>
-          <div className="input input-bordered relative">
+          <div className="relative">
             <input
               type={isPasswordVisible ? "text" : "password"}
               name="password"
               id="password"
-              className="w-full pr-4"
+              className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
               style={{
                 paddingTop: "calc(0.675rem - 1px)",
                 paddingBottom: "calc(0.375rem - 1px)",
@@ -191,12 +191,12 @@ export default function SignUp() {
           <label htmlFor="confirmPassword" className="text-sm">
             Confirm Password
           </label>
-          <div className="input input-bordered relative">
+          <div className="relative">
             <input
               type={isConfirmPasswordVisible ? "text" : "password"}
               name="confirmPassword"
               id="confirmPassword"
-              className="w-full pr-4"
+              className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
               style={{
                 paddingTop: "calc(0.675rem - 1px)",
                 paddingBottom: "calc(0.375rem - 1px)",

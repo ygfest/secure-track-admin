@@ -115,7 +115,7 @@ export default function SignInForm() {
             <input
               type="email"
               name="email"
-              className="input input-bordered"
+              className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Enter your email"
@@ -125,11 +125,11 @@ export default function SignInForm() {
             <label htmlFor="password" className="text-sm">
               Password
             </label>
-            <div className="input input-bordered relative">
+            <div className="relative">
               <input
                 type={isPasswordVisible ? "text" : "password"}
                 name="password"
-                className="w-full pr-4"
+                className="w-full pr-4 input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                 style={{
                   paddingTop: "calc(0.675rem - 1px)",
                   paddingBottom: "calc(0.375rem - 1px)",
