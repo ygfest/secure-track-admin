@@ -391,7 +391,7 @@ const NavigationBar = ({
       )}
       {showLogoutConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 md:w-[30%] rounded-xl shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Log out?</h3>
             <p>Are you sure you want to log out?</p>
             <div className="modal-action">

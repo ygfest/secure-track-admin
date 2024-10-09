@@ -195,11 +195,11 @@ router.get('/temp-logs', verifyUser, async(req, res) => {
 
 
 router.post('/addluggage', verifyUser, async (req, res) => {
-  const { luggage_custom_name, luggage_tag_number, destination, user_id } = req.body;
+  const { luggage_custom_name, luggage_tag_number, user_id } = req.body;
   console.log('Add Luggage Request:', req.body);
 
 
-  if (!luggage_custom_name || !luggage_tag_number || !destination || !user_id) {
+  if (!luggage_custom_name || !luggage_tag_number || !user_id) {
     return res.status(400).json({ status: false, message: "All fields are required" });
   }
 
@@ -207,7 +207,6 @@ router.post('/addluggage', verifyUser, async (req, res) => {
     const newLuggage = new Luggage({
       luggage_custom_name,
       luggage_tag_number,
-      destination,
       user_id
     });
 

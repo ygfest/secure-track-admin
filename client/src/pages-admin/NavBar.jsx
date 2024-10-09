@@ -19,6 +19,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [adminProfileDp, setAdminProfileDp] = useState("");
   const [adminProfile, setAdminProfile] = useState("");
   const [adminLastName, setAdminLastName] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {

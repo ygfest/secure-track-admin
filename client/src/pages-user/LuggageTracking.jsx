@@ -506,7 +506,6 @@ const LuggageTracking = () => {
                     handleAddNewLuggage({
                       luggage_custom_name: e.target.luggage_custom_name.value,
                       luggage_tag_number: e.target.luggage_tag_number.value,
-                      destination: e.target.destination.value,
                       user_id: userId,
                     });
                     //window.location.reload();
@@ -528,15 +527,6 @@ const LuggageTracking = () => {
                       type="text"
                       className="input input-bordered font-poppins"
                       placeholder="You can see it in the tag"
-                      required
-                    />
-                  </div>
-                  <div className="form-control mb-4">
-                    <label className="label font-poppins">Destination</label>
-                    <input
-                      name="destination"
-                      type="text"
-                      className="input input-bordered"
                       required
                     />
                   </div>
