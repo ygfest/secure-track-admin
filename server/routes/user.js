@@ -401,8 +401,8 @@ router.put('/edit-profile', async (req, res) => {
 
 router.put('/modify-role/:id', verifyUser, async (req, res) => {
   const userId = req.params.id;
-  const { role } = req.body; // Only get the role from the body
-  console.log(req.params.id)
+  const { role } = req.body; 
+  console.log(req.params)
 
   if (!userId || !role) {
     return res.status(400).json({ status: false, message: "User ID and role are required" });

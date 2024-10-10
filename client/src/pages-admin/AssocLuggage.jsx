@@ -377,7 +377,6 @@ const AdminAssocLuggage = () => {
                 handleAddNew({
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
-                  destination: e.target.destination.value,
                   user_id: userId,
                 });
                 setShowAddModal(false);
@@ -396,15 +395,6 @@ const AdminAssocLuggage = () => {
                 <label className="label">Tag Number</label>
                 <input
                   name="luggage_tag_number"
-                  type="text"
-                  className="input input-bordered"
-                  required
-                />
-              </div>
-              <div className="form-control mb-4">
-                <label className="label">Destination</label>
-                <input
-                  name="destination"
                   type="text"
                   className="input input-bordered"
                   required

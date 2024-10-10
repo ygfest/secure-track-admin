@@ -524,7 +524,7 @@ const LuggageTracking = () => {
                       required
                     />
                   </div>
-                  <div className="form-control mt-6 flex flex-row justify-center gap-4">
+                  <div className="form-control mt-6 flex flex-row justify-end gap-4 ">
                     <button
                       className="btn"
                       onClick={() => setShowAddModal(false)}
