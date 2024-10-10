@@ -240,7 +240,7 @@ const AdminAssocLuggage = () => {
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearch}
-              className="input input-bordered rounded-3xl pr-10"
+              className="input input-bordered rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -387,7 +387,7 @@ const AdminAssocLuggage = () => {
                 <input
                   name="luggage_custom_name"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -396,7 +396,7 @@ const AdminAssocLuggage = () => {
                 <input
                   name="luggage_tag_number"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -440,7 +440,7 @@ const AdminAssocLuggage = () => {
                 <input
                   name="luggage_custom_name"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentLuggage.luggage_custom_name}
                   required
                 />
@@ -450,7 +450,7 @@ const AdminAssocLuggage = () => {
                 <input
                   name="luggage_tag_number"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentLuggage.luggage_tag_number}
                   required
                 />
@@ -460,7 +460,7 @@ const AdminAssocLuggage = () => {
                 <input
                   name="luggage_owner_name"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={ownerName}
                   required
                 />
@@ -470,7 +470,7 @@ const AdminAssocLuggage = () => {
                 <input
                   name="status"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentLuggage.status}
                   required
                 />

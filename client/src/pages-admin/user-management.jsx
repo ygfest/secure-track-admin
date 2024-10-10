@@ -247,7 +247,7 @@ const UserManagement = () => {
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearch}
-              className="input input-bordered rounded-3xl pr-10"
+              className="input input-bordered rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -394,7 +394,7 @@ const UserManagement = () => {
 
       {showAddModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Add New User</h3>
             <form
               onSubmit={(e) => {
@@ -413,7 +413,7 @@ const UserManagement = () => {
                 <input
                   name="firstname"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -422,7 +422,7 @@ const UserManagement = () => {
                 <input
                   name="lastname"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -431,7 +431,7 @@ const UserManagement = () => {
                 <input
                   name="email"
                   type="email"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -440,7 +440,7 @@ const UserManagement = () => {
                 <input
                   name="password"
                   type="password"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -449,7 +449,7 @@ const UserManagement = () => {
                 <input
                   name="confirmed_password"
                   type="password"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -472,7 +472,7 @@ const UserManagement = () => {
 
       {showUpdateModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Edit User</h3>
             <form
               onSubmit={(e) => {
@@ -492,7 +492,7 @@ const UserManagement = () => {
                 <input
                   name="firstname"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentUser.firstname}
                   required
                 />
@@ -502,7 +502,7 @@ const UserManagement = () => {
                 <input
                   name="lastname"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentUser.lastname}
                   required
                 />
@@ -512,7 +512,7 @@ const UserManagement = () => {
                 <input
                   name="email"
                   type="email"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentUser.email}
                   required
                 />
@@ -522,7 +522,7 @@ const UserManagement = () => {
                 <input
                   name="phone"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentUser.phone}
                   required
                 />
@@ -546,7 +546,7 @@ const UserManagement = () => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Confirm Delete</h3>
             <p>Are you sure you want to delete this user?</p>
             <div className="modal-action">

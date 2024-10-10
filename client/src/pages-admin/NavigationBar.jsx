@@ -225,9 +225,9 @@ const NavigationBar = ({
             </button>
           </div>
           <div className="flex-1">
-            <a className="btn btn-ghost text-md text-black">
-              <img src={Logo} alt="AirAsia Logo" className="h-9 w-auto" />
-            </a>
+            <Link to="/" className="btn btn-ghost text-md text-black">
+              <img src={Logo} alt="ST Logo" className="h-9 w-auto" />
+            </Link>
           </div>
           <div className="flex-none gap-2">
             <button

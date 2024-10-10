@@ -510,7 +510,7 @@ const LuggageTracking = () => {
                     <input
                       name="luggage_custom_name"
                       type="text"
-                      className="input input-bordered"
+                      className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                       required
                     />
                   </div>
@@ -519,7 +519,7 @@ const LuggageTracking = () => {
                     <input
                       name="luggage_tag_number"
                       type="text"
-                      className="input input-bordered font-poppins"
+                      className="input input-bordered font-poppins focus:outline-none focus:ring-2 focus:ring-primary"
                       placeholder="You can see it in the tag"
                       required
                     />
