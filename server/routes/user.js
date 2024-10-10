@@ -399,5 +399,33 @@ router.put('/edit-profile', async (req, res) => {
   }
 });
 
+router.put('/modify-role/:id', verifyUser, async (req, res) => {
+  const userId = req.params.id;
+  const { role } = req.body; // Only get the role from the body
+  console.log(req.params.id)
+
+  if (!userId || !role) {
+    return res.status(400).json({ status: false, message: "User ID and role are required" });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { role },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    res.status(500).send("Server error");
+  }
+});
+
+
 
 module.exports = router;

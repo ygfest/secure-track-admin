@@ -3,6 +3,7 @@ import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
+import { toast, Toaster } from "sonner";
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const UserManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showModifyRole, setShowModifyRole] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -150,6 +152,47 @@ const UserManagement = () => {
     }
   };
 
+  const handleModifyRole = async (userInfo) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const updatedUser = { ...userInfo };
+
+      const response = await Axios.put(
+        `${apiUrl}/auth/modify-role/${userInfo.userId}`,
+        updatedUser
+      );
+
+      // Ensure the API response is correctly structured
+      if (!response.data || !response.data.role) {
+        toast.error("Error modifying account role");
+        return;
+      }
+
+      // Update local state with the new role
+      setUsersData((prev) =>
+        prev.map((user) =>
+          user._id === userInfo._id
+            ? { ...user, role: response.data.role }
+            : user
+        )
+      );
+      setFilteredData((prev) =>
+        prev.map((user) =>
+          user._id === userInfo._id
+            ? { ...user, role: response.data.role }
+            : user
+        )
+      );
+
+      fetchUsersData();
+      toast.success("Successfully modified account's role");
+      setShowModifyRole(false);
+    } catch (error) {
+      console.error("Error modifying role", error.response?.data || error);
+      toast.error("Error modifying account role");
+    }
+  };
+
   const paginationButtons = [];
   for (let i = 1; i <= Math.ceil(totalItems / 6); i++) {
     paginationButtons.push(
@@ -180,6 +223,15 @@ const UserManagement = () => {
   return (
     <div className="h-[100vh]">
       <NavigationBar />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            margin: "5px 0",
+          },
+        }}
+      />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-between mb-5">
           <button
@@ -284,6 +336,10 @@ const UserManagement = () => {
                           className={`btn btn-outline btn-xs ${
                             user.role === "admin" ? "btn-info" : "btn-success"
                           }`}
+                          onClick={() => {
+                            setCurrentUser(user);
+                            setShowModifyRole(true);
+                          }}
                         >
                           {user.role}
                         </button>
@@ -505,6 +561,49 @@ const UserManagement = () => {
               </button>
               <button className="btn" onClick={() => setShowDeleteModal(false)}>
                 Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showModifyRole && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white md:min-w-[30%] p-6 rounded-lg shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">
+              {currentUser.firstname + " " + currentUser.lastname}
+            </h3>
+            <label>Account Role</label>
+            <select
+              name="role"
+              required
+              value={currentUser.role}
+              className="flex w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              onChange={(e) =>
+                setCurrentUser({ ...currentUser, role: e.target.value })
+              }
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+            <div className="modal-action">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowModifyRole(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  handleModifyRole({
+                    userId: currentUser._id,
+                    role: currentUser.role,
+                  });
+                  setShowModifyRole(false);
+                }}
+              >
+                Save
               </button>
             </div>
           </div>

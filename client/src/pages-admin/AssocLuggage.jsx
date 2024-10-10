@@ -334,7 +334,7 @@ const AdminAssocLuggage = () => {
                       </td>
                       <td className="py-3 px-6 text-left">
                         <button
-                          className="btn btn-sm btn-outline btn-primary mr-2"
+                          className="btn btn-sm btn-outline btn-primary hover:text-white mr-2"
                           onClick={() => {
                             setCurrentLuggage(luggage);
                             setShowUpdateModal(true);
