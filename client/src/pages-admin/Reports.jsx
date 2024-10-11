@@ -4,7 +4,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
 
-const AdminAssocLuggage = () => {
+const AdminReports = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [usersData, setUsersData] = useState([]);
@@ -551,4 +551,4 @@ const AdminAssocLuggage = () => {
   );
 };
 
-export default AdminAssocLuggage;
+export default AdminReports;

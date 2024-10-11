@@ -455,6 +455,7 @@ const AssocLuggage = () => {
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentLuggage.status}
                   required
+                  disabled
                 />
               </div>
               <div className="modal-action">

@@ -7,6 +7,8 @@ import UserManagement from "./pages-admin/user-management";
 import ReportsAnalyticsPage from "./pages-admin/ReportsAnalyticsPage";
 import AdminAssocLuggage from "./pages-admin/AssocLuggage";
 import AdminProfile from "./pages-admin/Profile";
+import AdminReports from "./pages-admin/Reports";
+
 import UserDashboard from "./pages-user/DashBoard";
 import LuggageTracking from "./pages-user/LuggageTracking";
 import Profile from "./pages-user/Profile";
@@ -52,6 +54,7 @@ const AdminRoutes = () => {
       <Route path="/tracking" element={<AdminLuggageTracking />} />
       <Route path="/user-management" element={<UserManagement />} />
       <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
+      <Route path="/reports" element={<AdminReports />} />
       <Route path="/profile" element={<AdminProfile />} />
     </Routes>
   );

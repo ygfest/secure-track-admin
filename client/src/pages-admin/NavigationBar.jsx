@@ -347,6 +347,15 @@ const NavigationBar = ({
             </li>
             <li>
               <Link
+                to="/admin/reports"
+                className="block p-4 text-white hover:bg-zinc-800"
+                onClick={toggleSideBar}
+              >
+                Reports
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/admin/profile"
                 className="block p-4 text-white hover:bg-zinc-800"
                 onClick={toggleSideBar}
