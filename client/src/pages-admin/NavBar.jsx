@@ -269,6 +269,15 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                 </li>
                 <li>
                   <Link
+                    to="/admin/reports"
+                    className="link no-underline"
+                    onClick={toggleSideBar}
+                  >
+                    Reports
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/admin/profile"
                     className="link no-underline"
                     onClick={toggleSideBar}

@@ -17,6 +17,7 @@ const AdminReports = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentLuggage, setCurrentLuggage] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState("");
+  const [reportsData, setReportsData] = useState([]);
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -61,20 +62,19 @@ const AdminReports = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchLuggageInfo() {
+    const fetchReports = async () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(
-          `${apiUrl}/luggage-router/luggage-admin`
-        );
-        setLuggageInfo(response.data);
+        const response = await Axios.get(`${apiUrl}/auth/reports`);
+        setReportsData(response.data);
         setFilteredData(response.data);
         setTotalItems(response.data.length);
       } catch (error) {
-        console.log("error fetching luggage info", error);
+        console.error("Error fetching reorts:", reports);
       }
-    }
-    fetchLuggageInfo();
+    };
+
+    fetchReports();
   }, []);
 
   useEffect(() => {
@@ -111,8 +111,8 @@ const AdminReports = () => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
 
-    const filtered = luggageInfo.filter((luggage) => {
-      const user = usersData.find((user) => user._id === luggage.user_id);
+    const filtered = reportsData.filter((report) => {
+      const user = usersData.find((user) => user._id === report.userId);
       const fullName = user
         ? `${user.firstname.toLowerCase()} ${user.lastname.toLowerCase()}`
         : "";
@@ -121,9 +121,9 @@ const AdminReports = () => {
         fullName.includes(searchTerm) ||
         (user && user.firstname.toLowerCase().includes(searchTerm)) ||
         (user && user.lastname.toLowerCase().includes(searchTerm)) ||
-        luggage.luggage_custom_name.toLowerCase().includes(searchTerm) ||
-        luggage.luggage_tag_number.toLowerCase().includes(searchTerm) ||
-        luggage.status.toLowerCase().includes(searchTerm)
+        report.type.toLowerCase().includes(searchTerm) ||
+        report.title.toLowerCase().includes(searchTerm) ||
+        report.description.toLowerCase().includes(searchTerm)
       );
     });
 
@@ -264,22 +264,22 @@ const AdminReports = () => {
                   <th className="py-3 px-6 text-left">
                     <input type="checkbox" className="checkbox" />
                   </th>
-                  <th className="py-3 px-6 text-left">Luggage Name</th>
-                  <th className="py-3 px-6 text-left">Associated with</th>
-                  <th className="py-3 px-6 text-left">Location</th>
+                  <th className="py-3 px-6 text-left">Report Type</th>
+                  <th className="py-3 px-6 text-left">Reported Name</th>
+                  <th className="py-3 px-6 text-left">Description</th>
                   <th className="py-3 px-6 text-left">Status</th>
                   <th className="py-3 px-6 text-left">Action</th>
                   <th className="py-3 px-6"></th>
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-light">
-                {paginatedData.map((luggage) => {
+                {paginatedData.map((report) => {
                   const user = usersData.find(
-                    (user) => user._id === luggage.user_id
+                    (user) => user._id === report.userId
                   );
                   return (
                     <tr
-                      key={luggage._id}
+                      key={report._id}
                       className="border-b border-gray-200 hover:bg-gray-100"
                     >
                       <td className="py-3 px-6 text-left">
@@ -296,10 +296,10 @@ const AdminReports = () => {
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {luggage.luggage_custom_name}
+                              {report.title}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {luggage.luggage_tag_number}
+                              {report.type}
                             </div>
                           </div>
                         </div>
@@ -310,14 +310,14 @@ const AdminReports = () => {
                           : "Unknown User"}
                         <br />
                         <span className="badge badge-ghost badge-sm">
-                          Owner
+                          Reporter
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        {luggage.currentLocation}
+                        {report.description}
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <span
+                        {/*<span
                           className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                             luggage.status === "In Range"
                               ? "bg-green-100 text-green-800"
@@ -326,14 +326,14 @@ const AdminReports = () => {
                               : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {luggage.status}
-                        </span>
+                          status
+                        </span>*/}
                       </td>
                       <td className="py-3 px-6 text-left">
                         <button
                           className="btn btn-sm btn-outline btn-primary hover:text-white mr-2"
                           onClick={() => {
-                            setCurrentLuggage(luggage);
+                            setCurrentLuggage(report);
                             setShowUpdateModal(true);
                           }}
                         >
@@ -343,7 +343,7 @@ const AdminReports = () => {
                         <button
                           className="btn btn-sm btn-outline btn-danger"
                           onClick={() => {
-                            setCurrentLuggage(luggage);
+                            setCurrentLuggage(report);
                             setShowDeleteModal(true);
                           }}
                         >
