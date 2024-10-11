@@ -376,7 +376,7 @@ const AdminAssocLuggage = () => {
                 handleAddNew({
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
-                  user_id: userId,
+                  user_id: selectedUserId || "", // Ensure user_id is passed
                 });
                 setShowAddModal(false);
               }}
@@ -398,6 +398,29 @@ const AdminAssocLuggage = () => {
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
+              </div>
+              <div className="form-control mb-4">
+                <label className="label">Owner (User)</label>
+                <select
+                  value={selectedUserId || ""}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                  className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="" disabled>
+                    Select Owner
+                  </option>
+                  {usersData.length === 0 ? (
+                    <option value="" disabled>
+                      No users found
+                    </option>
+                  ) : (
+                    usersData.map((user) => (
+                      <option key={user._id} value={user._id}>
+                        {user.firstname} {user.lastname}
+                      </option>
+                    ))
+                  )}
+                </select>
               </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
