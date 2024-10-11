@@ -317,17 +317,17 @@ const AdminReports = () => {
                         {report.description}
                       </td>
                       <td className="py-3 px-6 text-left">
-                        {/*<span
+                        <span
                           className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                            luggage.status === "In Range"
+                            report.status === "In progress"
                               ? "bg-green-100 text-green-800"
-                              : luggage.status === "Out of Range"
+                              : report.status === "Out of Range"
                               ? "bg-yellow-100 text-yellow-800"
                               : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          status
-                        </span>*/}
+                          {report.status}
+                        </span>
                       </td>
                       <td className="py-3 px-6 text-left">
                         <button

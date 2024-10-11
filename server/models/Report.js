@@ -20,6 +20,10 @@ const ReportSchema = new mongoose.Schema({
     required: [true, 'Description is required'], // Custom error message
     trim: true,  // Trims any extra whitespace
   },
+  status: {
+    type: String,
+    default:"In progress"
+  }
 }, { timestamps: true });  // Adds createdAt and updatedAt fields
 
 module.exports = mongoose.model('Report', ReportSchema);
