@@ -136,9 +136,7 @@ const AdminAssocLuggage = () => {
   const userId = user?._id;
   console.log(userId);
 
-  const ownerName = user
-    ? user.firstname + " " + user.lastname
-    : "Unknown Owner";
+  const ownerName = user?.firstname + " " + user?.lastname;
 
   const handleAddNew = async (luggageData) => {
     try {
@@ -162,7 +160,7 @@ const AdminAssocLuggage = () => {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
         `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
-        luggageData
+        { ...luggageData, user_id: selectedUserId } // Include selected user
       );
       setLuggageInfo((prev) =>
         prev.map((item) =>
@@ -180,7 +178,6 @@ const AdminAssocLuggage = () => {
       console.error("Error updating luggage", error);
     }
   };
-
   const handleDeleteLuggage = async (luggageId) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -337,11 +334,13 @@ const AdminAssocLuggage = () => {
                           className="btn btn-sm btn-outline btn-primary hover:text-white mr-2"
                           onClick={() => {
                             setCurrentLuggage(luggage);
+                            setSelectedUserId(luggage.user_id); // Set selected user ID
                             setShowUpdateModal(true);
                           }}
                         >
                           Edit
                         </button>
+
                         <button
                           className="btn btn-sm btn-outline btn-danger"
                           onClick={() => {
@@ -428,9 +427,8 @@ const AdminAssocLuggage = () => {
                   _id: currentLuggage._id,
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
-                  luggage_owner_name: e.target.luggage_owner_name.value,
                   status: e.target.status.value,
-                  user_id: userId,
+                  user_id: selectedUserId || "", // Ensure user_id is passed
                 });
                 setShowUpdateModal(false);
               }}
@@ -456,14 +454,26 @@ const AdminAssocLuggage = () => {
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Owner Name</label>
-                <input
-                  name="luggage_owner_name"
-                  type="text"
-                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue={ownerName}
-                  required
-                />
+                <label className="label">Owner (User)</label>
+                <select
+                  value={selectedUserId || ""}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                  className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="" disabled>
+                    Select Owner
+                  </option>
+                  {usersData.length === 0 && (
+                    <option value="" disabled>
+                      No users found
+                    </option>
+                  )}
+                  {usersData.map((user) => (
+                    <option key={user._id} value={user._id}>
+                      {user.firstname} {user.lastname}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="form-control mb-4">
                 <label className="label">Status</label>
