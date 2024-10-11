@@ -334,7 +334,6 @@ const AdminAssocLuggage = () => {
                           className="btn btn-sm btn-outline btn-primary hover:text-white mr-2"
                           onClick={() => {
                             setCurrentLuggage(luggage);
-                            setSelectedUserId(luggage.user_id); // Set selected user ID
                             setShowUpdateModal(true);
                           }}
                         >
