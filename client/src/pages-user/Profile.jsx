@@ -22,7 +22,10 @@ const Profile = () => {
     type: "device-anomaly",
     title: "",
     description: "",
+    luggageId: "", // Add luggageId to the report state
   });
+
+  const [luggageInfo, setLuggageInfo] = useState([]);
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -57,13 +60,31 @@ const Profile = () => {
         toast.error("Error submitting report");
       } else {
         toast.success("Report submitted successfully");
-        setReport({ type: "device-anomaly", title: "", description: "" });
+        setReport({
+          type: "device-anomaly",
+          title: "",
+          description: "",
+          luggageId: "",
+        });
       }
     } catch (error) {
       console.error("Error submitting report:", error);
       toast.error("Error submitting report");
     }
   };
+
+  useEffect(() => {
+    const fetchLuggageInfo = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.get(`${apiUrl}/luggage-router/luggage`);
+        setLuggageInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching luggage data: ", error);
+      }
+    };
+    fetchLuggageInfo();
+  }, []);
 
   return (
     <>
@@ -141,6 +162,28 @@ const Profile = () => {
               className="w-full p-2 border rounded-md"
               required
             />
+            {report.type === "device-anomaly" && (
+              <select
+                id="luggageId"
+                name="luggageId"
+                value={report.luggageId} // Bind to luggageId state
+                onChange={(e) =>
+                  setReport({ ...report, luggageId: e.target.value })
+                } // Update luggageId in the report state
+                className="w-full p-2 border rounded-md"
+                required
+              >
+                <option value="" disabled>
+                  Select Luggage
+                </option>
+                {luggageInfo.map((luggage) => (
+                  <option key={luggage._id} value={luggage._id}>
+                    {luggage.luggage_tag_number}
+                  </option>
+                ))}
+              </select>
+            )}
+
             <textarea
               placeholder="Describe the issue"
               value={report.description}

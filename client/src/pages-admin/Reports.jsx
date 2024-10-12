@@ -265,7 +265,7 @@ const AdminReports = () => {
                     <input type="checkbox" className="checkbox" />
                   </th>
                   <th className="py-3 px-6 text-left">Report Type</th>
-                  <th className="py-3 px-6 text-left">Reported Name</th>
+                  <th className="py-3 px-6 text-left">Reporter Name</th>
                   <th className="py-3 px-6 text-left">Description</th>
                   <th className="py-3 px-6 text-left">Status</th>
                   <th className="py-3 px-6 text-left">Action</th>
