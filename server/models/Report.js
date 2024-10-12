@@ -20,6 +20,9 @@ const ReportSchema = new mongoose.Schema({
     required: [true, 'Description is required'], // Custom error message
     trim: true,  // Trims any extra whitespace
   },
+  luggageId: {
+    type: mongoose.Schema.Types.ObjectId, 
+  },
   status: {
     type: String,
     default:"In progress"

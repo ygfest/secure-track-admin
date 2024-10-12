@@ -346,9 +346,10 @@ router.delete('/deleteuser/:id', verifyUser, async(req, res) => {
 })
 
 router.post('/user-report', verifyUser, async(req, res) => {
-  const {type, title, description, userId} = req.body;
+  const {type, title, description, luggageId, userId} = req.body;
+  console.log(req.body)
 
-  if (!type || !title || !description || !userId) {
+  if (!type || !title || !description ||  !userId) {
     console.error("Missing fields:", {type, title, description, userId});
     return res.status(400).json({status: false, message: "All fields are required"});
   }
@@ -357,6 +358,7 @@ router.post('/user-report', verifyUser, async(req, res) => {
       type,
       title,
       description,
+      luggageId,
       userId
     });
 

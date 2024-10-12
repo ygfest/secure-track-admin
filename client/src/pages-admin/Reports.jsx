@@ -7,6 +7,7 @@ import LuggageIcon from "../assets/green_marker.png";
 const AdminReports = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
+  const [luggageInfos, setLuggageInfos] = useState([]);
   const [usersData, setUsersData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -59,6 +60,21 @@ const AdminReports = () => {
     }
 
     fetchUsersData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchLuggageInfo() {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.get(
+          `${apiUrl}/luggage-router/luggage-admin`
+        );
+        setLuggageInfos(response.data);
+      } catch (error) {
+        console.log("error fetching luggage info", error);
+      }
+    }
+    fetchLuggageInfo();
   }, []);
 
   useEffect(() => {
@@ -310,7 +326,11 @@ const AdminReports = () => {
                           : "Unknown User"}
                         <br />
                         <span className="badge badge-ghost badge-sm">
-                          Reporter
+                          {
+                            luggageInfos.find(
+                              (luggage) => luggage._id === report.luggageId
+                            )?.luggage_tag_number
+                          }
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">
@@ -320,9 +340,9 @@ const AdminReports = () => {
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                             report.status === "In progress"
-                              ? "bg-green-100 text-green-800"
-                              : report.status === "Out of Range"
                               ? "bg-yellow-100 text-yellow-800"
+                              : report.status === "Resolved"
+                              ? "bg-green-100 text-green-800"
                               : "bg-gray-100 text-gray-800"
                           }`}
                         >
