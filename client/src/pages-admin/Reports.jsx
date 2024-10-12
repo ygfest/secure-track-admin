@@ -326,11 +326,9 @@ const AdminReports = () => {
                           : "Unknown User"}
                         <br />
                         <span className="badge badge-ghost badge-sm">
-                          {
-                            luggageInfos.find(
-                              (luggage) => luggage._id === report.luggageId
-                            )?.luggage_tag_number
-                          }
+                          {luggageInfos.find(
+                            (luggage) => luggage._id === report.luggageId
+                          )?.luggage_tag_number || "Reporter"}
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">

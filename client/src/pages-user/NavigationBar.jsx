@@ -39,23 +39,24 @@ const NavigationBar = ({
     setOpenNotif(false);
   };
 
-  axios.defaults.withCredentials = true;
   useEffect(() => {
     const verifyToken = async () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
+        const response = await fetch(`${apiUrl}/auth/verify`, {
+          method: "GET",
+          credentials: "include", // Equivalent to axios withCredentials: true
         });
 
-        console.log("Verify token response:", response.data);
+        const data = await response.json();
+        console.log("Verify token response:", data);
 
-        if (!response.data.status) {
+        if (!data.status) {
           navigate("/sign-in");
         } else {
-          setProfileDp(response.data.user.profile_dp);
-          setProfileName(response.data.user.firstname);
-          setProfileLastName(response.data.user.lastname);
+          setProfileDp(data.user.profile_dp);
+          setProfileName(data.user.firstname);
+          setProfileLastName(data.user.lastname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);

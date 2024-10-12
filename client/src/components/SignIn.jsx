@@ -44,8 +44,6 @@ export default function SignInForm() {
       return;
     }
 
-    Axios.defaults.withCredentials = true;
-
     setIsSigningIn(true);
     try {
       const { email, password } = formData;
@@ -56,42 +54,40 @@ export default function SignInForm() {
         "Custom-Header": "YourHeaderValue", // Add your custom headers here
       };
 
-      const response = await Axios.post(
-        `${apiUrl}/auth/signin`,
-        { email, password },
-        {
-          withCredentials: true,
-          headers: headers, // Include headers here
-        }
-      );
+      // Using fetch to replace Axios
+      const response = await fetch(`${apiUrl}/auth/signin`, {
+        method: "POST",
+        credentials: "include", // Equivalent to Axios's withCredentials: true
+        headers: headers,
+        body: JSON.stringify({ email, password }),
+      });
 
-      if (response.data.status) {
-        console.log("Navigiting HAHAHA");
+      const data = await response.json();
+
+      if (data.status) {
+        console.log("Navigating HAHAHA");
         setIsSigningIn(false);
-        if (response.data.user.role === "user") {
+        if (data.user.role === "user") {
           navigate("/user");
-        } else if (response.data.user.role === "admin") {
+        } else if (data.user.role === "admin") {
           navigate("/admin");
         }
       } else {
-        setErrors({ server: response.data.message });
+        setErrors({ server: data.message });
         setIsSigningIn(false);
       }
     } catch (error) {
       console.error("Sign-in error:", error);
-      if (error.response) {
-        setErrors({ server: error.response.data.message });
-        if (error.response.status === 401) {
-          setSessionExpired(true);
-        }
-      } else if (error.request) {
+      setIsSigningIn(false);
+
+      if (error instanceof TypeError) {
+        // Handle fetch-specific errors (like network issues)
         setErrors({
           server: "No response from server. Please try again later.",
         });
       } else {
         setErrors({ server: "An error occurred. Please try again." });
       }
-      setIsSigningIn(false);
     }
   };
 

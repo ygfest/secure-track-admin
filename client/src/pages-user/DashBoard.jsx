@@ -57,18 +57,18 @@ const DashBoard = () => {
     const verifyToken = async () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
+        const response = await fetch(`${apiUrl}/auth/verify`, {
+          method: "GET",
+          credentials: "include",
         });
 
-        console.log("Verify token response:", response.data);
+        const data = await response.json();
+        console.log("Verify token response:", data);
 
-        if (!response.data.status || response.data.user.role !== "user") {
+        if (!data.status || data.user.role !== "user") {
           navigate("/sign-in");
         } else {
-          setUserFirstName(
-            `${response.data.user.firstname} ${response.data.user.lastname}`
-          );
+          setUserFirstName(`${data.user.firstname} ${data.user.lastname}`);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
