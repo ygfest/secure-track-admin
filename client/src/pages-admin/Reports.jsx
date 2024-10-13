@@ -13,11 +13,9 @@ const AdminReports = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [currentLuggage, setCurrentLuggage] = useState(null);
-  const [selectedUserId, setSelectedUserId] = useState("");
+  const [currentReport, setCurrentReport] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [reportsData, setReportsData] = useState([]);
 
   useEffect(() => {
@@ -148,63 +146,41 @@ const AdminReports = () => {
     setCurrentPage(1);
   };
 
-  const user = usersData.find((user) => user._id === currentLuggage?.user_id);
+  const user = usersData.find((user) => user._id === currentReport?.user_id);
   const userId = user?._id;
   console.log(userId);
 
-  const ownerName = user?.firstname + " " + user?.lastname;
-
-  const handleAddNew = async (luggageData) => {
+  const handleResolve = async (reportId) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.post(
-        `${apiUrl}/luggage-router/addluggage`,
-        luggageData
+      await Axios.put(`${apiUrl}/auth/resolve-reports/${reportId}`, {
+        status: "Resolved",
+      });
+      const updatedReports = filteredData.map((report) =>
+        report._id === reportId ? { ...report, status: "Resolved" } : report
       );
-      setLuggageInfo((prev) => [...prev, response.data]);
-      setFilteredData((prev) => [...prev, response.data]);
-      setTotalItems((prev) => prev + 1);
-      setShowAddModal(false);
-      window.location.reload();
+      setFilteredData(updatedReports);
     } catch (error) {
-      console.error("Error adding luggage", error);
+      console.error("Error resolving the report", error);
     }
   };
 
-  const handleUpdateLuggage = async (luggageData) => {
+  const handleUpdateReport = async (reportData) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
-        `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
-        { ...luggageData, user_id: selectedUserId } // Include selected user
+        `${apiUrl}/auth/update-reports/${reportData._id}`,
+        reportData
       );
       setLuggageInfo((prev) =>
-        prev.map((item) =>
-          item._id === luggageData._id ? response.data : item
-        )
+        prev.map((item) => (item._id === reportData._id ? response.data : item))
       );
       setFilteredData((prev) =>
-        prev.map((item) =>
-          item._id === luggageData._id ? response.data : item
-        )
+        prev.map((item) => (item._id === reportData._id ? response.data : item))
       );
       setShowUpdateModal(false);
-      window.location.reload();
     } catch (error) {
       console.error("Error updating luggage", error);
-    }
-  };
-  const handleDeleteLuggage = async (luggageId) => {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${luggageId}`);
-      setLuggageInfo((prev) => prev.filter((item) => item._id !== luggageId));
-      setFilteredData((prev) => prev.filter((item) => item._id !== luggageId));
-      setTotalItems((prev) => prev - 1);
-      setShowDeleteModal(false);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting luggage", error);
     }
   };
 
@@ -239,14 +215,7 @@ const AdminReports = () => {
     <div className="h-[100vh]">
       <NavigationBar />
       <div className="mt-5 ml-5 mr-5">
-        <div className="flex justify-between mb-5">
-          <button
-            className="btn bg-[#5CC90C] text-white rounded-3xl"
-            onClick={() => setShowAddModal(true)}
-          >
-            + Add New
-          </button>
-
+        <div className="flex justify-end mb-5">
           <div className="search-bar relative">
             <input
               type="text"
@@ -337,7 +306,7 @@ const AdminReports = () => {
                       <td className="py-3 px-6 text-left">
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                            report.status === "In progress"
+                            report.status === "In Progress"
                               ? "bg-yellow-100 text-yellow-800"
                               : report.status === "Resolved"
                               ? "bg-green-100 text-green-800"
@@ -349,21 +318,17 @@ const AdminReports = () => {
                       </td>
                       <td className="py-3 px-6 text-left">
                         <button
-                          className="btn btn-sm btn-outline btn-primary hover:text-white mr-2"
+                          className="btn btn-sm btn-primary btn-danger"
                           onClick={() => {
-                            setCurrentLuggage(report);
+                            setCurrentReport(report);
                             setShowUpdateModal(true);
                           }}
                         >
-                          Edit
+                          Update Status
                         </button>
-
                         <button
-                          className="btn btn-sm btn-outline btn-danger"
-                          onClick={() => {
-                            setCurrentLuggage(report);
-                            setShowDeleteModal(true);
-                          }}
+                          className="btn btn-sm btn-outline btn-danger hover:text-white mr-2"
+                          onClick={() => handleResolve(report._id)}
                         >
                           Delete
                         </button>
@@ -383,148 +348,70 @@ const AdminReports = () => {
         </div>
       </div>
 
-      {showAddModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Add New Luggage</h3>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleAddNew({
-                  luggage_custom_name: e.target.luggage_custom_name.value,
-                  luggage_tag_number: e.target.luggage_tag_number.value,
-                  user_id: selectedUserId || "", // Ensure user_id is passed
-                });
-                setShowAddModal(false);
-              }}
-            >
-              <div className="form-control mb-4">
-                <label className="label">Luggage Name</label>
-                <input
-                  name="luggage_custom_name"
-                  type="text"
-                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  required
-                />
-              </div>
-              <div className="form-control mb-4">
-                <label className="label">Tag Number</label>
-                <input
-                  name="luggage_tag_number"
-                  type="text"
-                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  required
-                />
-              </div>
-              <div className="form-control mb-4">
-                <label className="label">Owner (User)</label>
-                <select
-                  value={selectedUserId || ""}
-                  onChange={(e) => setSelectedUserId(e.target.value)}
-                  className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  <option value="" disabled>
-                    Select Owner
-                  </option>
-                  {usersData.length === 0 ? (
-                    <option value="" disabled>
-                      No users found
-                    </option>
-                  ) : (
-                    usersData.map((user) => (
-                      <option key={user._id} value={user._id}>
-                        {user.firstname} {user.lastname}
-                      </option>
-                    ))
-                  )}
-                </select>
-              </div>
-              <div className="modal-action">
-                <button type="submit" className="btn btn-primary">
-                  Add
-                </button>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setShowAddModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {showUpdateModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Update Luggage</h3>
+            <h3 className="text-xl font-semibold mb-4">Update Status</h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleUpdateLuggage({
-                  _id: currentLuggage._id,
-                  luggage_custom_name: e.target.luggage_custom_name.value,
-                  luggage_tag_number: e.target.luggage_tag_number.value,
-                  status: e.target.status.value,
-                  user_id: selectedUserId || "", // Ensure user_id is passed
+                const status = e.target.status.value;
+                handleUpdateReport({
+                  _id: currentReport._id,
+                  status,
                 });
                 setShowUpdateModal(false);
               }}
             >
               <div className="form-control mb-4">
-                <label className="label">Luggage Name</label>
+                <label className="label">Report Title</label>
                 <input
-                  name="luggage_custom_name"
+                  name="report_title"
                   type="text"
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue={currentLuggage.luggage_custom_name}
-                  required
+                  defaultValue={currentReport.title}
+                  disabled
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Tag Number</label>
+                <label className="label">Report Type</label>
                 <input
                   name="luggage_tag_number"
                   type="text"
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue={currentLuggage.luggage_tag_number}
-                  required
+                  defaultValue={currentReport.type}
+                  disabled
                 />
               </div>
               <div className="form-control mb-4">
-                <label className="label">Owner (User)</label>
-                <select
-                  value={selectedUserId || ""}
-                  onChange={(e) => setSelectedUserId(e.target.value)}
-                  className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  <option value="" disabled>
-                    Select Owner
-                  </option>
-                  {usersData.length === 0 && (
-                    <option value="" disabled>
-                      No users found
-                    </option>
-                  )}
-                  {usersData.map((user) => (
-                    <option key={user._id} value={user._id}>
-                      {user.firstname} {user.lastname}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-control mb-4">
-                <label className="label">Status</label>
+                <label className="label">Reported by</label>
                 <input
-                  name="status"
+                  name="reporter_name"
                   type="text"
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue={currentLuggage.status}
+                  defaultValue={
+                    usersData.find((user) => user._id === currentReport.userId)
+                      .firstname +
+                    " " +
+                    usersData.find((user) => user._id === currentReport.userId)
+                      .lastname
+                  }
                   required
                   disabled
                 />
+              </div>
+              <div className="form-control mb-4">
+                <label className="label">Status</label>
+                <select
+                  name="status"
+                  className="select select-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                  defaultValue={currentReport.status}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
               </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
@@ -539,29 +426,6 @@ const AdminReports = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {showDeleteModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Confirm Delete</h3>
-            <p>Are you sure you want to delete this luggage?</p>
-            <div className="modal-action">
-              <button
-                className="btn btn-danger bg-red-500 text-white"
-                onClick={() => {
-                  handleDeleteLuggage(currentLuggage._id);
-                  setShowDeleteModal(false);
-                }}
-              >
-                Delete
-              </button>
-              <button className="btn" onClick={() => setShowDeleteModal(false)}>
-                Cancel
-              </button>
-            </div>
           </div>
         </div>
       )}

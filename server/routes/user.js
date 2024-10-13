@@ -379,6 +379,47 @@ router.get('/reports', async (req, res) => {
   }
 })
 
+
+router.put('/resolve-reports/:id', verifyUser, async (req, res) => {
+  const status = req.body; 
+  const reportId = req.params.id;
+
+  try {
+    const resolvedReport = await User.findByIdAndUpdate(reportId, {
+      status
+    }, { new: true });
+
+    if (!resolvedReport) {
+      return res.status(404).json({ status: false, message: "Report not found" }); 
+    }
+    res.status(200).json(resolvedReport); 
+  } catch (error) {
+    console.error('Error resolving report:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+router.put('/update-reports/:id', verifyUser, async (req, res) => {
+  const { status } = req.body; 
+  const reportId = req.params.id; 
+  console.log(status)
+
+  try {
+    const updatedReport = await Report.findByIdAndUpdate(reportId, {
+      status
+    }, { new: true }); 
+
+    if (!updatedReport) {
+      return res.status(404).json({ status: false, message: "Report not found" });
+    }
+    res.status(200).json(updatedReport); 
+  } catch (error) {
+    console.error('Error updating report:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
 router.put('/edit-profile', async (req, res) => {
   const { profile_dp, firstname, lastname, phone, userId } = req.body; // Extract userId here
   console.log("req body:",req.body);
