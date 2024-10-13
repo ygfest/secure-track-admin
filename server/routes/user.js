@@ -420,6 +420,21 @@ router.put('/update-reports/:id', verifyUser, async (req, res) => {
 });
 
 
+router.delete('/delete-report/:id', verifyUser, async (req, res) => {
+  const reportId = req.params.id;
+  try {
+    const deletedReport = await Report.findByIdAndDelete(reportId)
+
+    if(!deletedReport) {
+      res.status(400).json({status: false, message: "Error deleting report"});
+    }
+    res.json(deletedReport)
+  } catch (error) {
+    res.status(500).send("Server error");
+  }
+})
+
+
 router.put('/edit-profile', async (req, res) => {
   const { profile_dp, firstname, lastname, phone, userId } = req.body; // Extract userId here
   console.log("req body:",req.body);

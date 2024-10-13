@@ -3,6 +3,7 @@ import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
+import { toast, Toaster } from "sonner";
 
 const AdminReports = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const AdminReports = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentReport, setCurrentReport] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [reportsData, setReportsData] = useState([]);
@@ -184,6 +186,36 @@ const AdminReports = () => {
     }
   };
 
+  const handleDeleteReport = async (reportData) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.delete(
+        `${apiUrl}/auth/delete-report/${reportData._id}`
+      );
+
+      // Check if the deletion was successful based on the response
+      if (response.status === 200) {
+        // Remove the deleted report from the filtered data
+        const updatedFilteredData = filteredData.filter(
+          (report) => report._id !== reportData._id
+        );
+
+        // Update the state with the new filtered data
+        setFilteredData(updatedFilteredData);
+        setTotalItems(updatedFilteredData.length); // Update total items
+
+        toast.success("Successfully deleted the report");
+      } else {
+        toast.error("Error deleting report");
+      }
+
+      setShowDeleteModal(false); // Close the delete modal
+    } catch (error) {
+      console.error("Error deleting report:", error);
+      toast.error("Error deleting report");
+    }
+  };
+
   const paginationButtons = [];
   for (let i = 1; i <= Math.ceil(totalItems / 6); i++) {
     paginationButtons.push(
@@ -214,6 +246,7 @@ const AdminReports = () => {
   return (
     <div className="h-[100vh]">
       <NavigationBar />
+      <Toaster position="top-right" />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-end mb-5">
           <div className="search-bar relative">
@@ -328,7 +361,10 @@ const AdminReports = () => {
                         </button>
                         <button
                           className="btn btn-sm btn-outline btn-danger hover:text-white mr-2"
-                          onClick={() => handleResolve(report._id)}
+                          onClick={() => {
+                            setCurrentReport(report);
+                            setShowDeleteModal(true);
+                          }}
                         >
                           Delete
                         </button>
@@ -426,6 +462,28 @@ const AdminReports = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">
+              Delete Report Permanently
+            </h3>
+            <p>Are you sure you want to delete this report?</p>
+            <div className="modal-action gap-2">
+              <button className="btn" onClick={() => setShowDeleteModal(false)}>
+                Cancel
+              </button>
+              <button
+                className="btn btn-danger bg-red-500 text-white"
+                onClick={() => handleDeleteReport(currentReport)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       )}
