@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import { toast, Toaster } from "sonner";
 import { CiCamera } from "react-icons/ci";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
 
 const EditProfile = ({ userProfile }) => {
@@ -21,6 +22,7 @@ const EditProfile = ({ userProfile }) => {
   });
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [resetPassMode, setResetPassMode] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -68,6 +70,20 @@ const EditProfile = ({ userProfile }) => {
 
   const handlePhotoChange = (e) => {
     setNewProfilePhoto(e.target.files[0]);
+  };
+
+  const handleDeleteAccount = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    try {
+      await Axios.delete(`${apiUrl}/auth/deleteuser/${profileData.userID}`, {
+        headers: { "Content-Type": "application/json" },
+      });
+      toast.success("Account deleted successfully");
+      navigate("/sign-in");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      toast.error("Error deleting account");
+    }
   };
 
   return (
@@ -191,12 +207,46 @@ const EditProfile = ({ userProfile }) => {
               onClick={() => setResetPassMode((prevState) => !prevState)}
               className="flex items-center gap-2 text-primary bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
             >
-              <FiSettings className="text-xl" />
+              <FiSettings className="text-lg" />
               <span>Reset Password</span>
             </button>
           </div>
         )}
+
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center mt-6">
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirmation(true)}
+            className="flex items-center gap-2 text-red-600 bg-gray-100 py-2 px-4 rounded-md hover:bg-red-200 transition-all"
+          >
+            <MdOutlineDeleteOutline className="text-2xl" />
+            <span>Delete Account</span>
+          </button>
+        </div>
       </div>
+
+      {showDeleteConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className=" bg-white p-6 rounded-lg min-w-[30%] shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">Delete Account</h3>
+            <p>Are you sure you want to permanently delete this account?</p>
+            <div className="modal-action">
+              <button
+                onClick={handleDeleteAccount}
+                className="btn btn-danger bg-red-500 hover:bg-red-700 text-white"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirmation(false)}
+                className="btn"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

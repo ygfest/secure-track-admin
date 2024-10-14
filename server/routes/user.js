@@ -285,9 +285,8 @@ router.delete('/delete-location', verifyUser, async (req, res) => {
   }
 
   try {
-    // Use findByIdAndUpdate instead of findByIdAndDelete
     await User.findByIdAndUpdate(userId, {
-      $unset: { latitude: '', longitude: '' } // This only removes the fields
+      $unset: { latitude: '', longitude: '' } 
     });
 
     res.json({ status: 'success', message: 'Location deleted successfully' });
