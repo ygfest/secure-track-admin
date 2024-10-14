@@ -358,8 +358,8 @@ router.post('/user-report', verifyUser, async(req, res) => {
       type,
       title,
       description,
-      luggageId,
-      userId
+      userId,
+      ...(type === "device-anomaly" && {luggageId})
     });
 
     const savedReport = await newReport.save();

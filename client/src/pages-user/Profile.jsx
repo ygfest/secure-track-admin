@@ -26,6 +26,7 @@ const Profile = () => {
   });
 
   const [luggageInfo, setLuggageInfo] = useState([]);
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -49,6 +50,7 @@ const Profile = () => {
 
   const handleReportSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmittingReport(true);
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const reportData = { ...report, userId: userProfile.userID };
@@ -70,6 +72,8 @@ const Profile = () => {
     } catch (error) {
       console.error("Error submitting report:", error);
       toast.error("Error submitting report");
+    } finally {
+      setIsSubmittingReport(false);
     }
   };
 
@@ -147,7 +151,7 @@ const Profile = () => {
               name="type"
               value={report.type}
               onChange={(e) => setReport({ ...report, type: e.target.value })}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             >
               <option value="device-anomaly">Device Anomaly</option>
@@ -159,18 +163,18 @@ const Profile = () => {
               placeholder="Title"
               value={report.title}
               onChange={(e) => setReport({ ...report, title: e.target.value })}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
             {report.type === "device-anomaly" && (
               <select
                 id="luggageId"
                 name="luggageId"
-                value={report.luggageId} // Bind to luggageId state
+                value={report.luggageId || ""}
                 onChange={(e) =>
                   setReport({ ...report, luggageId: e.target.value })
-                } // Update luggageId in the report state
-                className="w-full p-2 border rounded-md"
+                }
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 required
               >
                 <option value="" disabled>
@@ -190,15 +194,16 @@ const Profile = () => {
               onChange={(e) =>
                 setReport({ ...report, description: e.target.value })
               }
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               rows="4"
               required
             ></textarea>
             <button
               type="submit"
+              disabled={isSubmittingReport}
               className="w-full bg-secondary text-white py-2 rounded-md"
             >
-              Submit Report
+              {isSubmittingReport ? "Submitting report..." : "Submit Report"}
             </button>
           </form>
         </div>

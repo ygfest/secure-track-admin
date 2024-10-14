@@ -25,7 +25,7 @@ const ReportSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default:"In Progress"
+    default:"Pending"
   }
 }, { timestamps: true });  // Adds createdAt and updatedAt fields
 
