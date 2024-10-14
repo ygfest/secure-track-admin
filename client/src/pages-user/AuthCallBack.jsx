@@ -15,7 +15,6 @@ export default function AuthCallback() {
     if (accessToken) {
       localStorage.setItem("googleAccessToken", accessToken);
 
-      // Fetch user info from Google
       axios
         .get("https://www.googleapis.com/oauth2/v3/userinfo", {
           headers: {

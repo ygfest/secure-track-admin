@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import googleLogo from "../assets/google.svg"; // Update the path to your Google logo image
+import googleLogo from "../assets/google.svg";
+import { ImSpinner2 } from "react-icons/im";
 import "../index.css";
-
-// Replace with your Google client ID
 
 export default function GoogleButton() {
   const [isSigningIn, setIsSigningIn] = useState(false);
@@ -32,7 +31,11 @@ export default function GoogleButton() {
         height={16}
         className="mr-2"
       />
-      Google
+      {isSigningIn ? (
+        <ImSpinner2 className="animate-spin text-2xl text-primary" />
+      ) : (
+        "Google"
+      )}
     </button>
   );
 }

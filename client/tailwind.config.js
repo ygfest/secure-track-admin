@@ -12,14 +12,18 @@ export default {
       colors: {
         'light-gray': '#f2f5f8',
       },
-    },
-    screens: {
-      xs: "480px",
-      ss: "620px",
-      sm: "768px",
-      md: "1060px",
-      lg: "1200px",
-      xl: "1700px",
+      screens: {
+        xs: "480px",
+        ss: "620px",
+        sm: "768px",
+        md: "1060px",
+        lg: "1200px",
+        xl: "1700px",
+      },
+      
+      animation: {
+        'spin-slow': 'spin 2s linear infinite', // Slower spin animation
+      },
     },
   },
   plugins: [require("daisyui")],

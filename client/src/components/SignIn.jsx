@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import GoogleButton from "../auth/GoogleButton";
+import { ImSpinner2 } from "react-icons/im";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import TokenExpirationAlert from "./TokenExpirationAlert";
 
@@ -163,7 +164,11 @@ export default function SignInForm() {
               className="btn btn-primary"
               disabled={!formData.email || !formData.password || isSigningIn}
             >
-              {isSigningIn ? "Signing in..." : "Sign in"}
+              {isSigningIn ? (
+                <ImSpinner2 className="animate-spin text-2xl text-primary" />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
 

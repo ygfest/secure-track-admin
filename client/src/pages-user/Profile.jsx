@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import NavigationBar from "./NavigationBar";
 import { toast, Toaster } from "sonner";
+import { ImSpinner2 } from "react-icons/im";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -146,6 +147,7 @@ const Profile = () => {
           <hr className="border-t-2 border-primary my-6" />
           <form onSubmit={handleReportSubmit} className="space-y-4">
             <h3 className="text-xl font-bold">Report an Issue</h3>
+
             <select
               id="type"
               name="type"
@@ -166,6 +168,7 @@ const Profile = () => {
               className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
+
             {report.type === "device-anomaly" && (
               <select
                 id="luggageId"
@@ -198,12 +201,17 @@ const Profile = () => {
               rows="4"
               required
             ></textarea>
+
             <button
               type="submit"
               disabled={isSubmittingReport}
-              className="w-full bg-secondary text-white py-2 rounded-md"
+              className="w-full bg-secondary text-white py-2 rounded-md flex items-center justify-center"
             >
-              {isSubmittingReport ? "Submitting report..." : "Submit Report"}
+              {isSubmittingReport ? (
+                <ImSpinner2 className="animate-spin text-2xl text-white" />
+              ) : (
+                "Submit Report"
+              )}
             </button>
           </form>
         </div>

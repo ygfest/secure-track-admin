@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import GoogleButton from "../auth/GoogleButton";
+import { ImSpinner2 } from "react-icons/im";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 export default function SignUp() {
@@ -241,7 +242,11 @@ export default function SignUp() {
               isPending
             }
           >
-            {isPending ? "Creating account..." : "Sign up"}
+            {isPending ? (
+              <ImSpinner2 className="animate-spin text-2xl text-primary" />
+            ) : (
+              "Sign up"
+            )}
           </button>
         </div>
 

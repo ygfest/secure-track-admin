@@ -214,7 +214,7 @@ router.post('/addluggage', verifyUser, async (req, res) => {
     res.status(201).json(savedLuggage);
   } catch (error) {
     console.error('Error adding new luggage:', error);
-    res.status(500).json({ status: false, message: 'Server error' }); // Return error message
+    res.status(500).json({ status: false, message: 'Server error' }); 
   }
 });
 
