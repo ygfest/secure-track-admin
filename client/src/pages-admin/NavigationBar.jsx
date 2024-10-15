@@ -39,6 +39,7 @@ const NavigationBar = ({
   const [adminProfileLastName, setAdminProfileLastName] = useState("");
   const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const [showLogoutConfirmation, setIsShowLogoutConfirmation] = useState(false);
+  const [currentLink, setCurrentLink] = useState("");
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
 
@@ -321,10 +322,19 @@ const NavigationBar = ({
             <li>
               <Link
                 to="/admin/"
-                className="flex items-center bg-zinc-800 p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900"
-                onClick={toggleSideBar}
+                className={`flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900 ${
+                  currentLink === "/admin/" ? "bg-zinc-800" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/admin/");
+                }}
               >
-                <div className="p-2 rounded-lg bg-secondary">
+                <div
+                  className={`p-2 rounded-lg ${
+                    currentLink === "/admin/" ? "bg-secondary" : ""
+                  }`}
+                >
                   <MdDashboard className="text-2xl" />
                 </div>
                 <span className="ml-3 font-medium">Dashboard</span>
@@ -333,10 +343,19 @@ const NavigationBar = ({
             <li>
               <Link
                 to="/admin/tracking"
-                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
-                onClick={toggleSideBar}
+                className={`flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900 ${
+                  currentLink === "/admin/tracking" ? "bg-zinc-800" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/admin/tracking");
+                }}
               >
-                <div className="p-2 rounded-lg bg-zinc-800">
+                <div
+                  className={`p-2 rounded-lg ${
+                    currentLink === "/admin/tracking" ? "bg-secondary" : ""
+                  }`}
+                >
                   <MdTrackChanges className="text-2xl" />
                 </div>
                 <span className="ml-3 font-medium">Live Tracking</span>
@@ -345,10 +364,19 @@ const NavigationBar = ({
             <li>
               <Link
                 to="/admin/luggage"
-                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
-                onClick={toggleSideBar}
+                className={`flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900 ${
+                  currentLink === "/admin/luggage" ? "bg-zinc-800" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/admin/luggage");
+                }}
               >
-                <div className="p-2 rounded-lg bg-zinc-800">
+                <div
+                  className={`p-2 rounded-lg ${
+                    currentLink === "/admin/luggage" ? "bg-secondary" : ""
+                  }`}
+                >
                   <MdLuggage className="text-2xl" />
                 </div>
                 <span className="ml-3 font-medium">Luggage Management</span>
@@ -357,10 +385,21 @@ const NavigationBar = ({
             <li>
               <Link
                 to="/admin/user-management"
-                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
-                onClick={toggleSideBar}
+                className={`flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900 ${
+                  currentLink === "/admin/user-management" ? "bg-zinc-800" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/admin/user-management");
+                }}
               >
-                <div className="p-2 rounded-lg bg-zinc-800">
+                <div
+                  className={`p-2 rounded-lg ${
+                    currentLink === "/admin/user-management"
+                      ? "bg-secondary"
+                      : ""
+                  }`}
+                >
                   <MdGroup className="text-2xl" />
                 </div>
                 <span className="ml-3 font-medium">User Accounts</span>
@@ -369,10 +408,19 @@ const NavigationBar = ({
             <li>
               <Link
                 to="/admin/reports"
-                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
-                onClick={toggleSideBar}
+                className={`flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900 ${
+                  currentLink === "/admin/reports" ? "bg-zinc-800" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/admin/reports");
+                }}
               >
-                <div className="p-2 rounded-lg bg-zinc-800">
+                <div
+                  className={`p-2 rounded-lg ${
+                    currentLink === "/admin/reports" ? "bg-secondary" : ""
+                  }`}
+                >
                   <MdReport className="text-2xl" />
                 </div>
                 <span className="ml-3 font-medium">Reports</span>
@@ -381,10 +429,19 @@ const NavigationBar = ({
             <li>
               <Link
                 to="/admin/profile"
-                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
-                onClick={toggleSideBar}
+                className={`flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900 ${
+                  currentLink === "/admin/profile" ? "bg-zinc-800" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/admin/profile");
+                }}
               >
-                <div className="p-2 rounded-lg bg-zinc-800">
+                <div
+                  className={`p-2 rounded-lg ${
+                    currentLink === "/admin/profile" ? "bg-secondary" : ""
+                  }`}
+                >
                   <MdAccountCircle className="text-2xl" />
                 </div>
                 <span className="ml-3 font-medium">Profile</span>
