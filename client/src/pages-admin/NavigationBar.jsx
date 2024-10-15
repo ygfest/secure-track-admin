@@ -9,6 +9,15 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import {
+  MdDashboard,
+  MdTrackChanges,
+  MdLuggage,
+  MdGroup,
+  MdReport,
+  MdAccountCircle,
+  MdClose,
+} from "react-icons/md";
 import { parse, format } from "date-fns";
 
 const formatDate = (dateObj) => {
@@ -304,83 +313,88 @@ const NavigationBar = ({
           </div>
         </div>
         <div
-          className={`sidebar bg-secondary h-screen w-64 fixed left-0 top-0 shadow-lg ${
+          className={`sidebar bg-secondary h-screen w-72 px-4 fixed left-0 top-0 shadow-lg ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 ease-in-out`}
         >
-          <ul className="mt-6">
+          <ul className="mt-8 flex flex-col justify-start space-y-4 h-full">
             <li>
               <Link
                 to="/admin/"
-                className="block p-4 text-white hover:bg-zinc-800"
+                className="flex items-center bg-zinc-800 p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-900"
                 onClick={toggleSideBar}
               >
-                Dashboard
+                <div className="p-2 rounded-lg bg-secondary">
+                  <MdDashboard className="text-2xl" />
+                </div>
+                <span className="ml-3 font-medium">Dashboard</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/tracking"
-                className="block p-4 text-white hover:bg-zinc-800"
+                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
-                Live Tracking
+                <div className="p-2 rounded-lg bg-zinc-800">
+                  <MdTrackChanges className="text-2xl" />
+                </div>
+                <span className="ml-3 font-medium">Live Tracking</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/luggage"
-                className="block p-4 text-white hover:bg-zinc-800"
+                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
-                Luggage Management
+                <div className="p-2 rounded-lg bg-zinc-800">
+                  <MdLuggage className="text-2xl" />
+                </div>
+                <span className="ml-3 font-medium">Luggage Management</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/user-management"
-                className="block p-4 text-white hover:bg-zinc-800"
+                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
-                User Accounts
+                <div className="p-2 rounded-lg bg-zinc-800">
+                  <MdGroup className="text-2xl" />
+                </div>
+                <span className="ml-3 font-medium">User Accounts</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/reports"
-                className="block p-4 text-white hover:bg-zinc-800"
+                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
-                Reports
+                <div className="p-2 rounded-lg bg-zinc-800">
+                  <MdReport className="text-2xl" />
+                </div>
+                <span className="ml-3 font-medium">Reports</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/admin/profile"
-                className="block p-4 text-white hover:bg-zinc-800"
+                className="flex items-center p-3 text-white rounded-lg transition-colors duration-200 hover:bg-zinc-800"
                 onClick={toggleSideBar}
               >
-                Profile
+                <div className="p-2 rounded-lg bg-zinc-800">
+                  <MdAccountCircle className="text-2xl" />
+                </div>
+                <span className="ml-3 font-medium">Profile</span>
               </Link>
             </li>
             <li
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-200 rounded-full"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-200 cursor-pointer"
               onClick={toggleSideBar}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="w-6 h-6"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <MdClose className="w-6 h-6" />
             </li>
           </ul>
         </div>
