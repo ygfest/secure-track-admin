@@ -267,7 +267,7 @@ const NavigationBar = ({
                     <img alt="Profile" src={profileDp} />
                   </div>
                 ) : (
-                  <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
+                  <div className="w-[38px] pt-1 rounded-full flex justify-center items-center bg-gray-300 text-zinc-500 text-xl ring-zinc-300 ring-offset-base-100 ring ring-offset-2">
                     {profileName && profileName.charAt(0).toUpperCase()}
                     {profileLastName && profileLastName.charAt(0)}
                   </div>

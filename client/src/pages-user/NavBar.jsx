@@ -17,6 +17,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [openNotif, setOpenNotif] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
+  const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
   const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
         } else {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
+          setProfileLastName(response.data.user.lastname);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -335,7 +337,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
           </div>
         )}
 
-        {/* Profile Icon */}
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
@@ -344,12 +345,17 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             onClick={handleDropProfile}
           >
             {profileDp ? (
-              <div className="w-10 rounded-full">
-                <img src={profileDp} alt="Profile" />
+              <div className="w-24 rounded-full ring-primary ring-offset-base-100 ring ring-offset-2">
+                <img
+                  src={profileDp}
+                  alt="Profile"
+                  className="w-10 rounded-full"
+                />
               </div>
             ) : (
-              <div className="w-14 pt-1 rounded-full flex justify-center items-center bg-gray-300 text-gray-800 text-xl font-bold border-4 border-white ">
+              <div className="w-[38px] pt-1 rounded-full flex justify-center items-center bg-zinc-300 text-zinc-500 text-xl font-bold ring-zinc-300 ring-offset-zinc-50 ring ring-offset-2">
                 {profileName && profileName.charAt(0).toUpperCase()}
+                {profileLastName && profileLastName.charAt(0)}
               </div>
             )}
           </label>
@@ -362,6 +368,15 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   onClick={handleDropProfile}
                 >
                   Profile
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/user/profile/edit"
+                  className="justify-between"
+                  onClick={handleDropProfile}
+                >
+                  Settings
                 </Link>
               </li>
               <li>

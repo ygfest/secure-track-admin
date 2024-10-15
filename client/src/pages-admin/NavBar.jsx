@@ -358,7 +358,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   <img src={adminProfileDp} alt="Profile" />
                 </div>
               ) : (
-                <div className="w-14 pt-1 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl border-4 border-white">
+                <div className="w-[38px] pt-1 rounded-full flex justify-center items-center bg-zinc-500 font-light text-white text-lg ring-zinc-600 ring-offset-black ring ring-offset-2">
                   {adminProfile && adminProfile.charAt(0).toUpperCase()}
                   {adminLastName && adminLastName.charAt(0)}
                 </div>
