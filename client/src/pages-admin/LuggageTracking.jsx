@@ -372,15 +372,24 @@ const AdminLuggageTracking = () => {
                       </span>
                       <br />
                       <span className="font-poppins">
-                        Tracking Number: {luggage.luggage_tag_number}
+                        <span className="font-poppins font-semibold">
+                          Tracking Number:
+                        </span>{" "}
+                        {luggage.luggage_tag_number}
                       </span>{" "}
                       <br />
                       <span className="font-poppins">
-                        Location: {luggage.currentLocation}
+                        <span className="font-poppins font-semibold">
+                          Location:
+                        </span>{" "}
+                        {luggage.currentLocation}
                       </span>{" "}
                       <br />
                       <span className="font-poppins">
-                        Owner:{" "}
+                        <span className="font-poppins font-semibold">
+                          Owner:{" "}
+                        </span>
+
                         {usersData.find((user) => user._id === luggage.user_id)
                           ? `${
                               usersData.find(

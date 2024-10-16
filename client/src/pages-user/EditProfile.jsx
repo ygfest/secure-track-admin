@@ -97,7 +97,7 @@ const EditProfile = ({ userProfile }) => {
           },
         }}
       />
-      <div className="min-h-screen flex flex-col items-center py-6 mx-4 bg-gray-100">
+      <div className="min-h-screen flex flex-col items-center py-6 mx-4 pb-24 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <form className="space-y-4" onSubmit={handleSave}>
             <h3 className="text-xl font-bold">Edit Profile</h3>
@@ -227,7 +227,7 @@ const EditProfile = ({ userProfile }) => {
 
       {showDeleteConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className=" bg-white p-6 rounded-lg min-w-[30%] shadow-lg">
+          <div className=" bg-white p-6 rounded-lg md:w-[30%] w- shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Delete Account</h3>
             <p>Are you sure you want to permanently delete this account?</p>
             <div className="modal-action">

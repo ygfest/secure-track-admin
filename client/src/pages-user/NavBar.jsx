@@ -287,7 +287,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
         </Link>
       </div>
 
-      {/* Right: Location, Notification, Profile */}
       <div className="navbar-end flex items-center md:space-x-4">
         <label
           className="flex items-center cursor-pointer"
@@ -345,7 +344,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             onClick={handleDropProfile}
           >
             {profileDp ? (
-              <div className="w-24 rounded-full ring-primary ring-offset-base-100 ring ring-offset-2">
+              <div className="w-10 rounded-full">
                 <img
                   src={profileDp}
                   alt="Profile"

@@ -9,6 +9,12 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import {
+  AiOutlineHome,
+  AiOutlineCompass,
+  AiOutlineFolder,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { parse, format } from "date-fns";
 
 const formatDate = (dateObj) => {
@@ -23,8 +29,9 @@ const NavigationBar = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const [isSeenNotifications, setIsSeenNotifications] = useState(false);
+  const [isSeenNotifications, setIsSeenNotifications] = useState(true);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const [currentLink, setCurrentLink] = useState("/user/");
 
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [fallDetectData, setFallDetectData] = useState([]);
@@ -261,7 +268,7 @@ const NavigationBar = () => {
         <div className="navbar bg-base-100 h-16 fixed">
           <div className="flex-none">
             <button
-              className="btn btn-square btn-ghost"
+              className="hidden md:btn md:btn-square md:btn-ghost"
               onClick={() => {
                 toggleSideBar();
                 setOpenNotif(false);
@@ -356,17 +363,110 @@ const NavigationBar = () => {
             </div>
           </div>
         </div>
+        <div className="fixed bottom-0 left-0 right-0 border-t border-gray-400 bg-white shadow-lg md:hidden">
+          <ul className="flex justify-around p-2">
+            <li className="relative">
+              <Link
+                to="/user/"
+                className={`flex flex-col items-center text-secondary transition-colors duration-300 ${
+                  currentLink === "/user/" ? "text-[#5CC90C]" : "text-[#3B3F3F]"
+                }`}
+                onClick={() => setCurrentLink("/user/")}
+              >
+                <AiOutlineHome className="w-6 h-6" />
+                <span
+                  className={`mt-1 ${
+                    currentLink === "/user/"
+                      ? "block h-1 w-full bg-[#5CC90C]"
+                      : "hidden"
+                  }`}
+                />
+                <span className="text-xs">Dashboard</span>
+              </Link>
+            </li>
+            <li className="relative">
+              <Link
+                to="/user/tracking"
+                className={`flex flex-col items-center text-secondary transition-colors duration-300 ${
+                  currentLink === "/user/tracking"
+                    ? "text-[#5CC90C]"
+                    : "text-[#3B3F3F]"
+                }`}
+                onClick={() => setCurrentLink("/user/tracking")}
+              >
+                <AiOutlineCompass className="w-6 h-6" />
+                <span
+                  className={`mt-1 ${
+                    currentLink === "/user/tracking"
+                      ? "block h-1 w-full bg-[#5CC90C]"
+                      : "hidden"
+                  }`}
+                />
+                <span className="text-xs">Live Tracking</span>
+              </Link>
+            </li>
+            <li className="relative">
+              <Link
+                to="/user/luggage"
+                className={`flex flex-col items-center text-secondary transition-colors duration-300 ${
+                  currentLink === "/user/luggage"
+                    ? "text-[#5CC90C]"
+                    : "text-[#3B3F3F]"
+                }`}
+                onClick={() => setCurrentLink("/user/luggage")}
+              >
+                <AiOutlineFolder className="w-6 h-6" />
+                <span
+                  className={`mt-1 ${
+                    currentLink === "/user/luggage"
+                      ? "block h-1 w-full bg-[#5CC90C]"
+                      : "hidden"
+                  }`}
+                />
+                <span className="text-xs">My Luggage</span>
+              </Link>
+            </li>
+            <li className="relative">
+              <Link
+                to="/user/profile"
+                className={`flex flex-col items-center text-secondary transition-colors duration-300 ${
+                  currentLink === "/user/profile"
+                    ? "text-[#5CC90C]"
+                    : "text-[#3B3F3F]"
+                }`}
+                onClick={() => setCurrentLink("/user/profile")}
+              >
+                <AiOutlineUser className="w-6 h-6" />
+                <span
+                  className={`mt-1 ${
+                    currentLink === "/user/profile"
+                      ? "block h-1 w-full bg-[#5CC90C]"
+                      : "hidden"
+                  }`}
+                />
+                <span className="text-xs">Profile</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Sidebar for Medium Screens and Up */}
         <div
-          className={`sidebar bg-white h-screen w-64 fixed left-0 top-0 shadow-lg ${
+          className={`sidebar bg-white h-screen w-64 fixed top-0 left-0 shadow-lg ${
             isOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out`}
+          } md:block transition-transform duration-300 ease-in-out`}
         >
           <ul className="mt-6">
             <li>
               <Link
                 to="/user/"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
-                onClick={toggleSideBar}
+                className={`block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white ${
+                  currentLink === "/user/" ? "text-[#5CC90C]" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/user/");
+                }}
               >
                 Dashboard
               </Link>
@@ -374,8 +474,13 @@ const NavigationBar = () => {
             <li>
               <Link
                 to="/user/tracking"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
-                onClick={toggleSideBar}
+                className={`block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white ${
+                  currentLink === "/user/tracking" ? "text-[#5CC90C]" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/user/tracking");
+                }}
               >
                 Live Tracking
               </Link>
@@ -383,8 +488,13 @@ const NavigationBar = () => {
             <li>
               <Link
                 to="/user/luggage"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
-                onClick={toggleSideBar}
+                className={`block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white ${
+                  currentLink === "/user/luggage" ? "text-[#5CC90C]" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/user/luggage");
+                }}
               >
                 My Luggage
               </Link>
@@ -392,8 +502,13 @@ const NavigationBar = () => {
             <li>
               <Link
                 to="/user/profile"
-                className="block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white"
-                onClick={toggleSideBar}
+                className={`block p-4 text-[#3B3F3F] hover:bg-[#5CC90C] hover:text-white ${
+                  currentLink === "/user/profile" ? "text-[#5CC90C]" : ""
+                }`}
+                onClick={() => {
+                  toggleSideBar();
+                  setCurrentLink("/user/profile");
+                }}
               >
                 Profile
               </Link>

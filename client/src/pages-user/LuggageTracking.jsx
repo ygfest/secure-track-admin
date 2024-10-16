@@ -368,11 +368,18 @@ const LuggageTracking = () => {
                       </span>
                       <br />
                       <span className="font-poppins">
-                        Tracking Number: {luggage.luggage_tag_number}
+                        <span className="font-poppins font-semibold">
+                          Tracking Number:{" "}
+                        </span>{" "}
+                        {luggage.luggage_tag_number}
                       </span>{" "}
                       <br />
                       <span className="font-poppins">
-                        Location: {luggage.currentLocation}
+                        <span className="font-poppins font-semibold">
+                          {" "}
+                          Location:
+                        </span>{" "}
+                        {luggage.currentLocation}
                       </span>{" "}
                       <br />
                       <br />
