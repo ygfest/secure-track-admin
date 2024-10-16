@@ -290,9 +290,9 @@ const NavigationBar = () => {
             </button>
           </div>
           <div className="flex-1">
-            <a className="btn btn-ghost text-md text-black">
-              <img src={Logo} alt="AirAsia Logo" className="h-9 w-auto" />
-            </a>
+            <Link to="/" className="btn btn-ghost text-md text-black">
+              <img src={Logo} alt="ST Logo" className="h-9 w-auto" />
+            </Link>
           </div>
           <div className="flex-none gap-2">
             <button
@@ -371,7 +371,10 @@ const NavigationBar = () => {
                 className={`flex flex-col items-center text-secondary transition-colors duration-300 ${
                   currentLink === "/user/" ? "text-[#5CC90C]" : "text-[#3B3F3F]"
                 }`}
-                onClick={() => setCurrentLink("/user/")}
+                onClick={() => {
+                  setCurrentLink("/user/");
+                  setOpenNotif(false);
+                }}
               >
                 <AiOutlineHome className="w-6 h-6" />
                 <span
@@ -392,7 +395,10 @@ const NavigationBar = () => {
                     ? "text-[#5CC90C]"
                     : "text-[#3B3F3F]"
                 }`}
-                onClick={() => setCurrentLink("/user/tracking")}
+                onClick={() => {
+                  setCurrentLink("/user/tracking");
+                  setOpenNotif(false);
+                }}
               >
                 <AiOutlineCompass className="w-6 h-6" />
                 <span
@@ -413,7 +419,10 @@ const NavigationBar = () => {
                     ? "text-[#5CC90C]"
                     : "text-[#3B3F3F]"
                 }`}
-                onClick={() => setCurrentLink("/user/luggage")}
+                onClick={() => {
+                  setCurrentLink("/user/luggage");
+                  setOpenNotif(false);
+                }}
               >
                 <AiOutlineFolder className="w-6 h-6" />
                 <span
@@ -434,7 +443,10 @@ const NavigationBar = () => {
                     ? "text-[#5CC90C]"
                     : "text-[#3B3F3F]"
                 }`}
-                onClick={() => setCurrentLink("/user/profile")}
+                onClick={() => {
+                  setCurrentLink("/user/profile");
+                  setOpenNotif(false);
+                }}
               >
                 <AiOutlineUser className="w-6 h-6" />
                 <span
