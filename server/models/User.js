@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now 
   },
+  status: {
+    type: String,
+    default: "Inactive",
+  },
   createdAt: {
     type: Date,
     default: Date.now

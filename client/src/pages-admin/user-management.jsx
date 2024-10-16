@@ -79,6 +79,20 @@ const UserManagement = () => {
     fetchLuggageInfo();
   }, []);
 
+  const getUserStatus = (loggedInAt) => {
+    const currentTime = new Date();
+    const lastLoggedInTime = new Date(loggedInAt);
+    const timeDifference = (currentTime - lastLoggedInTime) / (1000 * 60); // difference in minutes
+
+    if (timeDifference <= 60) {
+      return "Active"; // Logged in within the last 1 hour
+    } else if (timeDifference <= 1440) {
+      return "Inactive"; // Logged in more than 1 hour but less than 24 hours
+    } else {
+      return "Offline"; // Logged in more than 24 hours ago
+    }
+  };
+
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
@@ -331,31 +345,42 @@ const UserManagement = () => {
                         {user.phone ? user.phone : "No phone number"}
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <button
-                          className={`btn btn-outline btn-xs ${
-                            user.role === "admin" ? "btn-info" : "btn-success"
-                          }`}
-                          onClick={() => {
-                            setCurrentUser(user);
-                            setShowModifyRole(true);
+                        <select
+                          value={user.role}
+                          onChange={async (e) => {
+                            const updatedRole = e.target.value;
+                            await handleModifyRole({
+                              userId: user._id, // Pass the userId
+                              role: updatedRole, // Pass the selected role
+                            });
                           }}
+                          className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                            user.role === "user"
+                              ? "bg-green-100 text-green-800"
+                              : user.role === "admin"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
                         >
-                          {user.role}
-                        </button>
+                          <option value="user">User</option>
+                          <option value="admin">Admin</option>
+                        </select>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <span
+                        <div
                           className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                            user.status === "Active"
+                            getUserStatus(user.loggedInAt) === "Active"
                               ? "bg-green-100 text-green-800"
-                              : user.status === "Inactive"
+                              : getUserStatus(user.loggedInAt) === "Inactive"
                               ? "bg-yellow-100 text-yellow-800"
                               : "bg-gray-100 text-gray-800"
                           }`}
                         >
-                          {user.status}
-                        </span>
+                          {getUserStatus(user.loggedInAt)}{" "}
+                          {/* Display Active, Inactive, or Offline */}
+                        </div>
                       </td>
+
                       <td className="py-3 px-6 text-left">
                         <button
                           className="btn btn-sm btn-outline btn-primary mr-2"
@@ -482,6 +507,7 @@ const UserManagement = () => {
                   lastname: e.target.lastname.value,
                   email: e.target.email.value,
                   phone: e.target.phone.value,
+                  status: e.target.status.value,
                 });
                 setShowUpdateModal(false);
               }}
@@ -526,6 +552,19 @@ const UserManagement = () => {
                   required
                 />
               </div>
+              <div className="form-control mb-4">
+                <label className="label">Status</label>
+                <select
+                  name="phone"
+                  type="text"
+                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                  defaultValue={currentUser.phone}
+                  required
+                >
+                  <option defaultValue={currentUser.status}></option>
+                  <option value="Suspended">Suspend</option>
+                </select>
+              </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
                   Update
@@ -560,49 +599,6 @@ const UserManagement = () => {
               </button>
               <button className="btn" onClick={() => setShowDeleteModal(false)}>
                 Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showModifyRole && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white md:min-w-[30%] p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">
-              {currentUser.firstname + " " + currentUser.lastname}
-            </h3>
-            <label>Account Role</label>
-            <select
-              name="role"
-              required
-              value={currentUser.role}
-              className="flex w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              onChange={(e) =>
-                setCurrentUser({ ...currentUser, role: e.target.value })
-              }
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-            <div className="modal-action">
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowModifyRole(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  handleModifyRole({
-                    userId: currentUser._id,
-                    role: currentUser.role,
-                  });
-                  setShowModifyRole(false);
-                }}
-              >
-                Save
               </button>
             </div>
           </div>
