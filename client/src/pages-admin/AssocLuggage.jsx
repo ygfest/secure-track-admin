@@ -374,7 +374,7 @@ const AdminAssocLuggage = () => {
                 handleAddNew({
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
-                  user_id: selectedUserId || "", // Ensure user_id is passed
+                  user_id: selectedUserId || "",
                 });
                 setShowAddModal(false);
               }}
@@ -403,9 +403,10 @@ const AdminAssocLuggage = () => {
                   value={selectedUserId || ""}
                   onChange={(e) => setSelectedUserId(e.target.value)}
                   className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
+                  required
                 >
                   <option value="" disabled>
-                    Select Owner
+                    Select owner
                   </option>
                   {usersData.length === 0 ? (
                     <option value="" disabled>
@@ -449,7 +450,7 @@ const AdminAssocLuggage = () => {
                   luggage_custom_name: e.target.luggage_custom_name.value,
                   luggage_tag_number: e.target.luggage_tag_number.value,
                   status: e.target.status.value,
-                  user_id: selectedUserId || "", // Ensure user_id is passed
+                  user_id: selectedUserId || "",
                 });
                 setShowUpdateModal(false);
               }}
@@ -464,6 +465,7 @@ const AdminAssocLuggage = () => {
                   required
                 />
               </div>
+
               <div className="form-control mb-4">
                 <label className="label">Tag Number</label>
                 <input
@@ -474,6 +476,7 @@ const AdminAssocLuggage = () => {
                   required
                 />
               </div>
+
               <div className="form-control mb-4">
                 <label className="label">Owner (User)</label>
                 <select
@@ -482,7 +485,21 @@ const AdminAssocLuggage = () => {
                   className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="" disabled>
-                    Select Owner
+                    {currentLuggage.user_id
+                      ? usersData.find(
+                          (user) => user._id === currentLuggage.user_id
+                        )
+                        ? `${
+                            usersData.find(
+                              (user) => user._id === currentLuggage.user_id
+                            )?.firstname || "Select"
+                          } ${
+                            usersData.find(
+                              (user) => user._id === currentLuggage.user_id
+                            )?.lastname || "Owner"
+                          }`
+                        : "Select owner"
+                      : "Select owner"}
                   </option>
                   {usersData.length === 0 && (
                     <option value="" disabled>
@@ -491,11 +508,12 @@ const AdminAssocLuggage = () => {
                   )}
                   {usersData.map((user) => (
                     <option key={user._id} value={user._id}>
-                      {user.firstname} {user.lastname}
+                      {user.firstname || "Unknown"} {user.lastname || "Owner"}
                     </option>
                   ))}
                 </select>
               </div>
+
               <div className="form-control mb-4">
                 <label className="label">Status</label>
                 <input
@@ -507,6 +525,7 @@ const AdminAssocLuggage = () => {
                   disabled
                 />
               </div>
+
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
                   Update

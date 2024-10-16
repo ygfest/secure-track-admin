@@ -262,7 +262,10 @@ const NavigationBar = () => {
           <div className="flex-none">
             <button
               className="btn btn-square btn-ghost"
-              onClick={toggleSideBar}
+              onClick={() => {
+                toggleSideBar();
+                setOpenNotif(false);
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
