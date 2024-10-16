@@ -221,7 +221,6 @@ const AdminAssocLuggage = () => {
 
   return (
     <div className="h-[100vh]">
-      <NavigationBar />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-between mb-5">
           <button

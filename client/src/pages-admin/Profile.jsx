@@ -105,7 +105,6 @@ const AdminProfile = () => {
 
   return (
     <>
-      <NavigationBar />
       <Toaster
         position="top-right"
         toastOptions={{

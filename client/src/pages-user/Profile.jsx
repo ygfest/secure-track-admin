@@ -93,7 +93,6 @@ const Profile = () => {
 
   return (
     <>
-      <NavigationBar />
       <Toaster
         position="top-right"
         toastOptions={{

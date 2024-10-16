@@ -88,7 +88,6 @@ const EditProfile = ({ userProfile }) => {
 
   return (
     <>
-      <NavigationBar />
       <Toaster
         position="top-right"
         toastOptions={{

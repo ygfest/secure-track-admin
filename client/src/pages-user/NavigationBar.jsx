@@ -15,13 +15,7 @@ const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
 };
 
-const NavigationBar = ({
-  luggageInfo,
-  tempData,
-  tamperData,
-  fallDetectData,
-  userFirstName,
-}) => {
+const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
@@ -31,6 +25,11 @@ const NavigationBar = ({
   const [profileLastName, setProfileLastName] = useState("");
   const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+
+  const [luggageInfo, setLuggageInfo] = useState([]);
+  const [fallDetectData, setFallDetectData] = useState([]);
+  const [tamperData, setTamperData] = useState([]);
+  const [tempData, setTempData] = useState([]);
   const navigate = useNavigate();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
@@ -66,6 +65,61 @@ const NavigationBar = ({
 
     verifyToken();
   }, [navigate]);
+
+  useEffect(() => {
+    async function fetchFallData() {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/luggage-router/fall-logs2`);
+        setFallDetectData(response.data);
+      } catch (error) {
+        console.log("Error fetching fall data");
+      }
+    }
+
+    fetchFallData();
+  }, [fallDetectData]);
+
+  useEffect(() => {
+    async function fetchTamperLogs() {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(
+          `${apiUrl}/luggage-router/tamper-logs2`
+        );
+        setTamperData(response.data);
+      } catch (error) {
+        console.log("error fetching tamper logs", error);
+      }
+    }
+    fetchTamperLogs();
+  }, []);
+
+  useEffect(() => {
+    async function fetchTempLogs() {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/luggage-router/temp-logs`);
+        setTempData(response.data);
+      } catch (error) {
+        console.log("Error fetching temp logs", error);
+      }
+    }
+    fetchTempLogs();
+  }, []);
+
+  useEffect(() => {
+    async function fetchLuggageInfo() {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${apiUrl}/luggage-router/luggage`);
+        setLuggageInfo(response.data);
+      } catch (error) {
+        console.log("error fetching luggage info", error);
+      }
+    }
+    fetchLuggageInfo();
+  }, []);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {

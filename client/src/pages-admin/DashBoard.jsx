@@ -447,13 +447,6 @@ const DashBoard = () => {
 
   return (
     <>
-      <NavigationBar
-        luggageInfo={luggageInfo}
-        tempData={tempData}
-        tamperData={tamperData}
-        fallDetectData={fallDetectData}
-      />
-
       <div className="p-6">
         <div className="flex flex-row justify-between items-center text-center mb-4">
           <h3 className="text-2xl font-medium">Overview</h3>

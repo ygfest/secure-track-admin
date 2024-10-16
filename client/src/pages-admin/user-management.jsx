@@ -222,7 +222,6 @@ const UserManagement = () => {
 
   return (
     <div className="h-[100vh]">
-      <NavigationBar />
       <Toaster
         position="top-right"
         toastOptions={{
