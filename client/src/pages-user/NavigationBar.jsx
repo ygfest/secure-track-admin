@@ -363,7 +363,7 @@ const NavigationBar = () => {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 right-0 border-t border-gray-400 bg-white shadow-lg md:hidden">
+        <div className="fixed bottom-0 left-0 right-0 border-t bg-white shadow-lg md:hidden">
           <ul className="flex justify-around p-2">
             <li className="relative">
               <Link
