@@ -220,7 +220,7 @@ const AdminAssocLuggage = () => {
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
   return (
-    <div className="h-[100vh]">
+    <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-between mb-5">
           <button

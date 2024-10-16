@@ -235,7 +235,7 @@ const UserManagement = () => {
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
   return (
-    <div className="h-[100vh]">
+    <div className="h-full">
       <Toaster
         position="top-right"
         toastOptions={{
@@ -337,7 +337,11 @@ const UserManagement = () => {
                         {user.email}
                         <br />
                         <span className="badge badge-ghost badge-sm">
-                          idk yet
+                          {luggageInfo.filter(
+                            (luggage) => luggage.user_id === user._id
+                          ).length +
+                            " " +
+                            "tracked luggage"}
                         </span>
                       </td>
 
@@ -547,23 +551,11 @@ const UserManagement = () => {
                 <input
                   name="phone"
                   type="text"
+                  placeholder="Add the owner's phone"
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentUser.phone}
                   required
                 />
-              </div>
-              <div className="form-control mb-4">
-                <label className="label">Status</label>
-                <select
-                  name="phone"
-                  type="text"
-                  className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue={currentUser.phone}
-                  required
-                >
-                  <option defaultValue={currentUser.status}></option>
-                  <option value="Suspended">Suspend</option>
-                </select>
               </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">

@@ -102,7 +102,7 @@ const Profile = () => {
           },
         }}
       />
-      <div className="min-h-screen flex flex-col items-center py-6 mx-4 bg-gray-100">
+      <div className="h-full flex flex-col items-center mx-4 py-6 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
           <div className="relative">
             {userProfile.backgroundImage && (

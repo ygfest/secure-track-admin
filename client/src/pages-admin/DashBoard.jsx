@@ -447,7 +447,7 @@ const DashBoard = () => {
 
   return (
     <>
-      <div className="p-6">
+      <div className="p-6 h-full bg-gray-100">
         <div className="flex flex-row justify-between items-center text-center mb-4">
           <h3 className="text-2xl font-medium">Overview</h3>
           <div className="md:w-1/5 w-1/2 ">

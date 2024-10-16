@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const UserLayout = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-inherit">
       <NavigationBar />
       <div className="content">
         <Outlet />

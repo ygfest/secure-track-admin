@@ -136,8 +136,9 @@ const EditProfile = ({ userProfile }) => {
               onChange={(e) =>
                 setProfileData({ ...profileData, phone: e.target.value })
               }
-              placeholder="Phone number"
+              placeholder="Add your phone number"
               className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              required
             />
             <button
               type="submit"

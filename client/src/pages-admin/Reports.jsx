@@ -244,7 +244,7 @@ const AdminReports = () => {
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
   return (
-    <div className="h-[100vh]">
+    <div className="h-full">
       <Toaster position="top-right" />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-end mb-5">
