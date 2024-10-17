@@ -107,9 +107,9 @@ ref.on('child_changed', async (snapshot) => {
 
 ref.on('child_added', async (snapshot) => {
     const newData = snapshot.val();
-    const firebaseId = snapshot.key; // Get the firebase ID from the snapshot key
+    const firebaseId = snapshot.key; 
     try {
-        // Only add new data if it does not already exist
+        
         const existingDoc = await ImpactDataModel.findOne({ firebaseId: firebaseId });
         if (!existingDoc) {
             await ImpactDataModel.create({ firebaseId: firebaseId, impact: newData.impact });
@@ -121,7 +121,7 @@ ref.on('child_added', async (snapshot) => {
 });
 
 ref.on('child_removed', async (snapshot) => {
-    const firebaseId = snapshot.key; // Get the firebase ID from the snapshot key
+    const firebaseId = snapshot.key;
     try {
         await ImpactDataModel.deleteOne({ firebaseId: firebaseId });
         console.log('Data removed from MongoDB');

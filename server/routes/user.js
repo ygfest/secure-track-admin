@@ -158,25 +158,38 @@ router.post('/save-google-user', async (req, res) => {
   const { googleId, email, firstName, lastName, picture } = req.body;
 
   try {
-    // Check if the user already exists
+    // First check if the user exists by googleId
     let user = await User.findOne({ googleId });
 
     if (!user) {
-      // If the user doesn't exist, create a new user
-      user = new User({
-        googleId,
-        email,
-        firstname: firstName,
-        lastname: lastName,
-        role: 'user', // Default role for new users
-        profile_dp: picture,
-        loggedInAt: Date.now(), // Track the time user logged in
-      });
+      // Check if a user with the same email already exists
+      user = await User.findOne({ email });
+      if (user) {
+        // If a user with the same email exists, update their details
+        user.googleId = googleId; // Update googleId if needed
+        user.firstname = firstName;
+        user.lastname = lastName;
+        user.profile_dp = picture;
+        user.loggedInAt = Date.now();
+        await user.save();
+        console.log("Existing user updated in MongoDB:", user);
+      } else {
+        // If the user doesn't exist, create a new user
+        user = new User({
+          googleId,
+          email,
+          firstname: firstName,
+          lastname: lastName,
+          role: 'user', // Default role for new users
+          profile_dp: picture,
+          loggedInAt: Date.now(), // Track the time user logged in
+        });
 
-      await user.save();
-      console.log("User saved to MongoDB:", user);
+        await user.save();
+        console.log("User saved to MongoDB:", user);
+      }
     } else {
-     
+      // Update existing user details
       user.email = email; 
       user.firstname = firstName; 
       user.lastname = lastName; 
@@ -207,8 +220,6 @@ router.post('/save-google-user', async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;

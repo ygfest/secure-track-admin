@@ -227,10 +227,12 @@ const EditProfile = ({ userProfile }) => {
 
       {showDeleteConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className=" bg-white p-6 rounded-lg md:w-[30%] w- shadow-lg">
+          <div className="bg-white p-6 rounded-lg md:w-[30%] shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Delete Account</h3>
-            <p>Are you sure you want to permanently delete this account?</p>
-            <div className="modal-action">
+            <p className="mb-2 w-72 md:w-full">
+              Are you sure you want to delete your account permanently?
+            </p>
+            <div className="modal-action mt-4">
               <button
                 onClick={handleDeleteAccount}
                 className="btn btn-danger bg-red-500 hover:bg-red-700 text-white"
@@ -239,7 +241,7 @@ const EditProfile = ({ userProfile }) => {
               </button>
               <button
                 onClick={() => setShowDeleteConfirmation(false)}
-                className="btn"
+                className="btn ml-2" // Add margin to space buttons
               >
                 Cancel
               </button>
