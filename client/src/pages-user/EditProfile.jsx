@@ -19,6 +19,9 @@ const EditProfile = ({ userProfile }) => {
     backgroundImage: "",
     userID: "",
     phone: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [resetPassMode, setResetPassMode] = useState(false);
@@ -44,9 +47,8 @@ const EditProfile = ({ userProfile }) => {
     }
   };
 
-  const handleSave = async (e) => {
+  const handleUpdateProfile = async (e) => {
     e.preventDefault();
-
     const editedProfileData = {
       userId: profileData.userID,
       firstname: profileData.firstname,
@@ -65,6 +67,37 @@ const EditProfile = ({ userProfile }) => {
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Error updating profile");
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    // Check if passwords match
+    if (profileData.newPassword !== profileData.confirmPassword) {
+      toast.error("New password and confirmation do not match.");
+      return;
+    }
+
+    // If user has a googleId, skip current password requirement
+    if (!profileData.googleId && !profileData.currentPassword) {
+      toast.error("Current password is required.");
+      return;
+    }
+
+    // Handle password reset logic
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      await Axios.post(`${apiUrl}/auth/reset-password-edit`, {
+        userId: profileData.userID,
+        currentPassword: profileData.currentPassword,
+        newPassword: profileData.newPassword,
+      });
+      toast.success("Password reset successfully");
+      setResetPassMode(false); // Optionally close the reset password form
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      toast.error("Error resetting password");
     }
   };
 
@@ -99,7 +132,7 @@ const EditProfile = ({ userProfile }) => {
       />
       <div className="min-h-screen flex flex-col items-center py-6 mx-4 pb-24 bg-gray-100">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-          <form className="space-y-4" onSubmit={handleSave}>
+          <form className="space-y-4" onSubmit={handleUpdateProfile}>
             <h3 className="text-xl font-bold">Edit Profile</h3>
             <div className="mx-auto mb-4 flex flex-col items-center">
               <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative">
@@ -153,12 +186,12 @@ const EditProfile = ({ userProfile }) => {
 
         {resetPassMode ? (
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-            <form className="space-y-4" onSubmit={handleSave}>
+            <form className="space-y-4" onSubmit={handleResetPassword}>
               <h3 className="text-xl font-bold">Reset Password</h3>
               <input
                 type="password"
                 name="currentPassword"
-                value={profileData.currentPassword || ""}
+                value={profileData.currentPassword}
                 onChange={(e) =>
                   setProfileData({
                     ...profileData,
@@ -171,6 +204,8 @@ const EditProfile = ({ userProfile }) => {
               <input
                 type="password"
                 name="newPassword"
+                value={profileData.newPassword}
+                required
                 onChange={(e) =>
                   setProfileData({
                     ...profileData,
@@ -183,6 +218,8 @@ const EditProfile = ({ userProfile }) => {
               <input
                 type="password"
                 name="confirmPassword"
+                value={profileData.confirmPassword}
+                required
                 onChange={(e) =>
                   setProfileData({
                     ...profileData,
@@ -217,38 +254,36 @@ const EditProfile = ({ userProfile }) => {
           <button
             type="button"
             onClick={() => setShowDeleteConfirmation(true)}
-            className="flex items-center gap-2 text-red-600 bg-gray-100 py-2 px-4 rounded-md hover:bg-red-200 transition-all"
+            className="flex items-center gap-2 text-red-500 bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
           >
-            <MdOutlineDeleteOutline className="text-2xl" />
+            <MdOutlineDeleteOutline className="text-lg" />
             <span>Delete Account</span>
           </button>
         </div>
-      </div>
 
-      {showDeleteConfirmation && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg md:w-[30%] shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Delete Account</h3>
-            <p className="mb-2 w-72 md:w-full">
-              Are you sure you want to delete your account permanently?
-            </p>
-            <div className="modal-action mt-4">
-              <button
-                onClick={handleDeleteAccount}
-                className="btn btn-danger bg-red-500 hover:bg-red-700 text-white"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirmation(false)}
-                className="btn ml-2" // Add margin to space buttons
-              >
-                Cancel
-              </button>
+        {showDeleteConfirmation && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold">Confirm Deletion</h3>
+              <p>Are you sure you want to delete your account?</p>
+              <div className="modal-action">
+                <button
+                  onClick={handleDeleteAccount}
+                  className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
+                >
+                  Yes, Delete
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirmation(false)}
+                  className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };

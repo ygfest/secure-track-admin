@@ -31,7 +31,7 @@ router.get('/verify', verifyUser, async (req, res) => {
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname,role: user.role, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt, phone: user.phone} });
+    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname,role: user.role, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt, phone: user.phone, googleId: user.googleId} });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
@@ -271,6 +271,39 @@ router.post('/reset-password', async (req, res) => {
     return res.json({ status: true, message: "Updated password" });
   } catch (err) {
     return res.status(400).json({ status: false, message: "Invalid token" });
+  }
+});
+
+router.post('/reset-password-edit', async (req, res) => {
+  const { currentPassword, newPassword, userId } = req.body;
+  console.log("RESSEETTT");
+
+  try {
+    // Find user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+
+    // If the user has a googleId, skip current password validation
+    if (!user.googleId) {
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ status: false, message: "Invalid current password" });
+      }
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    // Update user's password in the database
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.json({ status: true, message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Error resetting password:", err);
+    return res.status(500).json({ status: false, message: "An error occurred while resetting the password" });
   }
 });
 
