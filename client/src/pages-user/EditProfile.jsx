@@ -5,6 +5,7 @@ import NavigationBar from "./NavigationBar";
 import { toast, Toaster } from "sonner";
 import { CiCamera } from "react-icons/ci";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { FiSettings } from "react-icons/fi";
 
 const EditProfile = ({ userProfile }) => {
@@ -26,6 +27,10 @@ const EditProfile = ({ userProfile }) => {
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [resetPassMode, setResetPassMode] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -188,47 +193,87 @@ const EditProfile = ({ userProfile }) => {
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
             <form className="space-y-4" onSubmit={handleResetPassword}>
               <h3 className="text-xl font-bold">Reset Password</h3>
-              <input
-                type="password"
-                name="currentPassword"
-                value={profileData.currentPassword}
-                onChange={(e) =>
-                  setProfileData({
-                    ...profileData,
-                    currentPassword: e.target.value,
-                  })
-                }
-                placeholder="Current Password"
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <input
-                type="password"
-                name="newPassword"
-                value={profileData.newPassword}
-                required
-                onChange={(e) =>
-                  setProfileData({
-                    ...profileData,
-                    newPassword: e.target.value,
-                  })
-                }
-                placeholder="New Password"
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                value={profileData.confirmPassword}
-                required
-                onChange={(e) =>
-                  setProfileData({
-                    ...profileData,
-                    confirmPassword: e.target.value,
-                  })
-                }
-                placeholder="Re-enter Password"
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="relative">
+                <input
+                  type={isPasswordVisible ? "text" : "password"}
+                  name="currentPassword"
+                  value={profileData.currentPassword}
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      currentPassword: e.target.value,
+                    })
+                  }
+                  placeholder="Current Password"
+                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {isPasswordVisible ? (
+                  <EyeOutlined
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setIsPasswordVisible(false)}
+                  />
+                ) : (
+                  <EyeInvisibleOutlined
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setIsPasswordVisible(true)}
+                  />
+                )}
+              </div>
+              <div className="relative">
+                <input
+                  type={isNewPasswordVisible ? "text" : "password"}
+                  name="newPassword"
+                  value={profileData.newPassword}
+                  required
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      newPassword: e.target.value,
+                    })
+                  }
+                  placeholder="New Password"
+                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {isNewPasswordVisible ? (
+                  <EyeOutlined
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setIsNewPasswordVisible(false)}
+                  />
+                ) : (
+                  <EyeInvisibleOutlined
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setIsNewPasswordVisible(true)}
+                  />
+                )}
+              </div>
+              <div className="relative">
+                <input
+                  type={isConfirmPasswordVisible ? "text" : "password"}
+                  name="confirmPassword"
+                  value={profileData.confirmPassword}
+                  required
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  placeholder="Re-enter Password"
+                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {isConfirmPasswordVisible ? (
+                  <EyeOutlined
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setIsConfirmPasswordVisible(false)}
+                  />
+                ) : (
+                  <EyeInvisibleOutlined
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setIsConfirmPasswordVisible(true)}
+                  />
+                )}
+              </div>
+
               <button
                 type="submit"
                 className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition-all"
@@ -262,7 +307,7 @@ const EditProfile = ({ userProfile }) => {
         </div>
 
         {showDeleteConfirmation && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold">Confirm Deletion</h3>
               <p>Are you sure you want to delete your account?</p>

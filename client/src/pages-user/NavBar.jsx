@@ -10,8 +10,9 @@ import {
   FaExclamationTriangle,
 } from "react-icons/fa";
 import { useLocation } from "../context/LocationContext";
+import { useUserNotif } from "../context/UserNotifContext";
 
-const NavBar = ({ tempData, tamperData, fallDetectData }) => {
+const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
@@ -19,6 +20,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
+  const { tamperData, fallDetectData, tempData } = useUserNotif();
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;

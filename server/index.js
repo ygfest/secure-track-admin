@@ -51,7 +51,11 @@ admin.initializeApp({
 });
 
 const db = admin.database();
-const ref = db.ref("impactData"); // Adjusted to point to the correct data path
+
+//Fb Refs
+const ref = db.ref("impactData");
+const impactsRefs = db.ref("impacts")
+
 
 // Define a Mongoose schema
 const ImpactDataSchema = new mongoose.Schema({
