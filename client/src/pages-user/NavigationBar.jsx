@@ -16,6 +16,7 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { parse, format } from "date-fns";
+import { useUserNotif } from "../context/UserNotifContext";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
@@ -29,14 +30,18 @@ const NavigationBar = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const [isSeenNotifications, setIsSeenNotifications] = useState(true);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
-  const [currentLink, setCurrentLink] = useState("/user/");
 
   const [luggageInfo, setLuggageInfo] = useState([]);
-  const [fallDetectData, setFallDetectData] = useState([]);
-  const [tamperData, setTamperData] = useState([]);
-  const [tempData, setTempData] = useState([]);
+  const {
+    tamperData,
+    tempData,
+    fallDetectData,
+    isSeenNotifications,
+    setIsSeenNotifications,
+    currentLink,
+    setCurrentLink,
+  } = useUserNotif();
   const navigate = useNavigate();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
@@ -72,48 +77,6 @@ const NavigationBar = () => {
 
     verifyToken();
   }, [navigate]);
-
-  useEffect(() => {
-    async function fetchFallData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/fall-logs2`);
-        setFallDetectData(response.data);
-      } catch (error) {
-        console.log("Error fetching fall data");
-      }
-    }
-
-    fetchFallData();
-  }, [fallDetectData]);
-
-  useEffect(() => {
-    async function fetchTamperLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/luggage-router/tamper-logs2`
-        );
-        setTamperData(response.data);
-      } catch (error) {
-        console.log("error fetching tamper logs", error);
-      }
-    }
-    fetchTamperLogs();
-  }, []);
-
-  useEffect(() => {
-    async function fetchTempLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/temp-logs`);
-        setTempData(response.data);
-      } catch (error) {
-        console.log("Error fetching temp logs", error);
-      }
-    }
-    fetchTempLogs();
-  }, []);
 
   useEffect(() => {
     async function fetchLuggageInfo() {

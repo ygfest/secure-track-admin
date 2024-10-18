@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const UserNotifContext = createContext();
 
@@ -9,6 +10,8 @@ export const UserNotifProvider = ({ children }) => {
   const [fallDetectData, setFallDetectData] = useState([]);
   const [tamperData, setTamperData] = useState([]);
   const [tempData, setTempData] = useState([]);
+  const [isSeenNotifications, setIsSeenNotifications] = useState(true);
+  const [currentLink, setCurrentLink] = useState("/user/");
 
   useEffect(() => {
     async function fetchFallData() {
@@ -17,12 +20,12 @@ export const UserNotifProvider = ({ children }) => {
         const response = await axios.get(`${apiUrl}/luggage-router/fall-logs2`);
         setFallDetectData(response.data);
       } catch (error) {
-        console.log("Error fetching fall data");
+        console.log("Error fetching fall data", error);
       }
     }
 
     fetchFallData();
-  }, [fallDetectData]);
+  }, []);
 
   useEffect(() => {
     async function fetchTamperLogs() {
@@ -33,7 +36,7 @@ export const UserNotifProvider = ({ children }) => {
         );
         setTamperData(response.data);
       } catch (error) {
-        console.log("error fetching tamper logs", error);
+        console.log("Error fetching tamper logs", error);
       }
     }
     fetchTamperLogs();
@@ -59,7 +62,7 @@ export const UserNotifProvider = ({ children }) => {
         const response = await axios.get(`${apiUrl}/luggage-router/luggage`);
         setLuggageInfo(response.data);
       } catch (error) {
-        console.log("error fetching luggage info", error);
+        console.log("Error fetching luggage info", error);
       }
     }
     fetchLuggageInfo();
@@ -67,7 +70,16 @@ export const UserNotifProvider = ({ children }) => {
 
   return (
     <UserNotifContext.Provider
-      value={{ luggageInfo, fallDetectData, tamperData, tempData }}
+      value={{
+        luggageInfo,
+        fallDetectData,
+        tamperData,
+        tempData,
+        isSeenNotifications,
+        setIsSeenNotifications,
+        currentLink,
+        setCurrentLink,
+      }}
     >
       {children}
     </UserNotifContext.Provider>

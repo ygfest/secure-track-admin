@@ -20,7 +20,15 @@ const NavBar = () => {
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
-  const { tamperData, fallDetectData, tempData } = useUserNotif();
+  const {
+    tamperData,
+    fallDetectData,
+    tempData,
+    isSeenNotifications,
+    setIsSeenNotifications,
+    currentLink,
+    setCurrentLink,
+  } = useUserNotif();
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
@@ -119,7 +127,10 @@ const NavBar = () => {
     });
 
     return alerts.map((alert, index) => (
-      <div key={index} className="card w-full bg-base-100 shadow-xl mb-2">
+      <div
+        key={index}
+        className="card w-full bg-zinc-800 bg-base-100 max-h-64 shadow-xl mb-2"
+      >
         <div className="card-body flex items-start">
           <div className="mr-4">{getAlertIcon(alert.type)}</div>
           <div className="flex-1">
@@ -206,6 +217,11 @@ const NavBar = () => {
     toggleLocation();
   };
 
+  const handleNotifClick = () => {
+    setOpenNotif(!openNotif);
+    setIsSeenNotifications(true); // Mark notifications as seen
+  };
+
   return (
     <div
       className="navbar fixed top-2 left-0 right-0 px-3 flex justify-between rounded-lg z-10 p-0 mx-auto shadow-md bg-[#020202a0] backdrop-blur-xl text-white"
@@ -218,7 +234,10 @@ const NavBar = () => {
             tabIndex={0}
             role="button"
             className="btn btn-ghost btn-circle"
-            onClick={toggleSideBar}
+            onClick={() => {
+              toggleSideBar();
+              setOpenNotif(false);
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +260,10 @@ const NavBar = () => {
                 <Link
                   to="/user/"
                   className="link no-underline"
-                  onClick={toggleSideBar}
+                  onClick={() => {
+                    toggleSideBar();
+                    setCurrentLink("/user/");
+                  }}
                 >
                   Dashboard
                 </Link>
@@ -249,8 +271,15 @@ const NavBar = () => {
               <li>
                 <Link
                   to="/user/tracking"
-                  className="link no-underline"
-                  onClick={toggleSideBar}
+                  className={`link no-underline ${
+                    currentLink === "/user/tracking"
+                      ? "text-primary"
+                      : "text-white"
+                  }`}
+                  onClick={() => {
+                    toggleSideBar();
+                    setCurrentLink("/user/tracking");
+                  }}
                 >
                   Map
                 </Link>
@@ -259,7 +288,10 @@ const NavBar = () => {
                 <Link
                   to="/user/luggage"
                   className="link no-underline"
-                  onClick={toggleSideBar}
+                  onClick={() => {
+                    toggleSideBar();
+                    setCurrentLink("/user/luggage");
+                  }}
                 >
                   My Luggage
                 </Link>
@@ -268,7 +300,10 @@ const NavBar = () => {
                 <Link
                   to="/user/profile"
                   className="link no-underline"
-                  onClick={toggleSideBar}
+                  onClick={() => {
+                    toggleSideBar();
+                    setCurrentLink("/user/profile");
+                  }}
                 >
                   Profile
                 </Link>
@@ -304,10 +339,7 @@ const NavBar = () => {
         </label>
 
         {/* Notification Icon */}
-        <button
-          className="btn btn-ghost btn-circle"
-          onClick={() => setOpenNotif(!openNotif)}
-        >
+        <button className="btn btn-ghost btn-circle" onClick={handleNotifClick}>
           <div className="indicator">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -325,16 +357,21 @@ const NavBar = () => {
             </svg>
             {(tempData?.length ||
               tamperData?.length ||
-              fallDetectData?.length) && (
+              (fallDetectData?.length && !isSeenNotifications)) && (
               <span className="badge badge-xs badge-primary indicator-item"></span>
             )}
           </div>
         </button>
         {/* Notifications Popup */}
         {openNotif && (
-          <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
+          <div className="absolute top-16 right-3 p-3 rounded-lg shadow-md bg-zinc-950 w-80">
             <h3 className="font-bold text-lg mb-3">Notifications</h3>
-            {renderNotifications()}
+            <div
+              className="overflow-y-auto"
+              style={{ maxHeight: "480px", overflowX: "hidden" }}
+            >
+              {renderNotifications()}
+            </div>
           </div>
         )}
 
