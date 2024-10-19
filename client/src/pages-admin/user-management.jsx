@@ -19,6 +19,8 @@ const UserManagement = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showModifyRole, setShowModifyRole] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [password, setPassword] = useState("");
+  const [confimPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -117,23 +119,40 @@ const UserManagement = () => {
 
   const handleAddNew = async (userInfo) => {
     try {
+      if (userInfo.password !== userInfo.confirmedPassword) {
+        toast.error("Passwords did not match. Please retry");
+        return; // Prevent further execution
+      }
+
       console.log("User info to add:", userInfo);
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.post(
         `${apiUrl}/auth/admin-user-register`,
         userInfo
       );
+
+      if (response.data.status === false) {
+        toast.error("Error adding new user");
+        return; // Exit if there is an error response from the API
+      }
+
       setUsersData((prev) => [...prev, response.data.user]);
       setFilteredData((prev) => [...prev, response.data.user]);
       setTotalItems((prev) => prev + 1);
+
       fetchUsersData();
       setShowAddModal(false);
+      toast.success("Successfully added user");
     } catch (error) {
-      console.error("Error adding user", error.response?.data || error);
+      console.error("Error adding user", error.response?.data || error.message);
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred while adding the user"
+      );
     }
   };
 
-  const handleUpdateLuggage = async (userInfo) => {
+  const handleUpdateUser = async (userInfo) => {
     try {
       console.log(userInfo);
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -147,20 +166,32 @@ const UserManagement = () => {
       setFilteredData((prev) =>
         prev.map((item) => (item._id === userInfo._id ? response.data : item))
       );
+      if (response.data.status === false) {
+        toast.error("Error updating user");
+      }
       setShowUpdateModal(false);
+      toast.success("Successfully updated");
     } catch (error) {
       console.error("Error updating user", error.response?.data || error);
+      toast.error("Error updating user");
     }
   };
 
-  const handleDeleteLuggage = async (userId) => {
+  const handleDeleteUser = async (userId) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.delete(`${apiUrl}/auth/deleteuser/${userId}`);
-      setLuggageInfo((prev) => prev.filter((item) => item._id !== userId));
+      const response = await Axios.delete(
+        `${apiUrl}/auth/deleteuser/${userId}`
+      );
+      setUsersData((prev) => prev.filter((item) => item._id !== userId));
       setFilteredData((prev) => prev.filter((item) => item._id !== userId));
       setTotalItems((prev) => prev - 1);
+
+      if (response.status === "false") {
+        toast.error("Error deleting user");
+      }
       setShowDeleteModal(false);
+      toast.success("Successfully deleted user");
     } catch (error) {
       console.error("Error deleting luggage", error);
     }
@@ -432,6 +463,7 @@ const UserManagement = () => {
                   lastname: e.target.lastname.value,
                   email: e.target.email.value,
                   password: e.target.password.value,
+                  confirmedPassword: e.target.confirmed_password.value,
                 });
                 setShowAddModal(false);
               }}
@@ -505,13 +537,12 @@ const UserManagement = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleUpdateLuggage({
+                handleUpdateUser({
                   _id: currentUser._id,
                   firstname: e.target.firstname.value,
                   lastname: e.target.lastname.value,
                   email: e.target.email.value,
                   phone: e.target.phone.value,
-                  status: e.target.status.value,
                 });
                 setShowUpdateModal(false);
               }}
@@ -554,7 +585,6 @@ const UserManagement = () => {
                   placeholder="Add the owner's phone"
                   className="input input-bordered focus:outline-none focus:ring-2 focus:ring-primary"
                   defaultValue={currentUser.phone}
-                  required
                 />
               </div>
               <div className="modal-action">
@@ -583,7 +613,7 @@ const UserManagement = () => {
               <button
                 className="btn btn-danger bg-red-500 text-white"
                 onClick={() => {
-                  handleDeleteLuggage(currentUser._id);
+                  handleDeleteUser(currentUser._id);
                   setShowDeleteModal(false);
                 }}
               >

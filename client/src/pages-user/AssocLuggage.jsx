@@ -325,24 +325,26 @@ const AssocLuggage = () => {
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <button
-                          className="btn btn-sm btn-outline btn-primary mr-2"
-                          onClick={() => {
-                            setCurrentLuggage(luggage);
-                            setShowUpdateModal(true);
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-sm btn-outline btn-danger"
-                          onClick={() => {
-                            setCurrentLuggage(luggage);
-                            setShowDeleteModal(true);
-                          }}
-                        >
-                          Delete
-                        </button>
+                        <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                          <button
+                            className="btn w-full md:max-w-16 btn-sm btn-outline btn-primary mr-2"
+                            onClick={() => {
+                              setCurrentLuggage(luggage);
+                              setShowUpdateModal(true);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn w-full md:max-w-16 btn-sm btn-outline btn-danger"
+                            onClick={() => {
+                              setCurrentLuggage(luggage);
+                              setShowDeleteModal(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

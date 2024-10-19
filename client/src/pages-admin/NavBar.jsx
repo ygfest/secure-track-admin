@@ -295,16 +295,18 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             to="/user/"
             className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"
           >
-            <span className="text-sm">Powered by </span>
+            <span className="hidden md:inline text-sm">Powered by </span>
             <img src={Logo} alt="Secure Track" className="h-8" />
           </Link>
         </div>
-        <div className="navbar-end flex items-center space-x-4">
+        <div className="navbar-end flex items-center space-x-0">
           <label
             className="flex items-center cursor-pointer"
             title="Update Location"
           >
-            <span className="text-xs md:text-sm">Location:</span>
+            <span className="hidden md:inline text-xs md:text-sm">
+              Location:
+            </span>
             <input
               type="checkbox"
               className="toggle toggle-primary ml-1"
