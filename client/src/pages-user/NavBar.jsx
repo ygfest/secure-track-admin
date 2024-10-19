@@ -376,7 +376,7 @@ const NavBar = () => {
             <h3 className="font-bold text-lg mb-3">Notifications</h3>
             <div
               className="overflow-y-auto"
-              style={{ maxHeight: "480px", overflowX: "hidden" }}
+              style={{ maxHeight: "400px", overflowX: "hidden" }}
             >
               {renderNotifications()}
             </div>
