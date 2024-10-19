@@ -9,8 +9,13 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import { parse, format } from "date-fns";
 import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
+
+const formatDate = (dateObj) => {
+  return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
+};
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -144,7 +149,7 @@ const NavBar = () => {
             </h4>
             <p className="text-xs">{alert.description}</p>
             <p className="text-xs text-gray-500">
-              {new Date(alert.timestamp).toLocaleString()}
+              {formatDate(alert.timestamp)}
             </p>
           </div>
         </div>
