@@ -372,7 +372,7 @@ const NavBar = () => {
         </button>
         {/* Notifications Popup */}
         {openNotif && (
-          <div className="absolute top-16 right-3 w-[72%] sm:w-72 p-3 rounded-lg shadow-md bg-zinc-950 w-80">
+          <div className="absolute top-16 right-2 w-[72%] sm:w-72 p-3 rounded-lg shadow-md bg-zinc-950 w-80">
             <h3 className="font-bold text-lg mb-3">Notifications</h3>
             <div
               className="overflow-y-auto"
