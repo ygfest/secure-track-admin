@@ -218,7 +218,7 @@ const AssocLuggage = () => {
   return (
     <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
-        <div className="flex justify-between mb-5">
+        <div className="flex justify-between mb-5 gap-4">
           <button
             className="btn bg-[#5CC90C] text-white rounded-3xl"
             onClick={() => setShowAddModal(true)}
@@ -226,13 +226,13 @@ const AssocLuggage = () => {
             + Add New
           </button>
 
-          <div className="search-bar relative">
+          <div className="search-bar relative ">
             <input
               type="text"
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearch}
-              className="input input-bordered w-42 md:w-56 rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="input input-bordered md:w-56 rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
