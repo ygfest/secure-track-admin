@@ -226,13 +226,13 @@ const AssocLuggage = () => {
             + Add New
           </button>
 
-          <div className="search-bar relative ">
+          <div className="search-bar relative w-56 ">
             <input
               type="text"
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearch}
-              className="input input-bordered w-56 rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="input input-bordered w-full rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
