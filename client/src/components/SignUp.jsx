@@ -98,7 +98,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex p-4 items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-white">
       <form
         onSubmit={handleSubmit}
         className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-4 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-lg"

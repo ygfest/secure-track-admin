@@ -26,7 +26,7 @@ export default function Home() {
                 </button>
               </Link>
               <Link to="/sign-up">
-                <button className="p-2 text-sm md:text-base font-medium text-white bg-primary hover:bg-[#5bc90ce6] rounded-lg min-w-[100px] md:min-w-[120px]">
+                <button className="p-2 text-sm md:text-base font-medium text-white bg-primary hover:bg-[#5bc90ce6] rounded-lg min-w-[85px] md:min-w-[120px]">
                   Create an account
                 </button>
               </Link>
