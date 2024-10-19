@@ -232,7 +232,7 @@ const AssocLuggage = () => {
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearch}
-              className="input input-bordered w-56 rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="input input-bordered w-42 md:w-56 rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +363,7 @@ const AssocLuggage = () => {
 
       {showAddModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 w-[72%] md:w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Add New Luggage</h3>
             <form
               onSubmit={(e) => {
@@ -413,7 +413,7 @@ const AssocLuggage = () => {
 
       {showUpdateModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 w-[72%] md:w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Update Luggage</h3>
             <form
               onSubmit={(e) => {
@@ -478,7 +478,7 @@ const AssocLuggage = () => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 w-[72%] md:w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Confirm Delete</h3>
             <p>Are you sure you want to delete this luggage?</p>
             <div className="modal-action">

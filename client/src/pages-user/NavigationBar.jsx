@@ -525,7 +525,7 @@ const NavigationBar = () => {
         </div>
       </div>
       {openNotif && (
-        <div className="fixed top-16 right-0 w-[60%] sm:w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
+        <div className="fixed top-16 right-0 w-[72%] sm:w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
           <h3 className="text-lg font-medium mb-2 text-gray-800">
             Notifications
           </h3>
