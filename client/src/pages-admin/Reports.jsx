@@ -248,13 +248,13 @@ const AdminReports = () => {
       <Toaster position="top-right" />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-end mb-5">
-          <div className="search-bar relative">
+          <div className="search-bar relative w-56">
             <input
               type="text"
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearch}
-              className="input input-bordered rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="input input-bordered w-full rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
