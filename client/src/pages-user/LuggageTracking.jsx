@@ -497,7 +497,7 @@ const LuggageTracking = () => {
               className="fixed inset-0 flex items-center justify-center z-8000 bg-black bg-opacity-50"
               style={{ zIndex: 1000 }}
             >
-              <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+              <div className="bg-white p-6 w-[72%] md:w-[30%] rounded-lg shadow-lg">
                 <h3 className="text-xl font-semibold font-poppins mb-4">
                   Add New Luggage
                 </h3>

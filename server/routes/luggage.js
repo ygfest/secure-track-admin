@@ -86,6 +86,7 @@ router.get('/fall-logs1', verifyUser, async (req, res) => {
 
 // Fetch fall detection logs route for admin
 router.get('/fall-logs2', verifyUser, async (req, res) => {
+  console.log(req.user.email)
   try {
     const user = await User.findOne({ email: req.user.email });
     if (!user) {

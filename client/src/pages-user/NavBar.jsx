@@ -14,7 +14,10 @@ import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
 
 const formatDate = (dateObj) => {
-  return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
+  if (!dateObj || isNaN(new Date(dateObj))) {
+    return "Invalid date";
+  }
+  return format(new Date(dateObj), "MM/dd/yyyy, HH:mm:ss");
 };
 
 const NavBar = () => {
@@ -369,7 +372,7 @@ const NavBar = () => {
         </button>
         {/* Notifications Popup */}
         {openNotif && (
-          <div className="absolute top-16 right-3 p-3 rounded-lg shadow-md bg-zinc-950 w-80">
+          <div className="absolute top-16 right-3 w-[60%] sm:w-72 p-3 rounded-lg shadow-md bg-zinc-950 w-80">
             <h3 className="font-bold text-lg mb-3">Notifications</h3>
             <div
               className="overflow-y-auto"
@@ -408,7 +411,10 @@ const NavBar = () => {
                 <Link
                   to="/user/profile"
                   className="justify-between"
-                  onClick={handleDropProfile}
+                  onClick={() => {
+                    handleDropProfile();
+                    setCurrentLink("/user/profile");
+                  }}
                 >
                   Profile
                 </Link>
@@ -417,7 +423,10 @@ const NavBar = () => {
                 <Link
                   to="/user/profile/edit"
                   className="justify-between"
-                  onClick={handleDropProfile}
+                  onClick={() => {
+                    handleDropProfile();
+                    setCurrentLink("/user/profile");
+                  }}
                 >
                   Settings
                 </Link>

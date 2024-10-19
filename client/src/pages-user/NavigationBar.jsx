@@ -306,7 +306,13 @@ const NavigationBar = () => {
                   className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
                 >
                   <li>
-                    <Link to="/user/profile">
+                    <Link
+                      to="/user/profile"
+                      onClick={() => {
+                        setCurrentLink("/user/profile");
+                        setIsOpenProfile(false);
+                      }}
+                    >
                       <a className="justify-between">
                         Profile
                         <span className="badge">New</span>
@@ -314,7 +320,15 @@ const NavigationBar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/user/profile/edit">Settings</Link>
+                    <Link
+                      to="/user/profile/edit"
+                      onClick={() => {
+                        setCurrentLink("/user/profile");
+                        setIsOpenProfile(false);
+                      }}
+                    >
+                      Settings
+                    </Link>
                   </li>
                   <li>
                     <a onClick={() => setShowLogoutConfirmation(true)}>
@@ -511,7 +525,7 @@ const NavigationBar = () => {
         </div>
       </div>
       {openNotif && (
-        <div className="fixed top-16 right-0 w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
+        <div className="fixed top-16 right-0 w-[60%] sm:w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
           <h3 className="text-lg font-medium mb-2 text-gray-800">
             Notifications
           </h3>
