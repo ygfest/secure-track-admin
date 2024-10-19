@@ -277,7 +277,7 @@ const UserManagement = () => {
         }}
       />
       <div className="mt-5 ml-5 mr-5">
-        <div className="flex justify-between mb-5">
+        <div className="flex justify-between mb-5 gap-4">
           <button
             className="btn bg-[#5CC90C] text-white rounded-3xl"
             onClick={() => setShowAddModal(true)}
@@ -417,24 +417,26 @@ const UserManagement = () => {
                       </td>
 
                       <td className="py-3 px-6 text-left">
-                        <button
-                          className="btn btn-sm btn-outline btn-primary mr-2"
-                          onClick={() => {
-                            setCurrentUser(user);
-                            setShowUpdateModal(true);
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-sm btn-outline btn-danger"
-                          onClick={() => {
-                            setCurrentUser(user);
-                            setShowDeleteModal(true);
-                          }}
-                        >
-                          Delete
-                        </button>
+                        <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                          <button
+                            className="btn btn-sm btn-outline btn-primary mr-2 w-full md:max-w-16"
+                            onClick={() => {
+                              setCurrentUser(user);
+                              setShowUpdateModal(true);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-sm btn-outline btn-danger w-full md:max-w-16"
+                            onClick={() => {
+                              setCurrentUser(user);
+                              setShowDeleteModal(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

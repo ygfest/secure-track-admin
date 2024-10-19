@@ -247,7 +247,7 @@ const AdminReports = () => {
     <div className="h-full">
       <Toaster position="top-right" />
       <div className="mt-5 ml-5 mr-5">
-        <div className="flex justify-end mb-5">
+        <div className="flex justify-end mb-5 gap-4">
           <div className="search-bar relative w-56">
             <input
               type="text"
@@ -349,24 +349,26 @@ const AdminReports = () => {
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <button
-                          className="btn btn-sm btn-primary btn-danger"
-                          onClick={() => {
-                            setCurrentReport(report);
-                            setShowUpdateModal(true);
-                          }}
-                        >
-                          Update Status
-                        </button>
-                        <button
-                          className="btn btn-sm btn-outline btn-danger hover:text-white mr-2"
-                          onClick={() => {
-                            setCurrentReport(report);
-                            setShowDeleteModal(true);
-                          }}
-                        >
-                          Delete
-                        </button>
+                        <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                          <button
+                            className="btn btn-sm btn-primary btn-danger w-full md:max-w-16"
+                            onClick={() => {
+                              setCurrentReport(report);
+                              setShowUpdateModal(true);
+                            }}
+                          >
+                            Update Status
+                          </button>
+                          <button
+                            className="btn btn-sm btn-outline btn-danger hover:text-white mr-2 w-full md:max-w-16"
+                            onClick={() => {
+                              setCurrentReport(report);
+                              setShowDeleteModal(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

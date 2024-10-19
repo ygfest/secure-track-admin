@@ -308,7 +308,7 @@ const EditProfile = ({ userProfile }) => {
 
         {showDeleteConfirmation && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold">Confirm Deletion</h3>
               <p>Are you sure you want to delete your account?</p>
               <div className="modal-action">

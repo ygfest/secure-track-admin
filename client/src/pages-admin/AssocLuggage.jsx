@@ -222,7 +222,7 @@ const AdminAssocLuggage = () => {
   return (
     <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
-        <div className="flex justify-between mb-5">
+        <div className="flex justify-between mb-5 gap-4">
           <button
             className="btn bg-[#5CC90C] text-white rounded-3xl"
             onClick={() => setShowAddModal(true)}
@@ -329,25 +329,27 @@ const AdminAssocLuggage = () => {
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <button
-                          className="btn btn-sm btn-outline btn-primary hover:text-white mr-2"
-                          onClick={() => {
-                            setCurrentLuggage(luggage);
-                            setShowUpdateModal(true);
-                          }}
-                        >
-                          Edit
-                        </button>
+                        <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                          <button
+                            className="btn  w-full md:max-w-16 btn-sm btn-outline btn-primary hover:text-white mr-2"
+                            onClick={() => {
+                              setCurrentLuggage(luggage);
+                              setShowUpdateModal(true);
+                            }}
+                          >
+                            Edit
+                          </button>
 
-                        <button
-                          className="btn btn-sm btn-outline btn-danger"
-                          onClick={() => {
-                            setCurrentLuggage(luggage);
-                            setShowDeleteModal(true);
-                          }}
-                        >
-                          Delete
-                        </button>
+                          <button
+                            className="btn  w-full md:max-w-16 btn-sm btn-outline btn-danger"
+                            onClick={() => {
+                              setCurrentLuggage(luggage);
+                              setShowDeleteModal(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
