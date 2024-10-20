@@ -349,9 +349,9 @@ const AdminReports = () => {
                         </span>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                        <div className="flex flex-col md:flex-row gap-2 md:gap-2">
                           <button
-                            className="btn btn-sm btn-primary btn-danger w-full md:max-w-16"
+                            className="btn btn-sm btn-outline btn-primary btn-danger w-full md:max-w-16"
                             onClick={() => {
                               setCurrentReport(report);
                               setShowUpdateModal(true);

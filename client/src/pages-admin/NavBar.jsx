@@ -10,6 +10,7 @@ import {
   FaExclamationTriangle,
 } from "react-icons/fa";
 import { useLocation } from "../context/LocationContext";
+import { useAdminNavBarContext } from "../context/AdminNavBarContext";
 
 const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,13 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [adminProfileDp, setAdminProfileDp] = useState("");
   const [adminProfile, setAdminProfile] = useState("");
   const [adminLastName, setAdminLastName] = useState("");
+
+  const {
+    isSeenNotifications,
+    setIsSeenNotifications,
+    currentLink,
+    setCurrentLink,
+  } = useAdminNavBarContext();
 
   const navigate = useNavigate();
 
@@ -42,97 +50,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
     };
     verifyToken();
   }, [navigate]);
-
-  const getAlertIcon = (alertType) => {
-    switch (alertType) {
-      case "High Temperature":
-      case "Low Temperature":
-        return <FaThermometerHalf className="text-primary text-2xl mr-2" />;
-      case "Fall Detected":
-        return <FaExclamationTriangle className="text-primary text-2xl mr-2" />;
-      case "Tamper Detected":
-        return <FaShieldAlt className="text-primary text-2xl mr-2" />;
-      default:
-        return <FaLock className="text-primary text-2xl mr-2" />;
-    }
-  };
-
-  const getAlertColor = (alertType) => {
-    switch (alertType) {
-      case "High Temperature":
-        return "badge-danger";
-      case "Low Temperature":
-        return "badge-warning";
-      case "Fall Detected":
-        return "badge-info";
-      case "Tamper Detected":
-        return "badge-danger";
-      default:
-        return "badge-primary";
-    }
-  };
-
-  const renderNotifications = () => {
-    const alerts = [];
-
-    tempData?.forEach((temp) => {
-      if (temp.temperature > 30) {
-        alerts.push({
-          type: "High Temperature",
-          criticality: "Critical",
-          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: temp.timestamp,
-        });
-      } else if (temp.temperature < 10) {
-        alerts.push({
-          type: "Low Temperature",
-          criticality: "Warning",
-          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: temp.timestamp,
-        });
-      }
-    });
-
-    tamperData?.forEach((tamper) => {
-      alerts.push({
-        type: "Tamper Detected",
-        criticality: "Critical",
-        description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: tamper.timestamp,
-      });
-    });
-
-    fallDetectData?.forEach((fall) => {
-      alerts.push({
-        type: "Fall Detected",
-        criticality: "Info",
-        description: `Fall detected in ${fall.luggage_custom_name}`,
-        timestamp: fall.timestamp,
-      });
-    });
-
-    return alerts.map((alert, index) => (
-      <div key={index} className="card w-full bg-base-100 shadow-xl mb-2">
-        <div className="card-body flex items-start">
-          <div className="mr-4">{getAlertIcon(alert.type)}</div>
-          <div className="flex-1">
-            <h4 className="card-title text-base flex items-center">
-              {alert.type}
-              <div
-                className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
-              >
-                {alert.criticality}
-              </div>
-            </h4>
-            <p className="text-xs">{alert.description}</p>
-            <p className="text-xs text-gray-500">
-              {new Date(alert.timestamp).toLocaleString()}
-            </p>
-          </div>
-        </div>
-      </div>
-    ));
-  };
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -234,8 +151,13 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                 <li>
                   <Link
                     to="/admin/"
-                    className="link no-underline"
-                    onClick={toggleSideBar}
+                    className={`link no-underline ${
+                      currentLink === "/admin" ? "text-primary" : ""
+                    }`}
+                    onClick={() => {
+                      toggleSideBar();
+                      setCurrentLink("/admin/");
+                    }}
                   >
                     Dashboard
                   </Link>
@@ -243,8 +165,13 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                 <li>
                   <Link
                     to="/admin/tracking"
-                    className="link no-underline"
-                    onClick={toggleSideBar}
+                    className={`link no-underline ${
+                      currentLink === "/admin/tracking" ? "text-primary" : ""
+                    }`}
+                    onClick={() => {
+                      toggleSideBar();
+                      setCurrentLink("/admin/tracking");
+                    }}
                   >
                     Map
                   </Link>
@@ -253,7 +180,10 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   <Link
                     to="/admin/luggage"
                     className="link no-underline"
-                    onClick={toggleSideBar}
+                    onClick={() => {
+                      toggleSideBar();
+                      setCurrentLink("/admin/luggage");
+                    }}
                   >
                     Luggage Management
                   </Link>
@@ -262,7 +192,10 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   <Link
                     to="/admin/user-management"
                     className="link no-underline"
-                    onClick={toggleSideBar}
+                    onClick={() => {
+                      toggleSideBar();
+                      setCurrentLink("/admin/user-management");
+                    }}
                   >
                     Users Management
                   </Link>
@@ -271,7 +204,10 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   <Link
                     to="/admin/reports"
                     className="link no-underline"
-                    onClick={toggleSideBar}
+                    onClick={() => {
+                      toggleSideBar();
+                      setCurrentLink("/admin/reports");
+                    }}
                   >
                     Reports
                   </Link>
@@ -280,7 +216,10 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                   <Link
                     to="/admin/profile"
                     className="link no-underline"
-                    onClick={toggleSideBar}
+                    onClick={() => {
+                      toggleSideBar();
+                      setCurrentLink("/admin/profile");
+                    }}
                   >
                     Profile
                   </Link>

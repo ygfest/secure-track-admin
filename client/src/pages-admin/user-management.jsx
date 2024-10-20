@@ -358,8 +358,11 @@ const UserManagement = () => {
                               {user.firstname} {user.lastname}
                             </div>
                             <span className="badge badge-ghost badge-sm">
-                              Joined{" "}
-                              {new Date(user.createdAt).toLocaleDateString()}
+                              {luggageInfo.filter(
+                                (luggage) => luggage.user_id === user._id
+                              ).length +
+                                " " +
+                                "tracked luggage"}
                             </span>
                           </div>
                         </div>
@@ -367,12 +370,9 @@ const UserManagement = () => {
                       <td className="py-3 px-6 text-left">
                         {user.email}
                         <br />
+
                         <span className="badge badge-ghost badge-sm">
-                          {luggageInfo.filter(
-                            (luggage) => luggage.user_id === user._id
-                          ).length +
-                            " " +
-                            "tracked luggage"}
+                          Joined {new Date(user.createdAt).toLocaleDateString()}
                         </span>
                       </td>
 
