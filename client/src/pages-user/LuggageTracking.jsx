@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "../context/LocationContext";
+import { useUserNotif } from "../context/UserNotifContext";
 
 const hazardIcon = new Icon({
   iconUrl: hazardPinIcon,
@@ -115,6 +116,7 @@ const LuggageTracking = () => {
   const { isLocationOn } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
 
+  const { openNotif, setOpenNotif } = useUserNotif();
   useEffect(() => {
     axios.defaults.withCredentials = true;
   }, []);
@@ -222,7 +224,7 @@ const LuggageTracking = () => {
     fetchUsersData();
   }, []);
 
-  const position = [currentUserLat, currentUserLong]; //get the usersData from the who is loggedin in the account how can filter or get that
+  const position = [currentUserLat, currentUserLong];
 
   useEffect(() => {
     const fetchLuggageData = async () => {
@@ -424,7 +426,10 @@ const LuggageTracking = () => {
             )}
 
           <div
-            onClick={() => setClicked((prevClick) => !prevClick)}
+            onClick={() => {
+              setClicked((prevClick) => !prevClick);
+              setOpenNotif(false);
+            }}
             className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
               clicked ? "bottom-0" : "bottom-[-65%]"
             } bg-[#020202a0] backdrop-blur-xl h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer`}

@@ -12,6 +12,7 @@ export const UserNotifProvider = ({ children }) => {
   const [tempData, setTempData] = useState([]);
   const [isSeenNotifications, setIsSeenNotifications] = useState(true);
   const [currentLink, setCurrentLink] = useState("/user/");
+  const [openNotif, setOpenNotif] = useState(false);
 
   useEffect(() => {
     async function fetchFallData() {
@@ -79,6 +80,8 @@ export const UserNotifProvider = ({ children }) => {
         setIsSeenNotifications,
         currentLink,
         setCurrentLink,
+        openNotif,
+        setOpenNotif,
       }}
     >
       {children}

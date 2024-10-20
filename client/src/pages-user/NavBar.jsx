@@ -23,7 +23,6 @@ const formatDate = (dateObj) => {
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
-  const [openNotif, setOpenNotif] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
@@ -36,6 +35,8 @@ const NavBar = () => {
     setIsSeenNotifications,
     currentLink,
     setCurrentLink,
+    openNotif,
+    setOpenNotif,
   } = useUserNotif();
   const navigate = useNavigate();
 
