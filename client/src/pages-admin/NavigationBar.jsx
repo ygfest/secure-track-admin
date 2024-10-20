@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
 import Profile from "../assets/sample_profile.jpg";
@@ -20,6 +20,7 @@ import {
 } from "react-icons/md";
 import { FaCircleChevronLeft } from "react-icons/fa6";
 import { parse, format } from "date-fns";
+import { useAdminNavBarContext } from "../context/AdminNavBarContext";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
@@ -32,16 +33,16 @@ const NavigationBar = () => {
   const [adminProfileDp, setAdminProfileDp] = useState("");
   const [adminProfileFirstName, setAdminProfileFirstName] = useState("");
   const [adminProfileLastName, setAdminProfileLastName] = useState("");
-  const [isSeenNotifications, setIsSeenNotifications] = useState(false);
   const [showLogoutConfirmation, setIsShowLogoutConfirmation] = useState(false);
-  const [currentLink, setCurrentLink] = useState("");
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
 
-  const [luggageInfo, setLuggageInfo] = useState([]);
-  const [fallDetectData, setFallDetectData] = useState([]);
-  const [tamperData, setTamperData] = useState([]);
-  const [tempData, setTempData] = useState([]);
+  const {
+    isSeenNotifications,
+    setIsSeenNotifications,
+    currentLink,
+    setCurrentLink,
+  } = useAdminNavBarContext();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
   const toggleProfile = () => {
@@ -73,63 +74,6 @@ const NavigationBar = () => {
     };
     verifyToken();
   }, [navigate]);
-
-  useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/luggage-router/luggage-admin`
-        );
-        setLuggageInfo(response.data);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
-    fetchLuggageInfo();
-  }, []);
-
-  useEffect(() => {
-    async function fetchFallData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/fall-logs1`);
-        setFallDetectData(response.data);
-      } catch (error) {
-        console.log("Error fetching fall data");
-      }
-    }
-
-    fetchFallData();
-  }, [fallDetectData]);
-
-  useEffect(() => {
-    async function fetchTamperLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/luggage-router/tamper-logs2`
-        );
-        setTamperData(response.data);
-      } catch (error) {
-        console.log("error fetching tamper logs", error);
-      }
-    }
-    fetchTamperLogs();
-  }, []);
-
-  useEffect(() => {
-    async function fetchTempLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/temp-logs`);
-        setTempData(response.data);
-      } catch (error) {
-        console.log("Error fetching temp logs", error);
-      }
-    }
-    fetchTempLogs();
-  }, []);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
@@ -173,95 +117,6 @@ const NavigationBar = () => {
         return "badge-primary";
     }
   };
-
-  const updateAlerts = () => {
-    const newAlerts = [];
-
-    // Default empty arrays if props are undefined
-    const tempArray = tempData || [];
-    const tamperArray = tamperData || [];
-    const fallArray = fallDetectData || [];
-
-    tempArray.forEach((temp) => {
-      if (temp.temperature > 30) {
-        newAlerts.push({
-          type: "High Temperature",
-          criticality: "Critical",
-          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: new Date(temp.timestamp),
-        });
-      } else if (temp.temperature < 10) {
-        newAlerts.push({
-          type: "Low Temperature",
-          criticality: "Warning",
-          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: new Date(temp.timestamp),
-        });
-      }
-    });
-
-    tamperArray.forEach((tamper) => {
-      newAlerts.push({
-        type: "Tamper Detected",
-        criticality: "Critical",
-        description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: new Date(tamper.timestamp),
-      });
-    });
-
-    fallArray.forEach((fall) => {
-      newAlerts.push({
-        type: "Fall Detected",
-        criticality: "Info",
-        description: `Fall detected in ${fall.luggage_custom_name}`,
-        timestamp: new Date(fall.fall_time),
-      });
-    });
-
-    return newAlerts;
-  };
-
-  useEffect(() => {
-    const newAlerts = updateAlerts();
-
-    // Check if there are new alerts
-    if (newAlerts.length > alerts.length) {
-      setAlerts(newAlerts);
-      //setOpenNotif(true);
-      setIsSeenNotifications(false);
-    } else {
-      setAlerts(newAlerts); // Just update alerts
-    }
-  }, [tempData, tamperData, fallDetectData]); // Runs when tempData, tamperData, or fallDetectData change
-
-  {
-    /* const renderNotifications = () => {
-    return alerts
-      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp descending
-      .map((alert, index) => (
-        <div key={index} className="card w-full bg-[#f2f5f8] shadow-xl mb-2">
-          <div className="card-body flex items-start">
-            <div className="mr-4">{getAlertIcon(alert.type)}</div>
-            <div className="flex-1">
-              <h4 className="card-title text-base flex items-center">
-                {alert.type}
-                <div
-                  className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
-                >
-                  {alert.criticality}
-                </div>
-              </h4>
-              <p className="text-xs">{alert.description}</p>
-              <p className="text-xs text-gray-500">
-                {formatDate(alert.timestamp)}
-              </p>
-            </div>
-          </div>
-        </div>
-      ));
-  };
-*/
-  }
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
