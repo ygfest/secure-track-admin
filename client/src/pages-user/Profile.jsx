@@ -120,8 +120,10 @@ const Profile = () => {
                   className="w-24 h-24 rounded-full object-cover border-4 border-white"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
-                  {userProfile.firstname.charAt(0).toUpperCase()}
+                <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold text-2xl border-4 border-white">
+                  {userProfile.firstname.charAt(0).toUpperCase() +
+                    "" +
+                    userProfile.lastname.charAt(0)}
                 </div>
               )}
             </div>

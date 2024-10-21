@@ -269,4 +269,31 @@ router.delete('/deleteluggage/:id', verifyUser, async (req, res) => {
 });
 
 
+// Update geofence status route
+router.post('/luggage/:id/updateStatus', verifyUser, async (req, res) => {
+  const { status, luggageId } = req.body;  // Extract status and luggageId from the request body
+
+  // Validate the input data
+  if (!status || !luggageId) {
+    return res.status(400).json({ status: false, message: "Status and luggageId are required" });
+  }
+
+  try {
+    // Find the luggage by the provided luggageId and update its geofence status
+    const updatedLuggage = await Luggage.findByIdAndUpdate(luggageId, {
+      status: status
+    }, { new: true });
+
+    if (!updatedLuggage) {
+      return res.status(404).json({ status: false, message: "Luggage not found" });
+    }
+
+    res.json({ status: true, message: "Geofence status updated successfully", luggage: updatedLuggage });
+  } catch (error) {
+    console.error('Error updating geofence status:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
 module.exports = router;

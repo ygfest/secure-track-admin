@@ -25,6 +25,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
+import L from "leaflet";
 
 const hazardIcon = new Icon({
   iconUrl: hazardPinIcon,
@@ -115,6 +116,9 @@ const LuggageTracking = () => {
   const [currentUserLong, setCurrentUserLong] = useState(null);
   const { isLocationOn } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
+  const radius = 200;
+  const center = [currentUserLat, currentUserLong];
+  const [lastChecked, setLastChecked] = useState(null);
 
   const { openNotif, setOpenNotif } = useUserNotif();
   useEffect(() => {
@@ -226,6 +230,75 @@ const LuggageTracking = () => {
 
   const position = [currentUserLat, currentUserLong];
 
+  // Calculate whether luggage is outside the geofence
+  const isLuggageOutsideGeofence = (
+    luggageLat,
+    luggageLong,
+    centerLat,
+    centerLong,
+    radius
+  ) => {
+    const mapCenter = L.latLng(centerLat, centerLong);
+    const luggageLocation = L.latLng(luggageLat, luggageLong);
+    const distance = luggageLocation.distanceTo(mapCenter); // in meters
+    return distance > radius; // Returns true if outside geofence
+  };
+
+  const updateGeofenceStatus = async () => {
+    try {
+      const updatedStatuses = await Promise.all(
+        luggageDeets.map(async (luggage) => {
+          const isOutside = isLuggageOutsideGeofence(
+            luggage.latitude,
+            luggage.longitude,
+            currentUserLat,
+            currentUserLong,
+            radius
+          );
+
+          const luggageGeofenceStatus = {
+            status: isOutside ? "Out of Range" : "In Range",
+            luggageId: luggage._id,
+          };
+
+          // Only update if the status has changed
+          if (luggage.status !== luggageGeofenceStatus.status) {
+            await axios.post(
+              `${import.meta.env.VITE_API_URL}/luggage-router/luggage/${
+                luggage._id
+              }/updateStatus`,
+              luggageGeofenceStatus
+            );
+            return { ...luggage, status: luggageGeofenceStatus.status };
+          }
+
+          // Return the luggage unchanged if no update was necessary
+          return luggage;
+        })
+      );
+
+      // Update the luggage details with new statuses
+      setLuggageDeets(updatedStatuses);
+      toast.success("Geofence statuses are up to date");
+    } catch (error) {
+      console.error("Error updating geofence statuses:", error);
+      toast.error("Please refresh to get the up tp date geofencing status");
+    }
+  };
+
+  useEffect(() => {
+    const isNewDataAvailable = luggageDeets.some(
+      (luggage) =>
+        lastChecked === null ||
+        new Date(luggage.timestamp) > new Date(lastChecked)
+    );
+
+    if (isNewDataAvailable) {
+      updateGeofenceStatus();
+      setLastChecked(new Date()); // Update the last checked time to now
+    }
+  }, [luggageDeets, lastChecked]); // Run whenever luggageDeets change
+
   useEffect(() => {
     const fetchLuggageData = async () => {
       try {
@@ -295,6 +368,7 @@ const LuggageTracking = () => {
       if (response.status === 201) {
         setLuggageDeets([...luggageDeets, newLuggage]);
         console.log("New Luggage Details: ", newLuggage);
+        await fetchLuggageData();
         toast.success("Luggage added succesfully");
         window.location.reload();
       } else {
@@ -418,9 +492,9 @@ const LuggageTracking = () => {
                   </Popup>
                 </Marker>
                 <Circle
-                  center={[currentUserLat, currentUserLong]}
+                  center={center}
                   pathOptions={fillBlueOptions}
-                  radius={200}
+                  radius={radius}
                 />
               </>
             )}
