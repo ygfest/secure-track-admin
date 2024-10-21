@@ -3,6 +3,8 @@ import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
+import hardwareIcon from "../assets/hardware.png";
+import softwareIcon from "../assets/software.png";
 import { toast, Toaster } from "sonner";
 
 const AdminReports = () => {
@@ -307,7 +309,11 @@ const AdminReports = () => {
                           <div className="flex-shrink-0 h-10 w-10">
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={LuggageIcon}
+                              src={
+                                report.type === "device-anomaly"
+                                  ? hardwareIcon
+                                  : softwareIcon
+                              }
                               alt="Luggage"
                             />
                           </div>
@@ -348,8 +354,8 @@ const AdminReports = () => {
                           {report.status}
                         </span>
                       </td>
-                      <td className="py-3 px-6 text-left">
-                        <div className="flex flex-col md:flex-row gap-2 md:gap-2">
+                      <td className="py-3 text-left">
+                        <div className="flex flex-col md:flex-row gap-2">
                           <button
                             className="btn btn-sm btn-outline btn-primary btn-danger w-full md:max-w-16"
                             onClick={() => {
@@ -357,7 +363,7 @@ const AdminReports = () => {
                               setShowUpdateModal(true);
                             }}
                           >
-                            Update Status
+                            Respond
                           </button>
                           <button
                             className="btn btn-sm btn-outline btn-danger hover:text-white mr-2 w-full md:max-w-16"
