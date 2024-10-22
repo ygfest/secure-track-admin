@@ -27,16 +27,6 @@ import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
 import L from "leaflet";
 
-const hazardIcon = new Icon({
-  iconUrl: hazardPinIcon,
-  iconSize: [40, 40],
-});
-
-const cargoMarker = new Icon({
-  iconUrl: cargoIcon,
-  iconSize: [40, 40],
-});
-
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
   iconSize: [40, 40],
@@ -282,7 +272,7 @@ const LuggageTracking = () => {
       toast.success("Geofence statuses are up to date");
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
-      toast.error("Please refresh to get the up tp date geofencing status");
+      toast.error("Please refresh to get the up to date geofencing status");
     }
   };
 

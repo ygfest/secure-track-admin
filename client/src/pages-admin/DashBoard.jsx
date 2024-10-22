@@ -1,462 +1,234 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import moment from "moment";
-import {
-  FaThermometerHalf,
-  FaLock,
-  FaShieldAlt,
-  FaExclamationTriangle,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
-import NavigationBar from "./NavigationBar";
-import UserComboBox from "../components/ComboBox";
-import { Doughnut, Line, Bar } from "react-chartjs-2";
+import { Line, Doughnut, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
-  TimeScale,
   ArcElement,
+  BarElement,
 } from "chart.js";
-import "chartjs-adapter-moment";
+import {
+  FaMapMarkerAlt,
+  FaThermometerHalf,
+  FaShieldAlt,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
-  TimeScale,
-  ArcElement
+  ArcElement,
+  BarElement
 );
 
 const DashBoard = () => {
-  const navigate = useNavigate();
-  const [luggageInfo, setLuggageInfo] = useState([]);
-  const [fallDetectData, setFallDetectData] = useState([]);
-  const [tamperData, setTamperData] = useState([]);
-  const [selectedLuggage, setSelectedLuggage] = useState("All");
-  const [reportsData, setReportsData] = useState([]);
-  const [userFirstName, setUserFirstName] = useState("");
-  const [tempData, setTempData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [reportsData, setReportsData] = useState([]);
+  const [luggageInfo, setLuggageInfo] = useState([]);
 
   useEffect(() => {
-    axios.defaults.withCredentials = true;
-  }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-
-        console.log("Verify token response:", response.data);
-
-        if (!response.data.status || response.data.user.role !== "admin") {
-          navigate("/sign-in");
-        } else {
-          setUserFirstName(
-            `${response.data.user.firstname} ${response.data.user.lastname}`
-          );
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
-
-  useEffect(() => {
+    // Fetch users data
     const fetchUsersData = async () => {
       const apiUrl = import.meta.env.VITE_API_URL;
       const res = await axios.get(`${apiUrl}/auth/users`);
       setUserData(res.data);
     };
     fetchUsersData();
-  }, []);
 
-  const numOfUsers = userData.length;
+    // Fetch reports data
+    const fetchReportsData = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${apiUrl}/auth/reports`);
+      setReportsData(res.data);
+    };
+    fetchReportsData();
 
-  useEffect(() => {
-    async function fetchFallData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/fall-logs1`);
-        setFallDetectData(response.data);
-      } catch (error) {
-        console.log("Error fetching fall data");
-      }
-    }
-
-    fetchFallData();
-  }, [fallDetectData]);
-
-  const totalFall =
-    selectedLuggage === "All"
-      ? fallDetectData.length
-      : fallDetectData.filter(
-          (fall) => fall.luggage_custom_name === selectedLuggage
-        ).length;
-
-  useEffect(() => {
-    async function fetchTamperLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/luggage-router/tamper-logs2`
-        );
-        setTamperData(response.data);
-      } catch (error) {
-        console.log("error fetching tamper logs", error);
-      }
-    }
-    fetchTamperLogs();
-  }, []);
-
-  const totalTamper =
-    selectedLuggage === "All"
-      ? tamperData.length
-      : tamperData.filter(
-          (tamper) => tamper.luggage_custom_name === selectedLuggage
-        ).length;
-
-  useEffect(() => {
-    async function fetchTempLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/temp-logs`);
-        setTempData(response.data);
-      } catch (error) {
-        console.log("Error fetching temp logs", error);
-      }
-    }
-    fetchTempLogs();
-  }, []);
-
-  const sumTemp = tempData.reduce((sum, data) => sum + data.temperature, 0);
-  const avgTemp =
-    tempData.length > 0 ? (sumTemp / tempData.length).toFixed(1) : 0;
-
-  // Find the latest temperature log for the selected luggage
-  const latestTempLog =
-    selectedLuggage === "All"
-      ? null
-      : tempData
-          .filter((log) => log.luggage_custom_name === selectedLuggage)
-          .reduce((latest, log) => {
-            return moment(log.timeStamp).isAfter(moment(latest.timeStamp))
-              ? log
-              : latest;
-          }, tempData[0]);
-
-  const displayTemp =
-    selectedLuggage === "All"
-      ? avgTemp
-      : latestTempLog
-      ? latestTempLog.temperature
-      : 0;
-  const displayTempTime =
-    selectedLuggage === "All"
-      ? ""
-      : latestTempLog
-      ? latestTempLog.timeStamp
-      : "";
-
-  useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/luggage-router/luggage-admin`
-        );
-        setLuggageInfo([
-          { luggage_custom_name: "All", luggage_name: "All" },
-          ...response.data,
-        ]);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
+    // Fetch luggage info (if needed)
+    const fetchLuggageInfo = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${apiUrl}/luggage`);
+      setLuggageInfo(res.data);
+    };
     fetchLuggageInfo();
   }, []);
 
+  // Sample Data Aggregation
+  const numOfUsers = userData.length;
   const numOfLuggage = luggageInfo.length;
+  const deviceReports = reportsData.filter(
+    (report) => report.type === "device-anomaly"
+  ).length;
+  const softwareReports = reportsData.filter(
+    (report) => report.type === "software-anomaly"
+  ).length;
 
-  const displayStat =
-    selectedLuggage === "All"
-      ? "-"
-      : luggageInfo.find(
-          (luggage) => luggage.luggage_custom_name === selectedLuggage
-        )?.status || "-";
-
-  const tempTitle =
-    selectedLuggage === "All" ? "Average Temperature" : "Temperature";
-
-  // Calculate average temperature per timestamp for all luggage
-  const calculateAverageTempPerTimestamp = (data) => {
-    const tempMap = {};
-    data.forEach((log) => {
-      const timestamp = moment(log.timeStamp).format("MMM DD, YYYY HH:mm");
-      if (!tempMap[timestamp]) {
-        tempMap[timestamp] = { sum: 0, count: 0 };
-      }
-      tempMap[timestamp].sum += log.temperature;
-      tempMap[timestamp].count += 1;
-    });
-
-    return Object.keys(tempMap).map((timestamp) => ({
-      timeStamp: timestamp,
-      temperature: tempMap[timestamp].sum / tempMap[timestamp].count,
-    }));
-  };
-
-  const filteredTempData =
-    selectedLuggage === "All"
-      ? calculateAverageTempPerTimestamp(tempData)
-      : tempData.filter((log) => log.luggage_custom_name === selectedLuggage);
-
-  const labels = filteredTempData.map((log) => log.timeStamp);
+  // User Activity Bar Chart
+  const activeUsers = userData.filter(
+    (user) => user.status === "Active"
+  ).length;
+  const inactiveUsers = userData.filter(
+    (user) => user.status === "Inactive"
+  ).length;
+  const offlineUsers = userData.filter(
+    (user) => user.status === "Offline"
+  ).length;
 
   const tempChartData = {
-    labels,
+    labels: ["Active", "Inactive", "Offline"],
     datasets: [
       {
-        label: "Temperature",
-        data: filteredTempData.map((log) => log.temperature),
-        fill: false,
-        backgroundColor: "#5CC90C",
-        borderColor: "#5CC90C",
+        label: "User Activity",
+        data: [activeUsers, inactiveUsers, offlineUsers],
+        backgroundColor: [
+          "#5CC90C", // Primary color for Active
+          "#3B3F3F", // Secondary color for Inactive
+          "#FFD900", // Accent color for Offline
+        ],
+        borderColor: "#3e95cd",
+        borderWidth: 1,
       },
     ],
   };
 
   const tempChartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: true,
-        position: "top",
-      },
       title: {
         display: true,
-        text: "Temperature Over Time",
+        text: "Users' Activity",
       },
-    },
-    scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: "day",
-          displayFormats: {
-            day: "MMM DD, YYYY",
+      legend: {
+        position: "top",
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
           },
-        },
-        title: {
-          display: true,
-          text: "Date",
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Temperature (°C)",
         },
       },
     },
   };
 
-  // Create a map of status counts for the Doughnut chart, excluding "All"
-  const statusCounts = luggageInfo.reduce((counts, luggage) => {
-    if (luggage.luggage_custom_name !== "All") {
-      counts[luggage.status] = (counts[luggage.status] || 0) + 1;
-    }
-    return counts;
-  }, {});
+  // Issues and Reports Pie Chart
+  const deviceAnomalies = reportsData.filter(
+    (report) => report.type === "device-anomaly"
+  ).length;
+  const softwareAnomalies = reportsData.filter(
+    (report) => report.type === "software-anomaly"
+  ).length;
 
   const geofenceStatusData = {
-    labels: Object.keys(statusCounts),
+    labels: ["Device Anomalies", "Software Anomalies"],
     datasets: [
       {
-        data: Object.values(statusCounts),
-        backgroundColor: ["#3B3F3F", "#5CC90C", "#FFCE56", "#4BC0C0"],
+        data: [deviceAnomalies, softwareAnomalies],
+        backgroundColor: ["#5CC90C", "#FFD900"], // Using primary and accent colors
       },
     ],
   };
 
   const geofenceStatusOptions = {
     responsive: true,
-    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: true,
-        position: "top",
-      },
       title: {
         display: true,
-        text: "Luggage Status Distribution",
+        text: "Issues and Reports",
       },
     },
   };
 
-  // Stack the intrusion data by counting occurrences within the same day
-  const intrusionCounts = tamperData.reduce((counts, log) => {
-    const date = moment(log.timestamp).format("MMM DD, YYYY");
-    counts[date] = (counts[date] || 0) + 1;
-    return counts;
-  }, {});
+  // Device Anomalies Pie Chart
+  const resolvedDeviceAnomalies = reportsData.filter(
+    (report) => report.type === "device-anomaly" && report.status === "Resolved"
+  ).length;
+  const inProgressDeviceAnomalies = reportsData.filter(
+    (report) =>
+      report.type === "device-anomaly" && report.status === "In Progress"
+  ).length;
+  const pendingDeviceAnomalies = reportsData.filter(
+    (report) => report.type === "device-anomaly" && report.status === "Pending"
+  ).length;
 
   const intrusionChartData = {
-    labels: Object.keys(intrusionCounts),
+    labels: ["Resolved", "In Progress", "Pending"],
     datasets: [
       {
-        label: "Intrusions",
-        data: Object.values(intrusionCounts),
-        backgroundColor: "#5CC90C",
+        data: [
+          resolvedDeviceAnomalies,
+          inProgressDeviceAnomalies,
+          pendingDeviceAnomalies,
+        ],
+        backgroundColor: ["#5CC90C", "#FFD900", "#3B3F3F"], // Matching app theme colors
       },
     ],
   };
 
   const intrusionChartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: true,
-        position: "top",
-      },
       title: {
         display: true,
-        text: "Intrusion Detection Timeline",
-      },
-    },
-    scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: "day",
-          displayFormats: {
-            day: "MMM DD, YYYY",
-          },
-        },
-        title: {
-          display: true,
-          text: "Date",
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Intrusions",
-        },
+        text: "Device Anomalies Status",
       },
     },
   };
 
-  // Stack the fall data by counting occurrences within the same day
-  const fallCounts = fallDetectData.reduce((counts, log) => {
-    const date = moment(log.fall_time).format("MMM DD, YYYY");
-    counts[date] = (counts[date] || 0) + 1;
-    return counts;
-  }, {});
+  // Software Anomalies Pie Chart
+  const resolvedSoftwareAnomalies = reportsData.filter(
+    (report) =>
+      report.type === "software-anomaly" && report.status === "Resolved"
+  ).length;
+  const inProgressSoftwareAnomalies = reportsData.filter(
+    (report) =>
+      report.type === "software-anomaly" && report.status === "In Progress"
+  ).length;
+  const pendingSoftwareAnomalies = reportsData.filter(
+    (report) =>
+      report.type === "software-anomaly" && report.status === "Pending"
+  ).length;
 
   const fallChartData = {
-    labels: Object.keys(fallCounts),
+    labels: ["Resolved", "In Progress", "Pending"],
     datasets: [
       {
-        label: "Falls",
-        data: Object.values(fallCounts),
-        backgroundColor: "#5CC90C",
+        data: [
+          resolvedSoftwareAnomalies,
+          inProgressSoftwareAnomalies,
+          pendingSoftwareAnomalies,
+        ],
+        backgroundColor: ["#5CC90C", "#FFD900", "#3B3F3F"], // Matching app theme colors
       },
     ],
   };
 
   const fallChartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: true,
-        position: "top",
-      },
       title: {
         display: true,
-        text: "Fall History or Timeline",
-      },
-    },
-    scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: "day",
-          displayFormats: {
-            day: "MMM DD, YYYY",
-          },
-        },
-        title: {
-          display: true,
-          text: "Date",
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Falls",
-        },
+        text: "Software Anomalies Status",
       },
     },
   };
-
-  useEffect(() => {
-    async function fetchReports() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/reports`, {
-          withCredentials: true,
-        });
-        setReportsData(response.data);
-      } catch (error) {
-        console.error("Error fetching reports:", error);
-      }
-    }
-    fetchReports();
-  }, []);
-
-  const deviceReports = reportsData.filter(
-    (report) => report.type === "device-anomaly"
-  ).length;
-
-  const softwareReports = reportsData.filter(
-    (report) => report.type === "software-anomaly"
-  ).length;
 
   return (
     <>
       <div className="p-6 h-full bg-gray-100">
         <div className="flex flex-row justify-between items-center text-center mb-4">
           <h3 className="text-2xl font-medium">Overview</h3>
-          <div className="md:w-1/5 w-1/2 ">
-            <UserComboBox
-              options={luggageInfo}
-              value={selectedLuggage}
-              onChange={setSelectedLuggage}
-            />
-          </div>
+          <div className="md:w-1/5 w-1/2 "></div>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -471,7 +243,6 @@ const DashBoard = () => {
             <FaThermometerHalf className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
-              {/*<h2 className="text-3xl font-bold">{`${displayTemp}°C`}</h2>*/}
               <p className="text-gray-600">Luggage Registered</p>
             </div>
           </div>
@@ -492,22 +263,18 @@ const DashBoard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          {/* User Activity Bar Chart */}
           <div className="card bg-white shadow-md p-4 rounded-lg h-96">
             <div className="card-body h-full">
-              <h2 className="text-xl font-bold">Temperature over Time</h2>
-              <div className="h-full">
-                <Line
-                  options={tempChartOptions}
-                  data={tempChartData}
-                  className="h-full"
-                />
-              </div>
+              <h2 className="text-xl font-bold">Users Activity</h2>
+              <Bar data={tempChartData} options={tempChartOptions} />
             </div>
           </div>
+
           <div className="card bg-white shadow-md p-4 rounded-lg h-96">
             <div className="card-body h-full">
-              <h2 className="text-xl font-bold">Luggage Geofence Status</h2>
-              <div className="h-full">
+              <h2 className="text-xl font-bold">Issues and Reports</h2>
+              <div className="h-full flex justify-center items-center">
                 <Doughnut
                   options={geofenceStatusOptions}
                   data={geofenceStatusData}
@@ -515,27 +282,24 @@ const DashBoard = () => {
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           <div className="card bg-white shadow-md p-4 rounded-lg h-96">
-            <div className="card-body">
-              <h2 className="text-xl font-bold">
-                Intrusion Detection Timeline
-              </h2>
-              <div className="h-full">
-                <Bar
+            <div className="card-body h-full">
+              <h2 className="text-xl font-bold">Device Anomalies Status</h2>
+              <div className="h-full flex justify-center items-center">
+                <Doughnut
                   options={intrusionChartOptions}
                   data={intrusionChartData}
                 />
               </div>
             </div>
           </div>
+
           <div className="card bg-white shadow-md p-4 rounded-lg h-96">
-            <div className="card-body">
-              <h2 className="text-xl font-bold">Fall History or Timeline</h2>
-              <div className="h-full">
-                <Bar options={fallChartOptions} data={fallChartData} />
+            <div className="card-body h-full">
+              <h2 className="text-xl font-bold">Software Anomalies Status</h2>
+              <div className="h-full flex justify-center items-center">
+                <Doughnut options={fallChartOptions} data={fallChartData} />
               </div>
             </div>
           </div>
