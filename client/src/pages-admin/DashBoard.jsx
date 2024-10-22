@@ -99,8 +99,6 @@ const DashBoard = () => {
           "#3B3F3F", // Secondary color for Inactive
           "#FFD900", // Accent color for Offline
         ],
-        borderColor: "#3e95cd",
-        borderWidth: 1,
       },
     ],
   };
