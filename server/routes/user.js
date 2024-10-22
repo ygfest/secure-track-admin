@@ -402,6 +402,32 @@ router.delete('/deleteuser/:id', verifyUser, async(req, res) => {
   }
 })
 
+router.put('/update-user-status/:id', verifyUser, async (req, res) => {
+  const { status } = req.body;
+  const userId = req.params.id;
+
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        status
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Server error");
+  }
+});
+
+
 router.post('/user-report', verifyUser, async(req, res) => {
   const {type, title, description, luggageId, userId} = req.body;
   console.log(req.body)

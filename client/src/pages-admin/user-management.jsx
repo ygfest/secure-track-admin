@@ -60,10 +60,17 @@ const UserManagement = () => {
       setUsersData(dataJson);
       setFilteredData(dataJson);
       setTotalItems(dataJson.length);
+
+      // Automatically update user status after fetching users
+      dataJson.forEach((user) => {
+        const status = getUserStatus(user.loggedInAt);
+        updateUserStatus(user._id, status); // Pass user ID and status
+      });
     } catch (error) {
       console.log("error fetching user data", error);
     }
   }
+
   async function fetchLuggageInfo() {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -92,6 +99,26 @@ const UserManagement = () => {
       return "Inactive"; // Logged in more than 1 hour but less than 24 hours
     } else {
       return "Offline"; // Logged in more than 24 hours ago
+    }
+  };
+
+  const updateUserStatus = async (userId, status) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.put(
+        `${apiUrl}/auth/update-user-status/${userId}`,
+        { status }
+      );
+
+      // Update local state after successful status update
+      setUsersData((prev) =>
+        prev.map((user) => (user._id === userId ? { ...user, status } : user))
+      );
+      setFilteredData((prev) =>
+        prev.map((user) => (user._id === userId ? { ...user, status } : user))
+      );
+    } catch (error) {
+      console.error("Error updating user status", error);
     }
   };
 

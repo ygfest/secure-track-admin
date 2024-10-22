@@ -19,6 +19,10 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import { LuUsers } from "react-icons/lu";
+import { BsLuggage } from "react-icons/bs";
+import { TbDeviceSpeakerOff } from "react-icons/tb";
+import { TbDevicesX } from "react-icons/tb";
 
 ChartJS.register(
   CategoryScale,
@@ -233,28 +237,28 @@ const DashBoard = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <FaMapMarkerAlt className="text-primary text-4xl mb-2" />
+            <LuUsers className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{numOfUsers}</h2>
               <p className="text-gray-600">Registered Users</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <FaThermometerHalf className="text-primary text-4xl mb-2" />
+            <BsLuggage className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
               <p className="text-gray-600">Luggage Registered</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <FaShieldAlt className="text-primary text-4xl mb-2" />
+            <TbDeviceSpeakerOff className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{deviceReports}</h2>
               <p className="text-gray-600">Device Anomalies</p>
             </div>
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <FaExclamationTriangle className="text-primary text-4xl mb-2" />
+            <TbDevicesX className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
               <h2 className="text-3xl font-bold">{softwareReports}</h2>
               <p className="text-gray-600">Software Reports</p>
