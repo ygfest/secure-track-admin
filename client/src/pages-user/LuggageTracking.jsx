@@ -542,7 +542,7 @@ const LuggageTracking = () => {
                       {luggageDeet.luggage_custom_name}
                     </h4>
                     <div className="badge badge-primary badge-lg  text-white text-xs rounded-none font-poppins">
-                      <RelativeTime shipmentDate={luggageDeet.timestamp} />
+                      <RelativeTime shipmentDate={luggageDeet.timestamps} />
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
