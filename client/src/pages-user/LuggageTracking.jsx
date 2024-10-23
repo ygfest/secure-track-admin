@@ -221,6 +221,8 @@ const LuggageTracking = () => {
   const position = [currentUserLat, currentUserLong];
 
   // Calculate whether luggage is outside the geofence
+
+  // Calculate whether luggage is outside the geofence
   const isLuggageOutsideGeofence = (
     luggageLat,
     luggageLong,
@@ -228,45 +230,22 @@ const LuggageTracking = () => {
     centerLong,
     radius
   ) => {
+    // If there's no latitude or longitude, return "Out of Coverage"
+    if (!luggageLat || !luggageLong) {
+      return null; // We'll treat null as "Out of Coverage"
+    }
+
     const mapCenter = L.latLng(centerLat, centerLong);
     const luggageLocation = L.latLng(luggageLat, luggageLong);
     const distance = luggageLocation.distanceTo(mapCenter); // in meters
     return distance > radius; // Returns true if outside geofence
   };
 
-  // Calculate whether luggage is "Out of Coverage" based on timestamp
-  const isOutOfCoverage = (timestamp) => {
-    const tenMinutesAgo = new Date(Date.now() - 60 * 60 * 1000);
-    return new Date(timestamp) < tenMinutesAgo;
-  };
-
   const updateGeofenceStatus = async () => {
     try {
       const updatedStatuses = await Promise.all(
         luggageDeets.map(async (luggage) => {
-          // Check if luggage is out of coverage
-          const outOfCoverage = isOutOfCoverage(luggage.timestamp);
-          if (outOfCoverage) {
-            const luggageGeofenceStatus = {
-              status: "Out of Coverage",
-              luggageId: luggage._id,
-            };
-
-            // Only update if the status has changed
-            if (luggage.status !== luggageGeofenceStatus.status) {
-              await axios.post(
-                `${import.meta.env.VITE_API_URL}/luggage-router/luggage/${
-                  luggage._id
-                }/updateStatus`,
-                luggageGeofenceStatus
-              );
-              return { ...luggage, status: luggageGeofenceStatus.status };
-            }
-
-            return luggage; // No change needed if status hasn't changed
-          }
-
-          // Otherwise, check if luggage is inside or outside the geofence
+          // Check if luggage has no latitude or longitude (Out of Coverage)
           const isOutside = isLuggageOutsideGeofence(
             luggage.latitude,
             luggage.longitude,
@@ -275,10 +254,21 @@ const LuggageTracking = () => {
             radius
           );
 
-          const luggageGeofenceStatus = {
-            status: isOutside ? "Out of Range" : "In Range",
-            luggageId: luggage._id,
-          };
+          let luggageGeofenceStatus;
+
+          if (isOutside === null) {
+            // Set status to "Out of Coverage" if no lat/long
+            luggageGeofenceStatus = {
+              status: "Out of Coverage",
+              luggageId: luggage._id,
+            };
+          } else {
+            // Set status to "In Range" or "Out of Range" based on geofence check
+            luggageGeofenceStatus = {
+              status: isOutside ? "Out of Range" : "In Range",
+              luggageId: luggage._id,
+            };
+          }
 
           // Only update if the status has changed
           if (luggage.status !== luggageGeofenceStatus.status) {
