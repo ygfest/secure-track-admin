@@ -97,7 +97,7 @@ const DashBoard = () => {
         backgroundColor: [
           "#5CC90C", // Primary color for Active
           "#3B3F3F", // Secondary color for Inactive
-          "#FFD900", // Accent color for Offline
+          "#A9D18B", // Accent color for Offline
         ],
       },
     ],
@@ -136,7 +136,7 @@ const DashBoard = () => {
     datasets: [
       {
         data: [deviceAnomalies, softwareAnomalies],
-        backgroundColor: ["#5CC90C", "#FFD900"], // Using primary and accent colors
+        backgroundColor: ["#5CC90C", "#3B3F3F"], // Using primary and accent colors
       },
     ],
   };
@@ -172,7 +172,7 @@ const DashBoard = () => {
           inProgressDeviceAnomalies,
           pendingDeviceAnomalies,
         ],
-        backgroundColor: ["#5CC90C", "#FFD900", "#3B3F3F"], // Matching app theme colors
+        backgroundColor: ["#5CC90C", "#A9D18B", "#3B3F3F"], // Matching app theme colors
       },
     ],
   };
@@ -210,7 +210,7 @@ const DashBoard = () => {
           inProgressSoftwareAnomalies,
           pendingSoftwareAnomalies,
         ],
-        backgroundColor: ["#5CC90C", "#FFD900", "#3B3F3F"], // Matching app theme colors
+        backgroundColor: ["#5CC90C", "#3B3F3F", "#A9D18B"], // Matching app theme colors
       },
     ],
   };
