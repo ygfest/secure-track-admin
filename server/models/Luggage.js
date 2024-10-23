@@ -28,7 +28,7 @@ const LuggageSchema = new Schema({
     },
     status: { 
         type: String, 
-        enum: ['In Range', 'Out of Range', 'Lost'], 
+        enum: ['In Range', 'Out of Range', 'Out of Coverage'], 
         default: 'In Range' 
     },
     user_id: { 
