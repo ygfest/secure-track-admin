@@ -3,6 +3,7 @@
 import { FiUser } from "react-icons/fi";
 import { Link } from "react-router-dom";
 Link;
+import { SiVite } from "react-icons/si";
 
 export default function Home() {
   return (
@@ -114,7 +115,18 @@ export default function Home() {
 
       <section className="h-[500px]"></section>
 
-      <footer></footer>
+      <footer className="w-full">
+        <div className="pt-12 pb-4 flex flex-col gap-8">
+          <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">
+            <p> Design and Built by Stefano San Esteban</p>
+            <p>Powered by</p>
+            <SiVite className="size-8 text-primary" />
+          </div>
+          <p className="text-sm text-textMuted/60 md:text-left text-center">
+            This wep app is still under testing
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }
