@@ -56,10 +56,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Flow of cards section */}
       <section className="relative flex w-full justify-center py-[4rem]">
-        <div className="absolute right-0 top-0 z-0 h-[350px] w-[300px] rounded-bl-[8rem] rounded-tl-[8rem] bg-white/10 backdrop-blur-lg border border-white/20 md:h-[500px] md:w-[450px]" />
-        <div className="absolute -bottom-10 -left-[18rem] z-0 h-[500px] w-[500px] rounded-full bg-white/10 backdrop-blur-lg border border-white/20 md:h-[600px] md:w-[600px]" />
+        {/* Flow of cards */}
+        <div className="w-[90%] max-w-[1200px]">
+          {/* Cards Container with Animation */}
+          <div className="flex gap-4 justify-center items-center overflow-x-auto snap-x snap-mandatory scroll-smooth">
+            {[
+              { title: "Real-time Location Tracking", image: "/location.svg" },
+              { title: "Intrusion Monitoring", image: "/intrusion.svg" },
+              { title: "Fall Detection", image: "/fall.svg" },
+              { title: "Temperature Monitoring", image: "/temp.svg" },
+              { title: "Geofencing", image: "/geofence.svg" },
+              { title: "Reporting Feature", image: "/reporting.svg" },
+            ].map((card, idx) => (
+              <div
+                key={idx}
+                className="relative h-[380px] w-[500px] flex-shrink-0 snap-center overflow-hidden rounded-xl bg-[#F5F5F5] shadow-sm transition-transform duration-300 ease-in-out transform hover:scale-105"
+              >
+                <div className="absolute left-5 top-5 z-20 space-y-1">
+                  <p className="text-[1.1rem] font-bold text-[#3B3F3F]">
+                    {card.title}
+                  </p>
+                  <img src={card.image} alt={card.title} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      <section className="relative flex w-full justify-center py-[4rem]">
         {/* 2nd Section Container */}
         <div className=" w-[90%] max-w-[1200px]">
           {/* Cards Container */}

@@ -493,7 +493,7 @@ const DashBoard = () => {
           </div>
           <div className="card bg-white shadow-md p-4 rounded-lg h-96">
             <div className="card-body">
-              <h2 className="text-xl font-bold">Fall History or Timeline</h2>
+              <h2 className="text-xl font-bold">Fall History</h2>
               <div className="h-full">
                 <Bar options={fallChartOptions} data={fallChartData} />
               </div>
