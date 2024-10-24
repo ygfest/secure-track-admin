@@ -23,7 +23,7 @@ app.use(cookieParser());
 // Routes
 app.use('/auth', UserRouter);
 app.use('/luggage-router', LuggageRouter);
-app.use('/api/uploadthing', createRouteHandler({ router: uploadRouter, config: {} }));
+app.use('/api/uploadthing', uploadRouter);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_STRING, {
@@ -133,6 +133,7 @@ ref.on('child_removed', async (snapshot) => {
         console.error('Error removing data from MongoDB:', error);
     }
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

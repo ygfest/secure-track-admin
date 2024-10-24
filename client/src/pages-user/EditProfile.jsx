@@ -124,6 +124,33 @@ const EditProfile = ({ userProfile }) => {
     }
   };
 
+  // Upload image using Axios
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await Axios.post(
+          `${apiUrl}/api/uploadthing/image`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setNewProfilePhoto(response.data.url); // Update state with the new profile photo URL
+        toast.success("Profile photo uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        toast.error("Error uploading image");
+      }
+    }
+  };
+
   return (
     <>
       <Toaster
@@ -145,7 +172,7 @@ const EditProfile = ({ userProfile }) => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handlePhotoChange}
+                  onChange={handleImageUpload}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
               </div>
@@ -308,7 +335,7 @@ const EditProfile = ({ userProfile }) => {
 
         {showDeleteConfirmation && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold">Confirm Deletion</h3>
               <p>Are you sure you want to delete your account?</p>
               <div className="modal-action">
