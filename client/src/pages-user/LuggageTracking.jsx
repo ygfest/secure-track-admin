@@ -290,7 +290,9 @@ const LuggageTracking = () => {
       toast.success("Geofence statuses are up to date");
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
-      toast.error("Please refresh to get the up to date geofencing status");
+      toast.error(
+        "Please turn on location and refresh the page to get the updated geofencing status"
+      );
     }
   };
 
