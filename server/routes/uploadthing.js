@@ -1,28 +1,13 @@
 const express = require('express');
 const multer = require('multer'); // For handling multipart/form-data
-const { createUploadthing } = require('uploadthing/express');
+const { UTApi, UTFile } = require('uploadthing/server');
 const dotenv = require('dotenv');
 
 dotenv.config(); // Load environment variables
 
-// Initialize Uploadthing with the token from .env
-const f = createUploadthing({
+// Initialize Uploadthing API
+const utapi = new UTApi({
   apiKey: process.env.UPLOADTHING_TOKEN, // Use the token from the environment
-});
-
-// Create a FileRouter
-const uploadRouter = f({
-  imageUploader: {
-    image: {
-      maxFileSize: '4MB',
-      maxFileCount: 4,
-    },
-  },
-});
-
-// Define the onUploadComplete callback
-uploadRouter.onUploadComplete((data) => {
-  console.log('Upload completed:', data);
 });
 
 // Create an Express router
@@ -36,17 +21,26 @@ router.post('/image', upload.single('file'), async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    // Ensure you access the correct upload method from the router
-    const uploadResponse = await uploadRouter.imageUploader.upload(req.file.buffer, {
-      fileName: req.file.originalname, // Pass the original filename
-    });
+    // Create a new UTFile instance from the uploaded file
+    const fileToUpload = new UTFile([req.file.buffer], req.file.originalname);
+
+    // Upload the file using the Uploadthing API
+    const uploadResponse = await utapi.uploadFiles([fileToUpload]);
+
+    console.log("Upload Response:", uploadResponse); // Log the full response for inspection
 
     // Extract the URL from the response
-    const uploadedPictureUrl = uploadResponse.fileUrl;
+    const uploadedPictureUrl = uploadResponse[0]?.data?.url; // Corrected line to access the URL
 
-    res.status(200).json({ url: uploadedPictureUrl });
+    if (uploadedPictureUrl) {
+      res.status(200).json({ url: uploadedPictureUrl });
+      console.log("Uploaded Picture URL:", uploadedPictureUrl);
+    } else {
+      console.error("File URL is undefined in upload response.");
+      res.status(500).json({ message: 'File uploaded but URL is undefined' });
+    }
   } catch (error) {
-    console.error('Error uploading image:', error); // Log the full error object
+    console.error('Error uploading image:', error);
     res.status(500).json({ message: 'Error uploading image', error: error.message });
   }
 });
