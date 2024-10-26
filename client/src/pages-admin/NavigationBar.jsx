@@ -42,6 +42,10 @@ const NavigationBar = () => {
     setIsSeenNotifications,
     currentLink,
     setCurrentLink,
+    usersData,
+    setUsersData,
+    notifications,
+    addNotification,
   } = useAdminNavBarContext();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
@@ -89,33 +93,19 @@ const NavigationBar = () => {
       });
   };
 
-  const getAlertIcon = (alertType) => {
-    switch (alertType) {
-      case "High Temperature":
-      case "Low Temperature":
-        return <FaThermometerHalf className="text-primary text-2xl mr-2" />;
-      case "Fall Detected":
-        return <FaExclamationTriangle className="text-primary text-2xl mr-2" />;
-      case "Tamper Detected":
-        return <FaShieldAlt className="text-primary text-2xl mr-2" />;
-      default:
-        return <FaLock className="text-primary text-2xl mr-2" />;
-    }
-  };
-
-  const getAlertColor = (alertType) => {
-    switch (alertType) {
-      case "High Temperature":
-        return "badge-danger";
-      case "Low Temperature":
-        return "badge-warning";
-      case "Fall Detected":
-        return "badge-info";
-      case "Tamper Detected":
-        return "badge-danger";
-      default:
-        return "badge-primary";
-    }
+  const renderNotifications = () => {
+    return notifications
+      .sort((a, b) => b.timestamp - a.timestamp) // Sort by timestamp descending
+      .map((notification, index) => (
+        <div key={index} className="card w-full bg-[#f2f5f8] shadow-xl mb-2">
+          <div className="card-body flex items-start">
+            <h4 className="card-title text-base">{notification.message}</h4>
+            <p className="text-xs text-gray-500">
+              {formatDate(notification.timestamp)}
+            </p>
+          </div>
+        </div>
+      ));
   };
 
   const handleNotifClick = () => {
@@ -385,7 +375,7 @@ const NavigationBar = () => {
             className="overflow-y-auto"
             style={{ maxHeight: "400px", overflowX: "hidden" }}
           >
-            {/* {renderNotifications()}*/}
+            {renderNotifications()}
           </div>
         </div>
       )}

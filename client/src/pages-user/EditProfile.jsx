@@ -167,7 +167,7 @@ const EditProfile = ({ userProfile }) => {
           <form className="space-y-4" onSubmit={handleUpdateProfile}>
             <h3 className="text-xl font-bold">Edit Profile</h3>
             <div className="mx-auto mb-4 flex flex-col items-center">
-              <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative">
+              <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative hover:bg-zinc-100 transition-all">
                 {newProfilePhoto && (
                   <img
                     src={newProfilePhoto}
@@ -292,7 +292,7 @@ const EditProfile = ({ userProfile }) => {
                       confirmPassword: e.target.value,
                     })
                   }
-                  placeholder="Confirm New Password"
+                  placeholder="Re-enter Password"
                   className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 {isConfirmPasswordVisible ? (
@@ -307,40 +307,38 @@ const EditProfile = ({ userProfile }) => {
                   />
                 )}
               </div>
+
               <button
                 type="submit"
-                className="w-full bg-secondary text-white py-2 rounded-md hover:bg-secondary-dark transition-all"
+                className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition-all"
               >
                 Reset Password
-              </button>
-              <button
-                onClick={() => setResetPassMode(false)}
-                type="button"
-                className="w-full border border-gray-300 py-2 rounded-md hover:bg-gray-100 transition-all"
-              >
-                Cancel
               </button>
             </form>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-            <h3 className="text-xl font-bold">Account Settings</h3>
-            <div className="flex justify-between items-center">
-              <button
-                onClick={() => setResetPassMode(true)}
-                className="text-blue-500 hover:underline"
-              >
-                Reset Password
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirmation(true)}
-                className="text-red-500 hover:underline"
-              >
-                Delete Account
-              </button>
-            </div>
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setResetPassMode((prevState) => !prevState)}
+              className="flex items-center gap-2 text-primary bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
+            >
+              <FiSettings className="text-lg" />
+              <span>Reset Password</span>
+            </button>
           </div>
         )}
+
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center mt-6">
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirmation(true)}
+            className="flex items-center gap-2 text-red-500 bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
+          >
+            <MdOutlineDeleteOutline className="text-lg" />
+            <span>Delete Account</span>
+          </button>
+        </div>
 
         {showDeleteConfirmation && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
