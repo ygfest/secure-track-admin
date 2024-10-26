@@ -172,7 +172,7 @@ const EditProfile = ({ userProfile }) => {
           <form className="space-y-4" onSubmit={handleUpdateProfile}>
             <h3 className="text-xl font-bold">Edit Profile</h3>
             <div className="mx-auto mb-4 flex flex-col items-center">
-              <div className="w-24 h-24 rounded-full bg-white flex z-20 items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative hover:bg-zinc-100 transition-all">
+              <div className="w-24 h-24 rounded-full bg-white flex z-[20] items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative hover:bg-zinc-100 transition-all">
                 {newProfilePhoto && (
                   <>
                     <img
