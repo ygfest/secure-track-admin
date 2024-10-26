@@ -42,10 +42,7 @@ const NavigationBar = () => {
     setIsSeenNotifications,
     currentLink,
     setCurrentLink,
-    usersData,
-    setUsersData,
     notifications,
-    addNotification,
   } = useAdminNavBarContext();
 
   const toggleSideBar = () => setIsOpen(!isOpen);

@@ -2,42 +2,66 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const Luggage = require('../models/Luggage');
-const Report = require('../models/Report');
+const Luggage = require('../models/Luggage'); // Not currently used
+const Report = require('../models/Report'); // Not currently used
+const EventEmitter = require('events');
 
 const router = express.Router();
+const notificationEmitter = new EventEmitter(); // Initialize the event emitter
 
+// Middleware to verify user token
 const verifyUser = (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({ status: false, message: "No token" });
     }
+
     const decoded = jwt.verify(token, process.env.KEY);
     if (!decoded.id) {
       return res.status(401).json({ status: false, message: "Invalid token payload" });
     }
-    req.user = decoded;
+
+    req.user = decoded; // Attach user info to the request object
     next();
   } catch (err) {
     return res.status(401).json({ status: false, message: "Invalid token" });
   }
 };
 
+// Route to verify user and return user data
 router.get('/verify', verifyUser, async (req, res) => {
   try {
     const user = await User.findOne({ email: req.user.email });
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname,role: user.role, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt, phone: user.phone, googleId: user.googleId} });
+
+    return res.json({
+      status: true,
+      message: "Authorized",
+      user: {
+        firstname: user.firstname,
+        email: user.email,
+        lastname: user.lastname,
+        role: user.role,
+        userID: user._id,
+        latitude: user.latitude,
+        longitude: user.longitude,
+        profile_dp: user.profile_dp,
+        loggedInAt: user.loggedInAt,
+        createdAt: user.createdAt,
+        phone: user.phone,
+        googleId: user.googleId
+      }
+    });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
   }
 });
 
+// Route to get all users
 router.get('/users', async (req, res) => {
   try {
     const users = await User.find();
@@ -48,18 +72,19 @@ router.get('/users', async (req, res) => {
   }
 });
 
-
+// Route for user registration
 router.post('/signup', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
 
   try {
+    // Check if the user already exists
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
     user = new User({
       firstname,
       lastname,
@@ -68,12 +93,13 @@ router.post('/signup', async (req, res) => {
       role: 'user',
     });
 
+    // Save the new user
     await user.save();
 
+    // Generate JWT token
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.KEY, { expiresIn: '60m' });
 
-    console.log("Generated Token (Signup):", token);
-
+    // Set cookie with token
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
@@ -81,12 +107,29 @@ router.post('/signup', async (req, res) => {
       sameSite: 'None',
     });
 
-    return res.status(201).json({ status: true, message: "User registered successfully", token, user: {email: user.email, role: user.role} });
+    // Emit new user registration event
+    notificationEmitter.emit('newUser', {
+      firstname,
+      lastname,
+      createdAt: user.createdAt,
+    });
+
+    return res.status(201).json({
+      status: true,
+      message: "User registered successfully",
+      token,
+      user: {
+        email: user.email,
+        role: user.role
+      }
+    });
   } catch (error) {
     console.error("Error registering user:", error);
     return res.status(500).json({ message: "Server error" });
   }
 });
+
+
 
 router.post('/admin-user-register', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;

@@ -8,44 +8,45 @@ export const useAdminNavBarContext = () => useContext(AdminNavBarContext);
 export const AdminNavBarProvider = ({ children }) => {
   const [isSeenNotifications, setIsSeenNotifications] = useState(true);
   const [currentLink, setCurrentLink] = useState("/admin/");
-  const [usersData, setUsersData] = useState([]);
-  const [notifications, setNotifications] = useState([]); // State for notifications
+  const [notifications, setNotifications] = useState([]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  const addNotification = (message) => {
+    setNotifications((prev) => [
+      ...prev,
+      { message, timestamp: new Date().toISOString() },
+    ]);
+  };
+
   useEffect(() => {
-    const fetchUsersData = async () => {
+    const fetchNewRegUsers = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/auth/users`);
-        const newUsersData = response.data;
+        // Fetch from standard signup endpoint
+        const responseSignup = await axios.get(`${apiUrl}/auth/signup`);
+        const newUsersSignup = responseSignup.data;
 
-        // Check if a new user has been added
-        if (usersData.length < newUsersData.length) {
-          // Get the last user (assumes the API returns users in order of creation)
-          const newUser = newUsersData[newUsersData.length - 1];
-          addNotification(newUser); // Call addNotification with the new user
-        }
+        // Fetch from Google signup endpoint
+        const responseGoogleSignup = await axios.get(
+          `${apiUrl}/auth/save-google-user`
+        );
+        const newUsersGoogleSignup = responseGoogleSignup.data;
 
-        setUsersData(newUsersData);
+        // Combine all users
+        const allNewUsers = [...newUsersSignup, ...newUsersGoogleSignup];
+
+        allNewUsers.forEach((user) => {
+          const fullName = `${user.firstname} ${user.lastname}`;
+          const createdAt = new Date(user.createdAt).toLocaleString();
+          addNotification(`New account created: ${fullName} on ${createdAt}`);
+        });
       } catch (error) {
         console.error("Error fetching users data:", error);
       }
     };
 
-    fetchUsersData();
-  }, [usersData.length]); // Dependency array with usersData.length
-
-  // Function to create notifications
-  const addNotification = (newUser) => {
-    const { firstname, lastname, role, createdAt } = newUser; // Get createdAt here if needed
-    setNotifications((prev) => [
-      ...prev,
-      {
-        message: `${firstname} ${lastname} has registered as ${role}`,
-        timestamp: new Date(createdAt), // Use createdAt timestamp
-      },
-    ]);
-  };
+    fetchNewRegUsers();
+  }, []);
 
   return (
     <AdminNavBarContext.Provider
@@ -54,10 +55,7 @@ export const AdminNavBarProvider = ({ children }) => {
         setIsSeenNotifications,
         currentLink,
         setCurrentLink,
-        usersData,
-        setUsersData,
-        notifications, // Add notifications to the context
-        addNotification, // Provide the function to add notifications
+        notifications,
       }}
     >
       {children}

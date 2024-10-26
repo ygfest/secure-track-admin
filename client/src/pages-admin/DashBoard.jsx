@@ -61,7 +61,7 @@ const DashBoard = () => {
     // Fetch luggage info (if needed)
     const fetchLuggageInfo = async () => {
       const apiUrl = import.meta.env.VITE_API_URL;
-      const res = await axios.get(`${apiUrl}/luggage`);
+      const res = await axios.get(`${apiUrl}/luggage-router/luggage-admin`);
       setLuggageInfo(res.data);
     };
     fetchLuggageInfo();

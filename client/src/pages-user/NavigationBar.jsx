@@ -78,19 +78,6 @@ const NavigationBar = () => {
     verifyToken();
   }, [navigate]);
 
-  useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/luggage`);
-        setLuggageInfo(response.data);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
-    fetchLuggageInfo();
-  }, []);
-
   const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
     axios

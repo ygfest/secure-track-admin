@@ -23,6 +23,9 @@ import EditProfile from "./pages-user/EditProfile";
 import AdminLayout from "./pages-admin/AdminLayout";
 import UserLayout from "./pages-user/UserLayout";
 
+import { AdminNavBarProvider } from "./context/AdminNavBarContext";
+import { UserNotifProvider } from "./context/UserNotifContext";
+
 const AppRoutes = ({ loadingBarRef }) => {
   const location = useLocation();
 
@@ -50,31 +53,35 @@ const AppRoutes = ({ loadingBarRef }) => {
 
 const AdminRoutes = () => {
   return (
-    <Routes>
-      <Route element={<AdminLayout />}>
-        <Route path="/" element={<ADashBoard />} />
-        <Route path="/luggage" element={<AdminAssocLuggage />} />
-        <Route path="/user-management" element={<UserManagement />} />
-        <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
-        <Route path="/reports" element={<AdminReports />} />
-        <Route path="/profile" element={<AdminProfile />} />
-      </Route>
-      <Route path="/tracking" element={<AdminLuggageTracking />} />
-    </Routes>
+    <AdminNavBarProvider>
+      <Routes>
+        <Route element={<AdminLayout />}>
+          <Route path="/" element={<ADashBoard />} />
+          <Route path="/luggage" element={<AdminAssocLuggage />} />
+          <Route path="/user-management" element={<UserManagement />} />
+          <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
+          <Route path="/reports" element={<AdminReports />} />
+          <Route path="/profile" element={<AdminProfile />} />
+        </Route>
+        <Route path="/tracking" element={<AdminLuggageTracking />} />
+      </Routes>
+    </AdminNavBarProvider>
   );
 };
 
 const UserRoutes = () => {
   return (
-    <Routes>
-      <Route element={<UserLayout />}>
-        <Route path="/" element={<UserDashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/edit" element={<EditProfile />} />
-        <Route path="/luggage" element={<AssocLuggage />} />
-      </Route>
-      <Route path="/tracking" element={<LuggageTracking />} />
-    </Routes>
+    <UserNotifProvider>
+      <Routes>
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<UserDashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/luggage" element={<AssocLuggage />} />
+        </Route>
+        <Route path="/tracking" element={<LuggageTracking />} />
+      </Routes>
+    </UserNotifProvider>
   );
 };
 
