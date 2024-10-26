@@ -7,6 +7,7 @@ import { CiCamera } from "react-icons/ci";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { FiSettings } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
 
 const EditProfile = ({ userProfile }) => {
   const navigate = useNavigate();
@@ -110,6 +111,10 @@ const EditProfile = ({ userProfile }) => {
     setNewProfilePhoto(e.target.files[0]);
   };
 
+  const handleRemovePhoto = () => {
+    setNewProfilePhoto(null);
+  };
+
   const handleDeleteAccount = async () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     try {
@@ -167,13 +172,21 @@ const EditProfile = ({ userProfile }) => {
           <form className="space-y-4" onSubmit={handleUpdateProfile}>
             <h3 className="text-xl font-bold">Edit Profile</h3>
             <div className="mx-auto mb-4 flex flex-col items-center">
-              <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative hover:bg-zinc-100 transition-all">
+              <div className="w-24 h-24 rounded-full bg-white flex z-50 items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative hover:bg-zinc-100 transition-all">
                 {newProfilePhoto && (
-                  <img
-                    src={newProfilePhoto}
-                    alt="Profile Preview"
-                    className="w-full h-full rounded-full"
-                  />
+                  <>
+                    <img
+                      src={newProfilePhoto}
+                      alt="Profile Preview"
+                      className="w-full h-full rounded-full"
+                    />
+                    <button
+                      className="btn-ghost absolute rounded-full bg-zinc-50 p-1 -right-3 top-0 z-20 text-[1.3rem]"
+                      onClick={handleRemovePhoto}
+                    >
+                      <IoClose />
+                    </button>
+                  </>
                 )}
                 <CiCamera className="absolute inset-0 m-auto text-gray-600" />
                 <input
@@ -184,6 +197,7 @@ const EditProfile = ({ userProfile }) => {
                 />
               </div>
             </div>
+
             <input
               type="text"
               value={profileData.firstname}
