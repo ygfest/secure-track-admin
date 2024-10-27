@@ -22,7 +22,7 @@ import greenMarker from "../assets/green_marker.png";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast, Toaster } from "react-toastify";
+import { toast, Toaster } from "sonner";
 import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
 import L from "leaflet";
