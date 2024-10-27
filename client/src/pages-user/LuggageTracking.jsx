@@ -22,7 +22,7 @@ import greenMarker from "../assets/green_marker.png";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast, Toaster } from "react-toastify";
 import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
 import L from "leaflet";
@@ -413,7 +413,15 @@ const LuggageTracking = () => {
   return (
     <>
       <NavBar />
-      <ToastContainer />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            margin: "5px 0",
+          },
+        }}
+      />
 
       <div className="fixed inset-0 w-screen h-screen flex flex-col z-0">
         <div
@@ -421,7 +429,7 @@ const LuggageTracking = () => {
             setClicked((prevClick) => !prevClick);
             setOpenNotif(false);
           }}
-          className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
+          className={`card w-full md:w-[560px] shadow-xl px-0 md:px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
             clicked ? "bottom-0" : "bottom-[-65%]"
           } bg-[#020202a0] backdrop-blur-xl z-[1000] h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer overflow-hidden`}
         >
