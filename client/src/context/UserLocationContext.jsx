@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast, Toaster } from "sonner";
 
 const UserLocationContext = createContext();
 
@@ -36,10 +37,7 @@ export const UserLocationProvider = ({ children }) => {
               longitude,
               isLocationOn: locationStatus,
             });
-            console.log(
-              "Location updated successfully, isLocationOn:",
-              locationStatus
-            );
+            toast.success("Location updated successfully");
           } catch (err) {
             console.error("Error updating location:", err);
           }
@@ -78,6 +76,15 @@ export const UserLocationProvider = ({ children }) => {
   };
   return (
     <UserLocationContext.Provider value={{ isLocationOn, toggleLocation }}>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            margin: "5px 0",
+          },
+        }}
+      />
       {children}
     </UserLocationContext.Provider>
   );
