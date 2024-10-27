@@ -337,7 +337,7 @@ const AdminLuggageTracking = () => {
             ? `<div class="w-10 rounded-full border-3 border-white">
                  <img alt="Profile" src="${profileDp}" />
                </div>`
-            : `<div class="w-[38px] h-[38px] rounded-full flex justify-center items-center border-gray-300 border-3 bg-white text-gray-500 font-poppins text-xl">
+            : `<div class="w-[38px] h-[38px] rounded-full flex justify-center items-center border-gray-300 border-3 bg-white pt-1 text-gray-500 font-poppins text-xl">
                  ${profileName ? profileName.charAt(0).toUpperCase() : ""}
                </div>`
         }
