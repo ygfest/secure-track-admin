@@ -2,67 +2,42 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const Luggage = require('../models/Luggage');
-const Report = require('../models/Report'); 
-const EventEmitter = require('events');
+const Report = require('../models/Report');
 
 const router = express.Router();
-const notificationEmitter = new EventEmitter(); // Initialize the event emitter
 
-// Middleware to verify user token
 const verifyUser = (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({ status: false, message: "No token" });
     }
-
     const decoded = jwt.verify(token, process.env.KEY);
     if (!decoded.id) {
       return res.status(401).json({ status: false, message: "Invalid token payload" });
     }
-
-    req.user = decoded; // Attach user info to the request object
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ status: false, message: "Invalid token" });
   }
 };
 
-// Route to verify user and return user data
 router.get('/verify', verifyUser, async (req, res) => {
   try {
     const user = await User.findOne({ email: req.user.email });
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     }
-
-    return res.json({
-      status: true,
-      message: "Authorized",
-      user: {
-        firstname: user.firstname,
-        email: user.email,
-        lastname: user.lastname,
-        role: user.role,
-        userID: user._id,
-        isLocationOn: user.isLocationOn,
-        latitude: user.latitude,
-        longitude: user.longitude,
-        profile_dp: user.profile_dp,
-        loggedInAt: user.loggedInAt,
-        createdAt: user.createdAt,
-        phone: user.phone,
-        googleId: user.googleId
-      }
-    });
+    return res.json({ status: true, message: "Authorized", user: { firstname: user.firstname, email: user.email, lastname: user.lastname,role: user.role, userID: user._id, latitude: user.latitude, longitude: user.longitude, profile_dp: user.profile_dp, logggedInAt: user.loggedInAt, createdAt: user.createdAt, phone: user.phone, googleId: user.googleId} });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ status: false, message: "Server error" });
   }
 });
 
-// Route to get all users
 router.get('/users', async (req, res) => {
   try {
     const users = await User.find();
@@ -73,18 +48,18 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// Route for user registration
+
+// Import any notification service or use an event emitter here
+const EventEmitter = require('events');
+const notificationEmitter = new EventEmitter();
+
 router.post('/signup', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
-
   try {
-    // Check if the user already exists
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "User already exists" });
     }
-
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new User({
       firstname,
@@ -93,14 +68,10 @@ router.post('/signup', async (req, res) => {
       password: hashedPassword,
       role: 'user',
     });
-
-    // Save the new user
     await user.save();
-
-    // Generate JWT token
+    
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.KEY, { expiresIn: '60m' });
-
-    // Set cookie with token
+    
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
@@ -115,21 +86,12 @@ router.post('/signup', async (req, res) => {
       createdAt: user.createdAt,
     });
 
-    return res.status(201).json({
-      status: true,
-      message: "User registered successfully",
-      token,
-      user: {
-        email: user.email,
-        role: user.role
-      }
-    });
+    return res.status(201).json({ status: true, message: "User registered successfully", token, user: {email: user.email, role: user.role} });
   } catch (error) {
     console.error("Error registering user:", error);
     return res.status(500).json({ message: "Server error" });
   }
 });
-
 
 
 router.post('/admin-user-register', async (req, res) => {
@@ -360,27 +322,25 @@ router.put('/update-location', verifyUser, async (req, res) => {
   const { latitude, longitude, isLocationOn } = req.body;
   const userId = req.user.id; // Extracted from the verified token
 
-  console.log("Received isLocationOn:", isLocationOn);
+  console.log("Updating location for user ID:", userId); // Add this line to log the userId
 
   if (!userId) {
     return res.status(400).json({ status: 'error', message: 'User ID is missing' });
   }
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(userId, {
+    await User.findByIdAndUpdate(userId, {
       latitude,
       longitude,
-      isLocationOn
-    }, { new: true });
+      isLocationOn,
+    }, {new: true});
 
-    console.log("Updated user's isLocationOn in DB:", updatedUser.isLocationOn);
     res.json({ status: 'success', message: 'Location updated successfully' });
   } catch (error) {
     console.error('Failed to update location:', error);
     res.status(500).json({ status: 'error', message: 'Failed to update location' });
   }
 });
-
 
 router.delete('/delete-location', verifyUser, async (req, res) => {
   const userId = req.user.id;
