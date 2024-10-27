@@ -2,8 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const Luggage = require('../models/Luggage'); // Not currently used
-const Report = require('../models/Report'); // Not currently used
+const Luggage = require('../models/Luggage');
+const Report = require('../models/Report'); 
 const EventEmitter = require('events');
 
 const router = express.Router();
@@ -46,6 +46,7 @@ router.get('/verify', verifyUser, async (req, res) => {
         lastname: user.lastname,
         role: user.role,
         userID: user._id,
+        isLocationOn: user.isLocationOn,
         latitude: user.latitude,
         longitude: user.longitude,
         profile_dp: user.profile_dp,
@@ -356,8 +357,9 @@ router.get('/logout', (req, res) => {
 });
 
 router.post('/update-location', verifyUser, async (req, res) => {
-  const { latitude, longitude } = req.body;
+  const { latitude, longitude, isLocationOn } = req.body;
   const userId = req.user.id; // Extracted from the verified token
+  console.log(req.body)
 
   console.log("Updating location for user ID:", userId); // Add this line to log the userId
 
@@ -369,6 +371,7 @@ router.post('/update-location', verifyUser, async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       latitude,
       longitude,
+      isLocationOn,
     });
 
     res.json({ status: 'success', message: 'Location updated successfully' });

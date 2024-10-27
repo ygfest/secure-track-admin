@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { boolean } = require('zod');
 
 const userSchema = new mongoose.Schema({
   firstname: {
@@ -38,6 +39,10 @@ const userSchema = new mongoose.Schema({
   },
   profile_dp: {
     type: String, 
+  },
+  isLocationOn: {
+    type: Boolean,
+    default: false,
   },
   latitude: {
     type: Number,

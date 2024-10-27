@@ -26,7 +26,7 @@ const NavBar = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, toggleLocation } = useLocation();
+  const [isLocationOn, setIsLocationOn] = useState(false);
   const {
     tamperData,
     fallDetectData,
@@ -57,6 +57,7 @@ const NavBar = () => {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
           setProfileLastName(response.data.user.lastname);
+          setIsLocationOn(response.data.user.isLocationOn);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -180,6 +181,10 @@ const NavBar = () => {
 
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
 
+  const toggleLocation = () => {
+    setIsLocationOn(true);
+  };
+
   // Manage location update interval
   useEffect(() => {
     let locationInterval = null;
@@ -190,7 +195,11 @@ const NavBar = () => {
           (position) => {
             const { latitude, longitude } = position.coords;
             axios
-              .post(`${apiUrl}/auth/update-location`, { latitude, longitude })
+              .post(`${apiUrl}/auth/update-location`, {
+                latitude,
+                longitude,
+                isLocationOn,
+              })
               .then((res) => {
                 console.log("Location updated successfully:", res.data);
               })
@@ -221,10 +230,6 @@ const NavBar = () => {
       }
     };
   }, [isLocationOn]);
-
-  const handleLocationToggle = () => {
-    toggleLocation();
-  };
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
@@ -343,7 +348,7 @@ const NavBar = () => {
             type="checkbox"
             className="toggle toggle-primary ml-1"
             checked={isLocationOn}
-            onChange={handleLocationToggle}
+            onChange={toggleLocation}
           />
         </label>
 
