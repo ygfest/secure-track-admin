@@ -336,7 +336,7 @@ const AdminLuggageTracking = () => {
       <div className="fixed inset-0 w-screen h-screen z-0">
         <div
           onClick={() => setClicked((prevClick) => !prevClick)}
-          className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
+          className={`card w-full md:w-[560px] shadow-xl px-0 md:px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
             clicked ? "bottom-0" : "bottom-[-65%]"
           } bg-[#020202a0] backdrop-blur-xl h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer overflow-hidden`}
           style={{ zIndex: 1000 }}
