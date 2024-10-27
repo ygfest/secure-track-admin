@@ -54,6 +54,7 @@ export const UserLocationProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    fetchLocationStatus();
     let locationInterval = null;
     if (isLocationOn) {
       updateLocation(isLocationOn); // Initial location update
