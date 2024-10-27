@@ -104,6 +104,9 @@ const LuggageTracking = () => {
   const navigate = useNavigate();
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
+  const [profileDp, setProfileDp] = useState("");
+  const [profileName, setProfileName] = useState("");
+  const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 200;
@@ -124,6 +127,9 @@ const LuggageTracking = () => {
           navigate("/sign-in");
         } else {
           setUserId(response.data.user.userID);
+          setProfileDp(response.data.user.profile_dp);
+          setProfileName(response.data.user.firstname);
+          setProfileLastName(response.data.user.lastname);
           setCurrentUserLat(Number(response.data.user.latitude));
           setCurrentUserLong(Number(response.data.user.longitude));
         }
@@ -407,6 +413,24 @@ const LuggageTracking = () => {
     return null; // Component does not render anything
   };
 
+  const userIcon = L.divIcon({
+    html: `
+      <div class="btn btn-circle avatar relative flex items-center justify-center">
+        ${
+          profileDp
+            ? `<div class="w-10 rounded-full border-3 border-white">
+                 <img alt="Profile" src="${profileDp}" />
+               </div>`
+            : `<div class="w-[38px] h-[38px] rounded-full flex justify-center items-center border-gray-300 border-3 bg-white text-gray-500 font-poppins text-xl">
+                 ${profileName ? profileName.charAt(0).toUpperCase() : ""}
+               </div>`
+        }
+        <div class="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-gray-300"></div>
+      </div>`,
+    className: "",
+    iconSize: [30, 30],
+  });
+
   console.log(`ISONLOCATION DEBUG: ${isLocationOn}`);
   console.log(currentUserLat);
 
@@ -573,7 +597,11 @@ const LuggageTracking = () => {
             currentUserLat !== null &&
             currentUserLong !== null && (
               <>
-                <Marker position={position}>
+                <Marker
+                  position={position}
+                  icon={userIcon}
+                  zIndexOffset={100000}
+                >
                   <Popup>
                     You are here <br />
                   </Popup>
