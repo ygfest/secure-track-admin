@@ -214,7 +214,7 @@ const NavigationBar = () => {
 
   return (
     <>
-      <div className="navbar-container bg-base-100 h-16 z-10 shadow-sm relative bordered">
+      <div className="navbar-container bg-base-100 h-16 z-30 shadow-sm relative bordered">
         <div className="navbar bg-base-100 h-16 fixed">
           <div className="flex-none">
             <button

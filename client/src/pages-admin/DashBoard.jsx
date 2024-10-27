@@ -88,7 +88,7 @@ const DashBoard = () => {
     (user) => user.status === "Offline"
   ).length;
 
-  const tempChartData = {
+  const userActChartData = {
     labels: ["Active", "Inactive", "Offline"],
     datasets: [
       {
@@ -103,8 +103,9 @@ const DashBoard = () => {
     ],
   };
 
-  const tempChartOptions = {
+  const userActChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -119,6 +120,14 @@ const DashBoard = () => {
             return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
           },
         },
+      },
+    },
+    layout: {
+      padding: {
+        top: 10,
+        left: 5,
+        right: 5,
+        bottom: 10,
       },
     },
   };
@@ -269,7 +278,9 @@ const DashBoard = () => {
           <div className="card bg-white shadow-md p-4 rounded-lg h-96">
             <div className="card-body h-full">
               <h2 className="text-xl font-bold">Users Activity</h2>
-              <Bar data={tempChartData} options={tempChartOptions} />
+              <div className="relative h-full w-full">
+                <Bar data={userActChartData} options={userActChartOptions} />
+              </div>
             </div>
           </div>
 
