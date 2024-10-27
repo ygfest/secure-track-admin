@@ -70,52 +70,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
 
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
 
-  // Manage location update interval
-  useEffect(() => {
-    let locationInterval = null;
-
-    const updateLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            axios
-              .post(`${apiUrl}/auth/update-location`, { latitude, longitude })
-              .then((res) => {
-                console.log("Location updated successfully:", res.data);
-              })
-              .catch((err) => {
-                console.error("Error updating location:", err);
-              });
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-          }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
-    };
-
-    if (isLocationOn) {
-      updateLocation(); // Initial location update
-      locationInterval = setInterval(updateLocation, 60000); // Update every minute
-    } else if (locationInterval) {
-      clearInterval(locationInterval);
-      locationInterval = null;
-    }
-
-    return () => {
-      if (locationInterval) {
-        clearInterval(locationInterval);
-      }
-    };
-  }, [isLocationOn]);
-
-  const handleLocationToggle = () => {
-    toggleLocation();
-  };
-
   return (
     <>
       <div
@@ -250,7 +204,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
               type="checkbox"
               className="toggle toggle-primary ml-1"
               checked={isLocationOn}
-              onChange={handleLocationToggle}
+              onChange={toggleLocation}
             />
           </label>
 

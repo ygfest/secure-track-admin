@@ -54,17 +54,22 @@ const AppRoutes = ({ loadingBarRef }) => {
 const AdminRoutes = () => {
   return (
     <AdminNavBarProvider>
-      <Routes>
-        <Route element={<AdminLayout />}>
-          <Route path="/" element={<ADashBoard />} />
-          <Route path="/luggage" element={<AdminAssocLuggage />} />
-          <Route path="/user-management" element={<UserManagement />} />
-          <Route path="/reports-analytics" element={<ReportsAnalyticsPage />} />
-          <Route path="/reports" element={<AdminReports />} />
-          <Route path="/profile" element={<AdminProfile />} />
-        </Route>
-        <Route path="/tracking" element={<AdminLuggageTracking />} />
-      </Routes>
+      <UserLocationProvider>
+        <Routes>
+          <Route element={<AdminLayout />}>
+            <Route path="/" element={<ADashBoard />} />
+            <Route path="/luggage" element={<AdminAssocLuggage />} />
+            <Route path="/user-management" element={<UserManagement />} />
+            <Route
+              path="/reports-analytics"
+              element={<ReportsAnalyticsPage />}
+            />
+            <Route path="/reports" element={<AdminReports />} />
+            <Route path="/profile" element={<AdminProfile />} />
+          </Route>
+          <Route path="/tracking" element={<AdminLuggageTracking />} />
+        </Routes>
+      </UserLocationProvider>
     </AdminNavBarProvider>
   );
 };
