@@ -26,7 +26,6 @@ import { toast, Toaster } from "sonner";
 import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
 import L from "leaflet";
-import { ZodNull } from "zod";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
