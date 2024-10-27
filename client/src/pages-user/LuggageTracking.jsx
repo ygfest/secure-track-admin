@@ -415,17 +415,86 @@ const LuggageTracking = () => {
       <NavBar />
       <ToastContainer />
 
-      <div className="flex-grow relative w-full h-full z-0 lg:rounded">
+      <div className="fixed inset-0 w-screen h-screen flex flex-col z-0">
+        <div
+          onClick={() => {
+            setClicked((prevClick) => !prevClick);
+            setOpenNotif(false);
+          }}
+          className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
+            clicked ? "bottom-0" : "bottom-[-65%]"
+          } bg-[#020202a0] backdrop-blur-xl z-[1000] h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer overflow-hidden`}
+        >
+          <div className="block md:hidden mx-auto my-2">
+            {clicked ? <FaChevronDown /> : <FaChevronUp />}
+          </div>
+          <div className="card-header p-2 pl-8 pt-0 mt-0 mb-2">
+            <h2 className="card-title justify-center md:justify-normal text-md md:text-lg">
+              Luggage Details
+            </h2>
+          </div>
+          <div className="card-body overflow-y-auto h-full pt-2 gap-3">
+            {luggageDeets.map((luggageDeet, index) => (
+              <div
+                key={luggageDeet._id}
+                ref={(el) => (itemRefs.current[index] = el)}
+                className={`p-4 bg-[#403e3ea3] ${
+                  luggageDeet === selectedMarker
+                    ? "border-2 border-white scale-105"
+                    : ""
+                } hover:scale-105 transition rounded-[7px] flex flex-col gap-1 cursor-pointer`}
+                onClick={() => handleMarkerClick(luggageDeet, index)}
+              >
+                <div className="flex items-center justify-between">
+                  <h4 className=" text-lg font-poppins font-semibold max-w-[20px]:">
+                    {luggageDeet.luggage_custom_name}
+                  </h4>
+                  <div className="badge badge-primary badge-lg  text-white text-xs rounded-none font-poppins">
+                    <RelativeTime shipmentDate={luggageDeet.timestamps} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-base font-poppins text-[#ffffff8b] font-medium">
+                    {luggageDeet.luggage_tag_number}
+                  </h4>
+                  <div
+                    className={`badge badge-outline text-xs font-poppins ${
+                      luggageDeet.status === "In Range"
+                        ? "text-green-200"
+                        : luggageDeet.status === "Out of Range"
+                        ? "text-yellow-200"
+                        : "text-red-100"
+                    }`}
+                  >
+                    {luggageDeet.status}
+                  </div>
+                </div>
+                <p className="text-xs text-[#ffffff8b]">
+                  At {luggageDeet.currentLocation}
+                </p>
+                <p className="text-xs text-[#ffffff8b]">
+                  {formatStationarySince(luggageDeet.stationary_since)}
+                </p>
+              </div>
+            ))}
+            <div
+              onClick={() => setShowAddModal(true)}
+              className="p-4 bg-[#403e3ea3] hover:scale-105 transition rounded-[7px] flex flex-col gap-1 cursor-pointer text-center text white"
+            >
+              <FaPlusCircle className="text-2xl mx-auto " />
+              <p>Add a new Luggage</p>
+            </div>
+          </div>
+        </div>
         <MapContainer
           center={[14.5092, 121.0144]}
           zoom={13}
-          style={{ height: "100vh", width: "100%" }}
+          style={{ height: "100%", width: "100%" }}
           zoomControl={false}
         >
           <TileLayer
             attribution={`&copy; 
-            <a href="https://www.openstreetmap.org/copyright" className="bg-black text-white">OpenStreetMap</a> 
-                contributors`}
+            developed by <a href="https://www.instagram.com/__sstefano/" className="bg-black text-white z-[1]">Stefano</a>`}
             url={`https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${
               import.meta.env.VITE_STADIA_API_KEY
             }`}
@@ -508,78 +577,6 @@ const LuggageTracking = () => {
                 />
               </>
             )}
-
-          <div
-            onClick={() => {
-              setClicked((prevClick) => !prevClick);
-              setOpenNotif(false);
-            }}
-            className={`card w-full md:w-[560px] shadow-xl px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
-              clicked ? "bottom-0" : "bottom-[-65%]"
-            } bg-[#020202a0] backdrop-blur-xl h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer`}
-            style={{ zIndex: 1000 }}
-          >
-            <div className="block md:hidden mx-auto my-2">
-              {clicked ? <FaChevronDown /> : <FaChevronUp />}
-            </div>
-            <div className="card-header p-2 pl-8 pt-0 mt-0 mb-2">
-              <h2 className="card-title justify-center md:justify-normal text-md md:text-lg">
-                Luggage Details
-              </h2>
-            </div>
-            <div className="card-body overflow-y-auto h-full pt-2 gap-3">
-              {luggageDeets.map((luggageDeet, index) => (
-                <div
-                  key={luggageDeet._id}
-                  ref={(el) => (itemRefs.current[index] = el)}
-                  className={`p-4 bg-[#403e3ea3] ${
-                    luggageDeet === selectedMarker
-                      ? "border-2 border-white scale-105"
-                      : ""
-                  } hover:scale-105 transition rounded-[7px] flex flex-col gap-1 cursor-pointer`}
-                  onClick={() => handleMarkerClick(luggageDeet, index)}
-                >
-                  <div className="flex items-center justify-between">
-                    <h4 className=" text-lg font-poppins font-semibold max-w-[20px]:">
-                      {luggageDeet.luggage_custom_name}
-                    </h4>
-                    <div className="badge badge-primary badge-lg  text-white text-xs rounded-none font-poppins">
-                      <RelativeTime shipmentDate={luggageDeet.timestamps} />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-base font-poppins text-[#ffffff8b] font-medium">
-                      {luggageDeet.luggage_tag_number}
-                    </h4>
-                    <div
-                      className={`badge badge-outline text-xs font-poppins ${
-                        luggageDeet.status === "In Range"
-                          ? "text-green-200"
-                          : luggageDeet.status === "Out of Range"
-                          ? "text-yellow-200"
-                          : "text-red-100"
-                      }`}
-                    >
-                      {luggageDeet.status}
-                    </div>
-                  </div>
-                  <p className="text-xs text-[#ffffff8b]">
-                    At {luggageDeet.currentLocation}
-                  </p>
-                  <p className="text-xs text-[#ffffff8b]">
-                    {formatStationarySince(luggageDeet.stationary_since)}
-                  </p>
-                </div>
-              ))}
-              <div
-                onClick={() => setShowAddModal(true)}
-                className="p-4 bg-[#403e3ea3] hover:scale-105 transition rounded-[7px] flex flex-col gap-1 cursor-pointer text-center text white"
-              >
-                <FaPlusCircle className="text-2xl mx-auto " />
-                <p>Add a new Luggage</p>
-              </div>
-            </div>
-          </div>
 
           {showAddModal && (
             <div

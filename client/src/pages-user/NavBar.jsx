@@ -228,7 +228,7 @@ const NavBar = () => {
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
-    setIsSeenNotifications(true); // Mark notifications as seen
+    setIsSeenNotifications(true);
   };
 
   return (
