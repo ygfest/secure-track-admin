@@ -9,7 +9,7 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import { useLocation } from "../context/LocationContext";
+import { useLocation } from "../context/UserLocationContext";
 import { useAdminNavBarContext } from "../context/AdminNavBarContext";
 
 const NavBar = ({ tempData, tamperData, fallDetectData }) => {

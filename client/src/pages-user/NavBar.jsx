@@ -9,9 +9,9 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import { parse, format } from "date-fns";
-import { useLocation } from "../context/LocationContext";
+import { format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
+import { useLocation } from "../context/UserLocationContext";
 
 const formatDate = (dateObj) => {
   if (!dateObj || isNaN(new Date(dateObj))) {
@@ -26,7 +26,7 @@ const NavBar = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const [isLocationOn, setIsLocationOn] = useState(false);
+  const { isLocationOn, toggleLocation } = useLocation();
   const {
     tamperData,
     fallDetectData,
@@ -39,25 +39,21 @@ const NavBar = () => {
     setOpenNotif,
   } = useUserNotif();
   const navigate = useNavigate();
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   axios.defaults.withCredentials = true;
+
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/verify`, {
           withCredentials: true,
         });
-
-        console.log("Verify token response:", response.data);
-
         if (!response.data.status) {
           navigate("/sign-in");
         } else {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
           setProfileLastName(response.data.user.lastname);
-          setIsLocationOn(response.data.user.isLocationOn);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -66,7 +62,7 @@ const NavBar = () => {
     };
 
     verifyToken();
-  }, [navigate]);
+  }, [navigate, apiUrl]);
 
   const getAlertIcon = (alertType) => {
     switch (alertType) {
@@ -139,7 +135,7 @@ const NavBar = () => {
     return alerts.map((alert, index) => (
       <div
         key={index}
-        className="card w-full bg-zinc-800 bg-base-100 max-h-64 shadow-xl mb-2"
+        className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
       >
         <div className="card-body flex items-start">
           <div className="mr-4">{getAlertIcon(alert.type)}</div>
@@ -162,8 +158,6 @@ const NavBar = () => {
     ));
   };
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-
   const handleLogout = () => {
     axios
       .get(`${apiUrl}/auth/logout`)
@@ -178,58 +172,7 @@ const NavBar = () => {
   };
 
   const toggleSideBar = () => setIsOpen(!isOpen);
-
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
-
-  const toggleLocation = () => {
-    setIsLocationOn((prev) => !prev);
-  };
-
-  // Manage location update interval
-  useEffect(() => {
-    let locationInterval = null;
-
-    const updateLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            axios
-              .post(`${apiUrl}/auth/update-location`, {
-                latitude,
-                longitude,
-                isLocationOn,
-              })
-              .then((res) => {
-                console.log("Location updated successfully:", res.data);
-              })
-              .catch((err) => {
-                console.error("Error updating location:", err);
-              });
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-          }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
-    };
-
-    if (isLocationOn) {
-      updateLocation(); // Initial location update
-      locationInterval = setInterval(updateLocation, 60000); // Update every minute
-    } else if (locationInterval) {
-      clearInterval(locationInterval);
-      locationInterval = null;
-    }
-
-    return () => {
-      if (locationInterval) {
-        clearInterval(locationInterval);
-      }
-    };
-  }, [isLocationOn]);
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
@@ -348,7 +291,7 @@ const NavBar = () => {
             type="checkbox"
             className="toggle toggle-primary ml-1"
             checked={isLocationOn}
-            onChange={toggleLocation}
+            onChange={() => toggleLocation()}
           />
         </label>
 

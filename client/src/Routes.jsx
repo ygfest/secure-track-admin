@@ -25,7 +25,7 @@ import UserLayout from "./pages-user/UserLayout";
 
 import { AdminNavBarProvider } from "./context/AdminNavBarContext";
 import { UserNotifProvider } from "./context/UserNotifContext";
-
+import { UserLocationProvider } from "./context/UserLocationContext";
 const AppRoutes = ({ loadingBarRef }) => {
   const location = useLocation();
 
@@ -72,15 +72,17 @@ const AdminRoutes = () => {
 const UserRoutes = () => {
   return (
     <UserNotifProvider>
-      <Routes>
-        <Route element={<UserLayout />}>
-          <Route path="/" element={<UserDashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/edit" element={<EditProfile />} />
-          <Route path="/luggage" element={<AssocLuggage />} />
-        </Route>
-        <Route path="/tracking" element={<LuggageTracking />} />
-      </Routes>
+      <UserLocationProvider>
+        <Routes>
+          <Route element={<UserLayout />}>
+            <Route path="/" element={<UserDashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/luggage" element={<AssocLuggage />} />
+          </Route>
+          <Route path="/tracking" element={<LuggageTracking />} />
+        </Routes>
+      </UserLocationProvider>
     </UserNotifProvider>
   );
 };

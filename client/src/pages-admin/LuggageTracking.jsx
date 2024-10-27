@@ -23,7 +23,7 @@ import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { useLocation } from "../context/LocationContext";
+import { useLocation } from "../context/UserLocationContext";
 
 const hazardIcon = new Icon({
   iconUrl: hazardPinIcon,

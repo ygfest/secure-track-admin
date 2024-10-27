@@ -356,30 +356,31 @@ router.get('/logout', (req, res) => {
   return res.json({ status: true });
 });
 
-router.post('/update-location', verifyUser, async (req, res) => {
+router.put('/update-location', verifyUser, async (req, res) => {
   const { latitude, longitude, isLocationOn } = req.body;
   const userId = req.user.id; // Extracted from the verified token
-  console.log(req.body)
 
-  console.log("Updating location for user ID:", userId); // Add this line to log the userId
+  console.log("Received isLocationOn:", isLocationOn);
 
   if (!userId) {
     return res.status(400).json({ status: 'error', message: 'User ID is missing' });
   }
 
   try {
-    await User.findByIdAndUpdate(userId, {
+    const updatedUser = await User.findByIdAndUpdate(userId, {
       latitude,
       longitude,
-      isLocationOn,
-    });
+      isLocationOn
+    }, { new: true });
 
+    console.log("Updated user's isLocationOn in DB:", updatedUser.isLocationOn);
     res.json({ status: 'success', message: 'Location updated successfully' });
   } catch (error) {
     console.error('Failed to update location:', error);
     res.status(500).json({ status: 'error', message: 'Failed to update location' });
   }
 });
+
 
 router.delete('/delete-location', verifyUser, async (req, res) => {
   const userId = req.user.id;

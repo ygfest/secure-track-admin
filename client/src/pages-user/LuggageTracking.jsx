@@ -23,9 +23,9 @@ import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
-import { useLocation } from "../context/LocationContext";
 import { useUserNotif } from "../context/UserNotifContext";
 import L from "leaflet";
+import { useLocation } from "../context/UserLocationContext";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -104,7 +104,7 @@ const LuggageTracking = () => {
   const navigate = useNavigate();
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
-  const [isLocationOn, setIsLocationOn] = useState(null);
+  const { isLocationOn } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 200;
   const center = [currentUserLat, currentUserLong];
@@ -126,7 +126,6 @@ const LuggageTracking = () => {
           setUserId(response.data.user.userID);
           setCurrentUserLat(Number(response.data.user.latitude));
           setCurrentUserLong(Number(response.data.user.longitude));
-          setIsLocationOn(response.data.user.isLocationOn);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
