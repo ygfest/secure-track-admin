@@ -15,7 +15,8 @@ export const UserLocationProvider = ({ children }) => {
         const response = await axios.get(`${apiUrl}/auth/verify`, {
           withCredentials: true,
         });
-        setIsLocationOn(response.data.user?.isLocationOn ?? false);
+        setIsLocationOn(response.data.user.isLocationOn);
+        console.log(response.data.user.isLocationOn);
       } catch (error) {
         console.error("Error fetching location status:", error);
       }
