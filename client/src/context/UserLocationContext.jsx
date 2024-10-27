@@ -9,20 +9,17 @@ export const UserLocationProvider = ({ children }) => {
   const [isLocationOn, setIsLocationOn] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const fetchLocationStatus = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-        setIsLocationOn(response.data.user.isLocationOn);
-        console.log(response.data.user.isLocationOn);
-      } catch (error) {
-        console.error("Error fetching location status:", error);
-      }
-    };
-    fetchLocationStatus();
-  }, []);
+  const fetchLocationStatus = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/auth/verify`, {
+        withCredentials: true,
+      });
+      setIsLocationOn(response.data.user.isLocationOn);
+      console.log(response.data.user.isLocationOn);
+    } catch (error) {
+      console.error("Error fetching location status:", error);
+    }
+  };
 
   const updateLocation = async (locationStatus) => {
     if (navigator.geolocation) {
@@ -55,6 +52,7 @@ export const UserLocationProvider = ({ children }) => {
 
   useEffect(() => {
     fetchLocationStatus();
+
     let locationInterval = null;
     if (isLocationOn) {
       updateLocation(isLocationOn); // Initial location update
