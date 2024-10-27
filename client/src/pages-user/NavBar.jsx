@@ -182,7 +182,7 @@ const NavBar = () => {
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
 
   const toggleLocation = () => {
-    setIsLocationOn(true);
+    setIsLocationOn((prev) => !prev);
   };
 
   // Manage location update interval
