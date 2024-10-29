@@ -32,7 +32,6 @@ const NavigationBar = () => {
   const [profileLastName, setProfileLastName] = useState("");
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
-  const [luggageInfo, setLuggageInfo] = useState([]);
   const {
     tamperData,
     tempData,
@@ -41,6 +40,7 @@ const NavigationBar = () => {
     setIsSeenNotifications,
     currentLink,
     setCurrentLink,
+    luggageInfo,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -128,6 +128,18 @@ const NavigationBar = () => {
     const tempArray = tempData || [];
     const tamperArray = tamperData || [];
     const fallArray = fallDetectData || [];
+    const geofenceArray = luggageInfo || [];
+
+    geofenceArray.forEach((luggage) => {
+      if (luggage.status === "Out of Range") {
+        newAlerts.push({
+          type: "Out of Range",
+          criticality: "Critical",
+          description: `Luggage ${luggage.luggage_custom_name} is outside the Geofence range `,
+          timestamp: new Date(luggage.updatedAt),
+        });
+      }
+    });
 
     tempArray.forEach((temp) => {
       if (temp.temperature > 30) {
