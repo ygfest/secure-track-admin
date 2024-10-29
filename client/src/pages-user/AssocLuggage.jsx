@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
+import { toast, Toaster } from "sonner";
 
 const AssocLuggage = () => {
   const navigate = useNavigate();
@@ -187,6 +188,25 @@ const AssocLuggage = () => {
     }
   };
 
+  const handleDeleteData = async (luggageTagNumber) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.delete(
+        `${apiUrl}/luggage-router/delete-tracking-data/${luggageTagNumber}`
+      );
+      if (response.data.status === false) {
+        toast.error("Error deleting data");
+        console.error("Error deleting data");
+      } else {
+        toast.success("Successfully deleted data");
+        setShowUpdateModal(false);
+      }
+    } catch (error) {
+      console.error("Error deleting data:", error);
+      toast.error("Error deleting data");
+    }
+  };
+
   const paginationButtons = [];
   for (let i = 1; i <= Math.ceil(totalItems / 6); i++) {
     paginationButtons.push(
@@ -217,6 +237,7 @@ const AssocLuggage = () => {
   return (
     <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
+        <Toaster />
         <div className="flex justify-between mb-5 gap-4">
           <button
             className="btn bg-[#5CC90C] text-white rounded-3xl"
@@ -332,7 +353,7 @@ const AssocLuggage = () => {
                               setShowUpdateModal(true);
                             }}
                           >
-                            Edit
+                            Update
                           </button>
                           <button
                             className="btn w-full md:max-w-16 btn-sm btn-outline btn-danger"
@@ -458,7 +479,16 @@ const AssocLuggage = () => {
                   disabled
                 />
               </div>
+
               <div className="modal-action">
+                <button
+                  className="btn bg-red-500 text-white"
+                  onClick={() =>
+                    handleDeleteData(currentLuggage.luggage_tag_number)
+                  }
+                >
+                  Erase tracking data
+                </button>
                 <button type="submit" className="btn btn-primary">
                   Update
                 </button>

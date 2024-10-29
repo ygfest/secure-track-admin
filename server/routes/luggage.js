@@ -268,6 +268,30 @@ router.delete('/deleteluggage/:id', verifyUser, async (req, res) => {
   }
 });
 
+router.delete('/delete-tracking-data/:tagNumber', verifyUser, async (req, res) => {
+  const luggageTagNumber = req.params.tagNumber;
+
+  try {
+    const deletedFallData = await FallDetectionLog.deleteMany({ luggage_tag_number: luggageTagNumber });
+    const deletedTamperData = await TamperDetectionLog.deleteMany({ luggage_tag_number: luggageTagNumber });
+    const deletedTempData = await TempLog.deleteMany({ luggage_tag_number: luggageTagNumber });
+
+    if (
+      deletedFallData.deletedCount === 0 &&
+      deletedTamperData.deletedCount === 0 &&
+      deletedTempData.deletedCount === 0
+    ) {
+      return res.status(404).json({ status: false, message: "Luggage not found" });
+    }
+
+    return res.status(200).json({ status: true, message: "Data deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting luggage tracking data:", error);
+    return res.status(500).json({ status: false, message: "Error deleting luggage tracking data" });
+  }
+});
+
+
 
 // Update geofence status route
 router.post('/luggage/:id/updateStatus', verifyUser, async (req, res) => {
