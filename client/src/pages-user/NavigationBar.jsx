@@ -135,7 +135,7 @@ const NavigationBar = () => {
         newAlerts.push({
           type: "Out of Range",
           criticality: "Critical",
-          description: `Luggage ${luggage.luggage_custom_name} is outside the Geofence range `,
+          description: `${luggage.luggage_custom_name} is outside the Geofence range `,
           timestamp: new Date(luggage.updatedAt),
         });
       }
