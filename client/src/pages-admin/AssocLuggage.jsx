@@ -3,6 +3,7 @@ import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
+import { toast, Toaster } from "sonner";
 
 const AdminAssocLuggage = () => {
   const navigate = useNavigate();
@@ -178,6 +179,24 @@ const AdminAssocLuggage = () => {
       console.error("Error updating luggage", error);
     }
   };
+
+  const handleDeleteData = async (luggageTagNumber) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await Axios.delete(
+        `${apiUrl}/luggage-router/delete-tracking-data/${luggageTagNumber}`
+      );
+      if (response.data.status === false) {
+        console.error("Error deleting luggage data");
+      } else {
+        toast.success("Successfully deleted all tracking data");
+      }
+    } catch (error) {
+      console.error("Error deleting luggage data:", error);
+      toast.error("Error deleting luggage data");
+    }
+  };
+
   const handleDeleteLuggage = async (luggageId) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -529,6 +548,15 @@ const AdminAssocLuggage = () => {
               </div>
 
               <div className="modal-action">
+                <button
+                  className="btn bg-red-500 text-white"
+                  onClick={() =>
+                    handleDeleteData(currentLuggage.luggage_tag_number)
+                  }
+                >
+                  Erase all tracking data
+                </button>
+
                 <button type="submit" className="btn btn-primary">
                   Update
                 </button>
