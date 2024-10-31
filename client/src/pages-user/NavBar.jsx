@@ -57,7 +57,6 @@ const NavBar = () => {
         }
       } catch (error) {
         console.error("Error verifying token:", error);
-        navigate("/sign-in");
       }
     };
 
