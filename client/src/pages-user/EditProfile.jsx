@@ -112,7 +112,7 @@ const EditProfile = ({ userProfile }) => {
   };
 
   const handleRemovePhoto = () => {
-    setNewProfilePhoto(null);
+    setNewProfilePhoto("");
   };
 
   const handleDeleteAccount = async () => {
