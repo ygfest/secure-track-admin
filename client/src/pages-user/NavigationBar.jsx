@@ -15,6 +15,8 @@ import {
   AiOutlineFolder,
   AiOutlineUser,
 } from "react-icons/ai";
+import { GoAlert } from "react-icons/go";
+import { GoShield } from "react-icons/go";
 import { TbLocationExclamation } from "react-icons/tb";
 import { parse, format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
@@ -99,10 +101,9 @@ const NavigationBar = () => {
       case "Low Temperature":
         return <FaThermometerHalf className="text-primary text-2xl mr-2" />;
       case "Fall Detected":
-        return <FaExclamationTriangle className="text-primary text-2xl mr-2" />;
+        return <GoAlert className="text-primary text-2xl mr-2" />;
       case "Tamper Detected":
-        return <FaShieldAlt className="text-primary text-2xl mr-2" />;
-      case "Tamper Detected":
+        return <GoShield className="text-primary text-2xl mr-2" />;
       default:
         return <TbLocationExclamation className="text-primary text-2xl mr-2" />;
     }
