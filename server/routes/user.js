@@ -52,7 +52,7 @@ router.get('/verify', verifyUser, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Error verifying user:", error);
     return res.status(500).json({ status: false, message: "Server error" });
   }
 });

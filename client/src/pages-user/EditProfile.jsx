@@ -60,7 +60,7 @@ const EditProfile = ({ userProfile }) => {
       firstname: profileData.firstname,
       lastname: profileData.lastname,
       phone: profileData.phone,
-      ...(newProfilePhoto && { profile_dp: newProfilePhoto }),
+      profile_dp: newProfilePhoto || profileData.profile_dp || "",
     };
 
     try {
@@ -110,9 +110,9 @@ const EditProfile = ({ userProfile }) => {
   const handlePhotoChange = (e) => {
     setNewProfilePhoto(e.target.files[0]);
   };
-
   const handleRemovePhoto = () => {
-    setNewProfilePhoto("");
+    setProfileData({ ...profileData, profile_dp: "" });
+    setNewProfilePhoto(null);
   };
 
   const handleDeleteAccount = async () => {
@@ -173,20 +173,22 @@ const EditProfile = ({ userProfile }) => {
             <h3 className="text-xl font-bold">Edit Profile</h3>
             <div className="mx-auto mb-4 flex flex-col items-center">
               <div className="w-24 h-24 rounded-full bg-white flex z-[20] items-center justify-center text-3xl text-gray-600 font-bold text-xl border-2 border-gray-600 relative hover:bg-zinc-100 transition-all">
-                {newProfilePhoto && (
+                {profileData.profile_dp || newProfilePhoto ? (
                   <>
                     <img
-                      src={newProfilePhoto}
+                      src={newProfilePhoto || profileData.profile_dp}
                       alt="Profile Preview"
-                      className="w-full h-full rounded-full"
+                      className="w-full rounded-full"
                     />
                     <button
-                      className="btn-ghost absolute rounded-full bg-zinc-50 p-1 -right-3 top-0 z-20 text-[1.3rem]"
+                      className="absolute rounded-full bg-zinc-50 p-1 -right-3 top-0 text-[1.3rem]"
                       onClick={handleRemovePhoto}
                     >
                       <IoClose />
                     </button>
                   </>
+                ) : (
+                  <CiCamera className="text-gray-600" />
                 )}
                 <CiCamera className="absolute inset-0 m-auto text-gray-600" />
                 <input
