@@ -178,7 +178,7 @@ const EditProfile = ({ userProfile }) => {
                     <img
                       src={newProfilePhoto || profileData.profile_dp}
                       alt="Profile Preview"
-                      className="w-full rounded-full"
+                      className="w-24 h-24 rounded-full"
                     />
                     <button
                       className="absolute rounded-full bg-zinc-50 p-1 -right-3 top-0 text-[1.3rem]"
