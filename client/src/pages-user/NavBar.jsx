@@ -212,7 +212,7 @@ const NavBar = () => {
             </svg>
           </div>
           {isOpen && (
-            <ul className="menu dropdown-content mt-3 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
+            <ul className="menu dropdown-content mt-3 absolute z-30 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
               <li>
                 <Link
                   to="/user/"
@@ -355,7 +355,7 @@ const NavBar = () => {
             )}
           </label>
           {isDropProfile && (
-            <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
+            <ul className="menu menu-compact dropdown-content absolute z-30 mt-3 p-2 shadow rounded-box w-52 bg-[#020202a0]">
               <li>
                 <Link
                   to="/user/profile"
