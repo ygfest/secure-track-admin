@@ -217,7 +217,7 @@ const NavBar = () => {
                   to="/user/"
                   className="link no-underline"
                   onClick={() => {
-                    toggleSideBar();
+                    //toggleSideBar();
                     setCurrentLink("/user/");
                   }}
                 >
@@ -233,7 +233,7 @@ const NavBar = () => {
                       : "text-white"
                   }`}
                   onClick={() => {
-                    toggleSideBar();
+                    //toggleSideBar();
                     setCurrentLink("/user/tracking");
                   }}
                 >
@@ -245,7 +245,7 @@ const NavBar = () => {
                   to="/user/luggage"
                   className="link no-underline"
                   onClick={() => {
-                    toggleSideBar();
+                    //toggleSideBar();
                     setCurrentLink("/user/luggage");
                   }}
                 >
@@ -257,7 +257,7 @@ const NavBar = () => {
                   to="/user/profile"
                   className="link no-underline"
                   onClick={() => {
-                    toggleSideBar();
+                    //toggleSideBar();
                     setCurrentLink("/user/profile");
                   }}
                 >
@@ -336,7 +336,7 @@ const NavBar = () => {
             tabIndex={0}
             role="button"
             className="btn btn-ghost btn-circle avatar"
-            onClick={handleDropProfile}
+            onClick={() => handleDropProfile()}
           >
             {profileDp ? (
               <div className="w-10 rounded-full">
