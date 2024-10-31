@@ -386,7 +386,7 @@ const LuggageTracking = () => {
         console.log("New Luggage Details: ", newLuggage);
         await fetchLuggageData();
         toast.success("Luggage added succesfully");
-        //window.location.reload();
+        window.location.reload();
       } else {
         toast.error("Error adding Luggage");
       }
@@ -631,7 +631,7 @@ const LuggageTracking = () => {
                       luggage_tag_number: e.target.luggage_tag_number.value,
                       user_id: userId,
                     });
-                    window.location.reload();
+                    //window.location.reload();
                   }}
                 >
                   <div className="form-control mb-4">
