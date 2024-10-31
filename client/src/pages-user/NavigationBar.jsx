@@ -15,6 +15,7 @@ import {
   AiOutlineFolder,
   AiOutlineUser,
 } from "react-icons/ai";
+import { TbLocationExclamation } from "react-icons/tb";
 import { parse, format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
 
@@ -101,8 +102,9 @@ const NavigationBar = () => {
         return <FaExclamationTriangle className="text-primary text-2xl mr-2" />;
       case "Tamper Detected":
         return <FaShieldAlt className="text-primary text-2xl mr-2" />;
+      case "Tamper Detected":
       default:
-        return <FaLock className="text-primary text-2xl mr-2" />;
+        return <TbLocationExclamation className="text-primary text-2xl mr-2" />;
     }
   };
 
