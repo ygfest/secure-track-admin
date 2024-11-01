@@ -384,10 +384,10 @@ const AdminLuggageTracking = () => {
                 onClick={() => handleMarkerClick(luggageDeet, index)}
               >
                 <div className="flex items-center justify-between">
-                  <h4 className=" text-lg font-poppins font-semibold max-w-[20px]:">
+                  <h4 className="text-md md:text-lg font-poppins font-semibold max-w-[20px]:">
                     {luggageDeet.luggage_custom_name}
                   </h4>
-                  <div className="badge badge-primary badge-lg  text-white text-xs rounded-none font-poppins">
+                  <div className="badge badge-primary badge-sm md:badge-md  text-white text-xs rounded-none font-poppins">
                     <RelativeTime shipmentDate={luggageDeet.timestamp} />
                   </div>
                 </div>
