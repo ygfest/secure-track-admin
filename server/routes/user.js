@@ -168,13 +168,6 @@ router.post('/signin', async (req, res) => {
       sameSite: 'None',
     });
 
-    res.session('token', token, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 60 * 60 * 1000, // 60 minutes
-      sameSite: 'None',
-    });
-
     console.log("Cookies sent:", req.cookies);
 
 
