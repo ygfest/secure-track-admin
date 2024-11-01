@@ -481,7 +481,7 @@ const LuggageTracking = () => {
                   <h4 className=" text-md md:text-lg font-poppins font-semibold max-w-[20px]:">
                     {luggageDeet.luggage_custom_name}
                   </h4>
-                  <div className="badge badge-primary badge-sm md:badge-md  text-white text-xs rounded-none font-poppins">
+                  <div className="badge badge-primary badge-sm md:badge-md  text-white text-xs rounded-none font-poppins whitespace-nowrap ">
                     <RelativeTime shipmentDate={luggageDeet.timestamps} />
                   </div>
                 </div>
