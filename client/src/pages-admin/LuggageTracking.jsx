@@ -548,11 +548,8 @@ const AdminLuggageTracking = () => {
             )}
 
           {showAddModal && (
-            <div
-              className="fixed inset-0 flex items-center justify-center z-8000 bg-black bg-opacity-50"
-              style={{ zIndex: 1000 }}
-            >
-              <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+            <div className="fixed inset-0 flex items-center justify-center z-[1000] text-white bg-white bg-opacity-20">
+              <div className="bg-[#020202a0] backdrop-blur-xl p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
                 <h3 className="text-xl font-semibold font-poppins mb-4">
                   Add New Luggage
                 </h3>
@@ -562,7 +559,6 @@ const AdminLuggageTracking = () => {
                     handleAddNewLuggage({
                       luggage_custom_name: e.target.luggage_custom_name.value,
                       luggage_tag_number: e.target.luggage_tag_number.value,
-                      destination: e.target.destination.value,
                       user_id: userId,
                     });
                     //window.location.reload();
@@ -573,7 +569,7 @@ const AdminLuggageTracking = () => {
                     <input
                       name="luggage_custom_name"
                       type="text"
-                      className="input input-bordered"
+                      className="input input-bordered bg-[#403e3ea3]"
                       required
                     />
                   </div>
@@ -582,30 +578,21 @@ const AdminLuggageTracking = () => {
                     <input
                       name="luggage_tag_number"
                       type="text"
-                      className="input input-bordered font-poppins"
+                      className="input input-bordered font-poppins bg-[#403e3ea3]"
                       placeholder="You can see it in the tag"
                       required
                     />
                   </div>
-                  <div className="form-control mb-4">
-                    <label className="label font-poppins">Destination</label>
-                    <input
-                      name="destination"
-                      type="text"
-                      className="input input-bordered"
-                      required
-                    />
-                  </div>
-                  <div className="form-control mt-6 flex flex-row justify-end gap-2">
+                  <div className="form-control mt-6 flex  flex-row justify-end gap-2">
                     <button
-                      className="btn"
+                      className="btn bg-[#403e3ea3] text-white border-none"
                       onClick={() => setShowAddModal(false)}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="btn btn-primary font-poppins"
+                      className="btn btn-primary font-poppins text-white"
                     >
                       Add Luggage
                     </button>
