@@ -453,15 +453,15 @@ const LuggageTracking = () => {
             setClicked((prevClick) => !prevClick);
             setOpenNotif(false);
           }}
-          className={`card w-full md:w-[560px] shadow-xl px-0 md:px-2 py-6 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
+          className={`card w-full md:w-[560px] shadow-xl px-0 md:px-2 md:py-6 py-2 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
             clicked ? "bottom-0" : "bottom-[-65%]"
           } bg-[#020202a0] backdrop-blur-xl z-[1000] h-[85%] md:max-h-[32rem] max-h-auto cursor-pointer overflow-hidden`}
         >
           <div className="block md:hidden mx-auto my-2">
             {clicked ? <FaChevronDown /> : <FaChevronUp />}
           </div>
-          <div className="card-header p-2 pl-8 pt-0 mt-0 mb-2">
-            <h2 className="card-title justify-center md:justify-normal text-sm md:text-lg">
+          <div className="card-header p-2 md:pl-8 pt-0 mt-0 mb-2">
+            <h2 className="card-title text-center justify-center md:justify-normal text-md md:text-lg">
               Luggage Details
             </h2>
           </div>

@@ -558,7 +558,7 @@ const AdminAssocLuggage = () => {
                     Erase tracking data
                   </button>
                 </div>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-2 w-full">
                   <button type="submit" className="btn btn-primary w-1/2">
                     Update
                   </button>
