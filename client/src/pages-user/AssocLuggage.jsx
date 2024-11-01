@@ -480,25 +480,29 @@ const AssocLuggage = () => {
                 />
               </div>
 
-              <div className="modal-action">
-                <button
-                  className="btn bg-red-500 text-white"
-                  onClick={() =>
-                    handleDeleteData(currentLuggage.luggage_tag_number)
-                  }
-                >
-                  Erase tracking data
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Update
-                </button>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setShowUpdateModal(false)}
-                >
-                  Cancel
-                </button>
+              <div className="flex flex-col gap-2">
+                <div className="flex">
+                  <button
+                    className="btn w-full bg-red-500 text-white"
+                    onClick={() =>
+                      handleDeleteData(currentLuggage.luggage_tag_number)
+                    }
+                  >
+                    Erase tracking data
+                  </button>
+                </div>
+                <div className="flex flex-row gap-2">
+                  <button type="submit" className="btn btn-primary w-1/2">
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    className="btn w-1/2"
+                    onClick={() => setShowUpdateModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </form>
           </div>
