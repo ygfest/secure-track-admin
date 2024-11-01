@@ -270,7 +270,7 @@ const NavBar = () => {
       </div>
 
       {/* Center: Logo */}
-      <div className="navbar-center flex items-center justify-center">
+      <div className="navbar-start md:navbar-center flex items-center justify-center">
         <Link
           to="/user/"
           className="link btn btn-ghost text-sm md:text-xl no-underline flex items-center p-0"

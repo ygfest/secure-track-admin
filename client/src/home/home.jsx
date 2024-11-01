@@ -20,7 +20,7 @@ export default function Home() {
           <header className="flex w-full items-center justify-between">
             <img src="/st-logo.png" alt="logo" width={120} height={35} />
 
-            <div className="flex gap-1 md:gap-4 items-center">
+            <div className="flex gap-1 md:gap-4 items-center flex-nowrap">
               <Link to="/sign-in">
                 <button className="font-medium min-w-[60px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200">
                   Sign in
