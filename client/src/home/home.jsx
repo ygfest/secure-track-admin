@@ -22,13 +22,16 @@ export default function Home() {
 
             <div className="flex gap-1 md:gap-4 items-center">
               <Link to="/sign-in">
-                <button className="font-medium min-w-[80px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200">
+                <button className="font-medium min-w-[60px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200">
                   Sign in
                 </button>
               </Link>
               <Link to="/sign-up">
-                <button className="p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[150px] md:min-w-[120px]">
+                <button className="hidden md:inline p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[150px] md:min-w-[120px]">
                   Create an account
+                </button>
+                <button className="md:hidden p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[120px] md:min-w-[120px]">
+                  Create account
                 </button>
               </Link>
             </div>
