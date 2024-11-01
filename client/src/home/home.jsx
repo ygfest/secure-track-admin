@@ -20,14 +20,14 @@ export default function Home() {
           <header className="flex w-full items-center justify-between">
             <img src="/st-logo.png" alt="logo" width={120} height={35} />
 
-            <div className="flex gap-2 md:gap-4 items-center">
+            <div className="flex gap-1 md:gap-4 items-center">
               <Link to="/sign-in">
                 <button className="font-medium min-w-[80px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200">
                   Sign in
                 </button>
               </Link>
               <Link to="/sign-up">
-                <button className="p-2 text-sm md:text-base font-medium text-white bg-primary hover:bg-[#5bc90ce6] rounded-lg min-w-[85px] md:min-w-[120px]">
+                <button className="p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[150px] md:min-w-[120px]">
                   Create an account
                 </button>
               </Link>
@@ -145,7 +145,7 @@ export default function Home() {
       <footer className="w-full">
         <div className="pt-12 pb-4 flex flex-col gap-8">
           <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">
-            <p> Design and Built by Stefano San Esteban</p>
+            <p>Built by Stefano San Esteban</p>
             <p>Powered by</p>
             <SiVite className="size-8 text-primary" />
           </div>

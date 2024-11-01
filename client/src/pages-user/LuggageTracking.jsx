@@ -461,7 +461,7 @@ const LuggageTracking = () => {
             {clicked ? <FaChevronDown /> : <FaChevronUp />}
           </div>
           <div className="card-header p-2 pl-8 pt-0 mt-0 mb-2">
-            <h2 className="card-title justify-center md:justify-normal text-md md:text-lg">
+            <h2 className="card-title justify-center md:justify-normal text-sm md:text-lg">
               Luggage Details
             </h2>
           </div>

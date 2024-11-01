@@ -102,7 +102,7 @@ export default function SignInForm() {
           onSubmit={handleSubmit}
           className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-2 md:gap-4 bg-white  md:border-2 md:border-zinc-400 md:border-opacity-25 p-4 md:p-8 rounded-lg z-[50]"
         >
-          <h2 className="flex text-2xl font-semibold justify-center md:justify-normal">
+          <h2 className="flex text-xl font-semibold justify-start md:justify-normal">
             Sign in to your account
           </h2>
           <div className="flex flex-col gap-3">
@@ -184,7 +184,7 @@ export default function SignInForm() {
 
           <p className="text-center text-sm">
             Don't have an account?{" "}
-            <Link to="/sign-up" className="text-primary font-bold">
+            <Link to="/sign-up" className="text-primary font-semibold">
               Sign up
             </Link>
           </p>

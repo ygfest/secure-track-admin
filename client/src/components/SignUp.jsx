@@ -103,7 +103,7 @@ export default function SignUp() {
         onSubmit={handleSubmit}
         className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-4 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-lg"
       >
-        <h2 className="flex text-2xl font-semibold justify-center md:justify-normal">
+        <h2 className="flex text-xl font-semibold justify-start md:justify-normal">
           Create your account
         </h2>
         <div className="grid grid-cols-1 gap-4">
