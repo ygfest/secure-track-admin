@@ -15,7 +15,7 @@ const { createRouteHandler } = require('uploadthing/express');
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app"],
+    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app", "https://secure-track-est.vercel.app"],
     credentials: true,
 }));
 app.use(cookieParser());
