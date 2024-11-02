@@ -4,7 +4,7 @@ const UserComboBox = ({ options, onChange, value }) => {
   return (
     <div className="form-control">
       <select
-        className="select select-bordered"
+        className="select select-bordered focus:outline-none focus:ring-2 focus:ring-primary"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
