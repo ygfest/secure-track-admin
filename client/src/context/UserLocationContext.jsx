@@ -28,7 +28,7 @@ export const UserLocationProvider = ({ children }) => {
       }
     };
     fetchLocationStatus();
-  }, [updatedLat, updatedLong]);
+  }, [currentUserLat, currentUserLong]);
 
   const updateLocation = async (locationStatus) => {
     if (navigator.geolocation) {
