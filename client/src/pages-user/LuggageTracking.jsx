@@ -109,7 +109,7 @@ const LuggageTracking = () => {
   const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, updatedLat, updatedLong } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
-  const radius = 200;
+  const radius = 20;
   const center = [currentUserLat, currentUserLong];
   const [lastChecked, setLastChecked] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -553,7 +553,7 @@ const LuggageTracking = () => {
           <MarkerClusterGroup
             chunkedLoading
             iconCreateFunction={createClusterCustomIcon}
-            maxClusterRadius={8}
+            maxClusterRadius={20}
           >
             {luggageDeets.map((luggage, index) => (
               <Marker
