@@ -9,10 +9,9 @@ export const UserLocationProvider = ({ children }) => {
   const [isLocationOn, setIsLocationOn] = useState(false);
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
-  const [updatedLat, setUpdatedLat] = useState(null);
-  const [updatedLong, setUpdatedLong] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  // Fetch initial location status on component mount
   useEffect(() => {
     const fetchLocationStatus = async () => {
       try {
@@ -22,14 +21,18 @@ export const UserLocationProvider = ({ children }) => {
         setIsLocationOn(response.data.user.isLocationOn);
         setCurrentUserLat(Number(response.data.user.latitude));
         setCurrentUserLong(Number(response.data.user.longitude));
-        console.log(response.data.user.isLocationOn);
+        console.log(
+          "Initial Location Status:",
+          response.data.user.isLocationOn
+        );
       } catch (error) {
         console.error("Error fetching location status:", error);
       }
     };
     fetchLocationStatus();
-  }, [currentUserLat, currentUserLong]);
+  }, []); // Empty dependency array ensures it runs once on mount
 
+  // Function to update location periodically
   const updateLocation = async (locationStatus) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -42,10 +45,9 @@ export const UserLocationProvider = ({ children }) => {
               longitude,
               isLocationOn: locationStatus,
             });
-            console.log(
-              "Location updated successfully, isLocationOn:",
-              locationStatus
-            );
+            setCurrentUserLat(latitude);
+            setCurrentUserLong(longitude);
+            console.log("Location updated:", latitude, longitude);
           } catch (err) {
             console.error("Error updating location:", err);
           }
@@ -59,18 +61,19 @@ export const UserLocationProvider = ({ children }) => {
     }
   };
 
+  // Set an interval to update the location if isLocationOn is true
   useEffect(() => {
     let locationInterval = null;
     if (isLocationOn) {
       updateLocation(isLocationOn); // Initial location update
-      locationInterval = setInterval(() => updateLocation(isLocationOn), 10000); // Update every minute
+      locationInterval = setInterval(() => updateLocation(isLocationOn), 10000); // Update every 10 seconds
     }
     return () => {
       if (locationInterval) {
         clearInterval(locationInterval);
       }
     };
-  }, [isLocationOn]);
+  }, [isLocationOn]); // Run the effect whenever isLocationOn changes
 
   const toggleLocation = async () => {
     const newLocationStatus = !isLocationOn;
@@ -82,6 +85,7 @@ export const UserLocationProvider = ({ children }) => {
       console.error("Error updating location status:", error);
     }
   };
+
   return (
     <UserLocationContext.Provider
       value={{ isLocationOn, toggleLocation, currentUserLat, currentUserLong }}
