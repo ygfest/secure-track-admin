@@ -234,9 +234,9 @@ const LuggageTracking = () => {
     centerLong,
     radius
   ) => {
-    // If there's no latitude or longitude, return "Out of Coverage"
-    if (!luggageLat || !luggageLong) {
-      return null; // We'll treat null as "Out of Coverage"
+    // Return "Out of Coverage" if there's no latitude or longitude
+    if (luggageLat == null || luggageLong == null) {
+      return null;
     }
 
     const mapCenter = L.latLng(centerLat, centerLong);
