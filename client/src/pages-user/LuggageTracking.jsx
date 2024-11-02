@@ -553,7 +553,7 @@ const LuggageTracking = () => {
           <MarkerClusterGroup
             chunkedLoading
             iconCreateFunction={createClusterCustomIcon}
-            maxClusterRadius={20}
+            maxClusterRadius={5}
           >
             {luggageDeets.map((luggage, index) => (
               <Marker
