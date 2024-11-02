@@ -131,8 +131,17 @@ const LuggageTracking = () => {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
           setProfileLastName(response.data.user.lastname);
-          setCurrentUserLat(Number(response.data.user.latitude));
-          setCurrentUserLong(Number(response.data.user.longitude));
+
+          // Set current user latitude and longitude
+          const newLat = Number(response.data.user.latitude);
+          const newLong = Number(response.data.user.longitude);
+
+          // Update state with new values
+          setCurrentUserLat(newLat);
+          setCurrentUserLong(newLong);
+
+          // Call updateGeofenceStatus after updating lat/long
+          updateGeofenceStatus(); // Ensure this function is defined in the same scope
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -141,7 +150,7 @@ const LuggageTracking = () => {
     };
 
     verifyToken();
-  }, [navigate, currentUserLat, currentUserLong]);
+  }, [navigate]);
 
   useEffect(() => {
     const fetchCurrentLocations = async () => {
