@@ -227,7 +227,6 @@ const LuggageTracking = () => {
 
   const position = [currentUserLat, currentUserLong];
 
-  // Calculate whether luggage is outside the geofence
   const isLuggageOutsideGeofence = async (
     luggageLat,
     luggageLong,
@@ -254,14 +253,14 @@ const LuggageTracking = () => {
   };
 
   useEffect(() => {
-    if (
+    const shouldUpdateGeofence =
       luggageDeets.length > 0 &&
       currentUserLat !== null &&
-      currentUserLong !== null
-    ) {
+      currentUserLong !== null;
+    if (shouldUpdateGeofence) {
       updateGeofenceStatus();
     }
-  }, [updatedLat, updatedLong]); // Remove luggageDeets from dependency array to prevent re-runs
+  }, [luggageDeets, currentUserLat, currentUserLong]); // Add currentUserLat and currentUserLong to the dependencies
 
   const updateGeofenceStatus = async () => {
     if (isUpdating) return; // Prevent re-entry if an update is in progress
