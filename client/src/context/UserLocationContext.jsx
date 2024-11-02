@@ -7,6 +7,8 @@ export const useLocation = () => useContext(UserLocationContext);
 
 export const UserLocationProvider = ({ children }) => {
   const [isLocationOn, setIsLocationOn] = useState(false);
+  const [updatedLat, setUpdatedLat] = useState(null);
+  const [updatedLong, setUpdatedLong] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -29,6 +31,8 @@ export const UserLocationProvider = ({ children }) => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
+          setUpdatedLat(latitude);
+          setUpdatedLong(longitude);
 
           try {
             await axios.put(`${apiUrl}/auth/update-location`, {
@@ -77,7 +81,9 @@ export const UserLocationProvider = ({ children }) => {
     }
   };
   return (
-    <UserLocationContext.Provider value={{ isLocationOn, toggleLocation }}>
+    <UserLocationContext.Provider
+      value={{ isLocationOn, toggleLocation, updatedLat, updatedLong }}
+    >
       {children}
     </UserLocationContext.Provider>
   );

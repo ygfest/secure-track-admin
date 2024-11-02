@@ -107,7 +107,7 @@ const LuggageTracking = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn } = useLocation();
+  const { isLocationOn, updatedLat, updatedLong } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 200;
   const center = [currentUserLat, currentUserLong];
@@ -131,17 +131,8 @@ const LuggageTracking = () => {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
           setProfileLastName(response.data.user.lastname);
-
-          // Set current user latitude and longitude
-          const newLat = Number(response.data.user.latitude);
-          const newLong = Number(response.data.user.longitude);
-
-          // Update state with new values
-          setCurrentUserLat(newLat);
-          setCurrentUserLong(newLong);
-
-          // Call updateGeofenceStatus after updating lat/long
-          updateGeofenceStatus(); // Ensure this function is defined in the same scope
+          setCurrentUserLat(Number(response.data.user.latitude));
+          setCurrentUserLong(Number(response.data.user.longitude));
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -270,7 +261,7 @@ const LuggageTracking = () => {
     ) {
       updateGeofenceStatus();
     }
-  }, [currentUserLat, currentUserLong]); // Remove luggageDeets from dependency array to prevent re-runs
+  }, [updatedLat, updatedLong]); // Remove luggageDeets from dependency array to prevent re-runs
 
   const updateGeofenceStatus = async () => {
     if (isUpdating) return; // Prevent re-entry if an update is in progress
