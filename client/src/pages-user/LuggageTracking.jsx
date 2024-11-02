@@ -112,6 +112,7 @@ const LuggageTracking = () => {
   const radius = 200;
   const center = [currentUserLat, currentUserLong];
   const [lastChecked, setLastChecked] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const { openNotif, setOpenNotif } = useUserNotif();
   useEffect(() => {
@@ -234,40 +235,48 @@ const LuggageTracking = () => {
     centerLong,
     radius
   ) => {
-    // Log coordinates to help with debugging
     console.log("Luggage Coordinates:", { luggageLat, luggageLong });
     console.log("Center Coordinates:", { centerLat, centerLong });
 
-    // Check for null or undefined values and return "Out of Coverage"
-    if (
-      luggageLat == null ||
-      luggageLong == null ||
-      centerLat == null ||
-      centerLong == null
-    ) {
+    if (!luggageLat || !luggageLong || !centerLat || !centerLong) {
       return null;
     }
 
-    // Ensure valid lat/lng values before proceeding
     try {
       const mapCenter = L.latLng(centerLat, centerLong);
       const luggageLocation = L.latLng(luggageLat, luggageLong);
-      const distance = luggageLocation.distanceTo(mapCenter); // in meters
-      return distance > radius; // Returns true if outside geofence
+      const distance = luggageLocation.distanceTo(mapCenter);
+      return distance > radius;
     } catch (error) {
       console.error("Error in calculating distance:", error);
-      return null; // Return "Out of Coverage" if there's an error
+      return null;
     }
   };
 
+  useEffect(() => {
+    if (
+      luggageDeets.length > 0 &&
+      currentUserLat !== null &&
+      currentUserLong !== null
+    ) {
+      updateGeofenceStatus();
+    }
+  }, [currentUserLat, currentUserLong]); // Remove luggageDeets from dependency array to prevent re-runs
+
   const updateGeofenceStatus = async () => {
+    if (isUpdating) return; // Prevent re-entry if an update is in progress
+
+    setIsUpdating(true);
     try {
       const updatedStatuses = await Promise.all(
         luggageDeets.map(async (luggage) => {
-          const luggageLat = await luggage.latitude;
-          const luggageLong = await luggage.longitude;
+          const {
+            latitude: luggageLat,
+            longitude: luggageLong,
+            _id,
+            status,
+          } = luggage;
 
-          // Check if luggage has no latitude or longitude (Out of Coverage)
           const isOutside = await isLuggageOutsideGeofence(
             luggageLat,
             luggageLong,
@@ -276,45 +285,39 @@ const LuggageTracking = () => {
             radius
           );
 
-          let luggageGeofenceStatus;
+          const newStatus =
+            isOutside === null
+              ? "Out of Coverage"
+              : isOutside
+              ? "Out of Range"
+              : "In Range";
 
-          if (isOutside === null) {
-            // Set status to "Out of Coverage" if no lat/long
-            luggageGeofenceStatus = {
-              status: "Out of Coverage",
-              luggageId: luggage._id,
-            };
-          } else {
-            // Set status to "In Range" or "Out of Range" based on geofence check
-            luggageGeofenceStatus = {
-              status: isOutside ? "Out of Range" : "In Range",
-              luggageId: luggage._id,
-            };
-          }
-
-          // Only update if the status has changed
-          if (luggage.status !== luggageGeofenceStatus.status) {
+          if (status !== newStatus) {
             await axios.post(
-              `${import.meta.env.VITE_API_URL}/luggage-router/luggage/${
-                luggage._id
-              }/updateStatus`,
-              luggageGeofenceStatus
+              `${
+                import.meta.env.VITE_API_URL
+              }/luggage-router/luggage/${_id}/updateStatus`,
+              { status: newStatus, luggageId: _id }
             );
-            return { ...luggage, status: luggageGeofenceStatus.status };
+            return { ...luggage, status: newStatus };
           }
 
-          return luggage; // No update if the status is the same
+          return luggage;
         })
       );
 
-      // Update the luggage details with new statuses
-      setLuggageDeets(updatedStatuses);
-      toast.success("Geofence statuses are up to date");
+      // Only update luggageDeets if there are changes
+      if (JSON.stringify(updatedStatuses) !== JSON.stringify(luggageDeets)) {
+        setLuggageDeets(updatedStatuses);
+        toast.success("Geofence statuses are up to date");
+      }
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
       toast.error(
         "Please turn on location and refresh the page to get the updated geofencing status"
       );
+    } finally {
+      setIsUpdating(false); // Reset update state after completion
     }
   };
 
