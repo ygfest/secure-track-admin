@@ -234,15 +234,30 @@ const LuggageTracking = () => {
     centerLong,
     radius
   ) => {
-    // Return "Out of Coverage" if there's no latitude or longitude
-    if (luggageLat == null || luggageLong == null) {
+    // Log coordinates to help with debugging
+    console.log("Luggage Coordinates:", { luggageLat, luggageLong });
+    console.log("Center Coordinates:", { centerLat, centerLong });
+
+    // Check for null or undefined values and return "Out of Coverage"
+    if (
+      luggageLat == null ||
+      luggageLong == null ||
+      centerLat == null ||
+      centerLong == null
+    ) {
       return null;
     }
 
-    const mapCenter = L.latLng(centerLat, centerLong);
-    const luggageLocation = L.latLng(luggageLat, luggageLong);
-    const distance = luggageLocation.distanceTo(mapCenter); // in meters
-    return distance > radius; // Returns true if outside geofence
+    // Ensure valid lat/lng values before proceeding
+    try {
+      const mapCenter = L.latLng(centerLat, centerLong);
+      const luggageLocation = L.latLng(luggageLat, luggageLong);
+      const distance = luggageLocation.distanceTo(mapCenter); // in meters
+      return distance > radius; // Returns true if outside geofence
+    } catch (error) {
+      console.error("Error in calculating distance:", error);
+      return null; // Return "Out of Coverage" if there's an error
+    }
   };
 
   const updateGeofenceStatus = async () => {
