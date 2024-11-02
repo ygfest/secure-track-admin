@@ -102,12 +102,11 @@ const LuggageTracking = () => {
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
   const navigate = useNavigate();
-  const [currentUserLat, setCurrentUserLat] = useState(null);
-  const [currentUserLong, setCurrentUserLong] = useState(null);
+
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, updatedLat, updatedLong } = useLocation();
+  const { isLocationOn, currentUserLat, currentUserLong } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 20;
   const center = [currentUserLat, currentUserLong];
@@ -131,8 +130,6 @@ const LuggageTracking = () => {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
           setProfileLastName(response.data.user.lastname);
-          setCurrentUserLat(Number(response.data.user.latitude));
-          setCurrentUserLong(Number(response.data.user.longitude));
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -141,7 +138,7 @@ const LuggageTracking = () => {
     };
 
     verifyToken();
-  }, [navigate]);
+  }, [navigate, currentUserLat, currentUserLong]);
 
   useEffect(() => {
     const fetchCurrentLocations = async () => {

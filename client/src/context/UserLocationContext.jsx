@@ -7,6 +7,8 @@ export const useLocation = () => useContext(UserLocationContext);
 
 export const UserLocationProvider = ({ children }) => {
   const [isLocationOn, setIsLocationOn] = useState(false);
+  const [currentUserLat, setCurrentUserLat] = useState(null);
+  const [currentUserLong, setCurrentUserLong] = useState(null);
   const [updatedLat, setUpdatedLat] = useState(null);
   const [updatedLong, setUpdatedLong] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -18,13 +20,15 @@ export const UserLocationProvider = ({ children }) => {
           withCredentials: true,
         });
         setIsLocationOn(response.data.user.isLocationOn);
+        setCurrentUserLat(Number(response.data.user.latitude));
+        setCurrentUserLong(Number(response.data.user.longitude));
         console.log(response.data.user.isLocationOn);
       } catch (error) {
         console.error("Error fetching location status:", error);
       }
     };
     fetchLocationStatus();
-  }, []);
+  }, [updatedLat, updatedLong]);
 
   const updateLocation = async (locationStatus) => {
     if (navigator.geolocation) {
@@ -82,7 +86,7 @@ export const UserLocationProvider = ({ children }) => {
   };
   return (
     <UserLocationContext.Provider
-      value={{ isLocationOn, toggleLocation, updatedLat, updatedLong }}
+      value={{ isLocationOn, toggleLocation, currentUserLat, currentUserLong }}
     >
       {children}
     </UserLocationContext.Provider>
