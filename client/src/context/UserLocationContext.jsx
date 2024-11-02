@@ -65,7 +65,7 @@ export const UserLocationProvider = ({ children }) => {
     let locationInterval = null;
     if (isLocationOn) {
       updateLocation(isLocationOn); // Initial location update
-      locationInterval = setInterval(() => updateLocation(isLocationOn), 10000); // Update every minute
+      locationInterval = setInterval(() => updateLocation(isLocationOn), 1000); // Update every minute
     }
     return () => {
       if (locationInterval) {
