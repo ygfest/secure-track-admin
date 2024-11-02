@@ -227,9 +227,7 @@ const LuggageTracking = () => {
   const position = [currentUserLat, currentUserLong];
 
   // Calculate whether luggage is outside the geofence
-
-  // Calculate whether luggage is outside the geofence
-  const isLuggageOutsideGeofence = (
+  const isLuggageOutsideGeofence = async (
     luggageLat,
     luggageLong,
     centerLat,
@@ -251,10 +249,13 @@ const LuggageTracking = () => {
     try {
       const updatedStatuses = await Promise.all(
         luggageDeets.map(async (luggage) => {
+          const luggageLat = await luggage.latitude;
+          const luggageLong = await luggage.longitude;
+
           // Check if luggage has no latitude or longitude (Out of Coverage)
-          const isOutside = isLuggageOutsideGeofence(
-            luggage.latitude,
-            luggage.longitude,
+          const isOutside = await isLuggageOutsideGeofence(
+            luggageLat,
+            luggageLong,
             currentUserLat,
             currentUserLong,
             radius
