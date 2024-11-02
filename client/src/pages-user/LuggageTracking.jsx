@@ -305,7 +305,7 @@ const LuggageTracking = () => {
       // Only update luggageDeets if there are changes
       if (JSON.stringify(updatedStatuses) !== JSON.stringify(luggageDeets)) {
         setLuggageDeets(updatedStatuses);
-        toast.success("Geofence statuses are up to date");
+        toast.success("Geofence statuses have been updated");
       }
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
