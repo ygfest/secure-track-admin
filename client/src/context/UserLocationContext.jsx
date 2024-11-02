@@ -35,8 +35,6 @@ export const UserLocationProvider = ({ children }) => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          setUpdatedLat(latitude);
-          setUpdatedLong(longitude);
 
           try {
             await axios.put(`${apiUrl}/auth/update-location`, {
@@ -65,7 +63,7 @@ export const UserLocationProvider = ({ children }) => {
     let locationInterval = null;
     if (isLocationOn) {
       updateLocation(isLocationOn); // Initial location update
-      locationInterval = setInterval(() => updateLocation(isLocationOn), 1000); // Update every minute
+      locationInterval = setInterval(() => updateLocation(isLocationOn), 10000); // Update every minute
     }
     return () => {
       if (locationInterval) {

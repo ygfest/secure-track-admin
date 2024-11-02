@@ -138,7 +138,7 @@ const LuggageTracking = () => {
     };
 
     verifyToken();
-  }, [navigate, currentUserLat, currentUserLong]);
+  }, [navigate]);
 
   useEffect(() => {
     const fetchCurrentLocations = async () => {
