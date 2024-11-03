@@ -183,15 +183,11 @@ router.post('/save-google-user', async (req, res) => {
   const { googleId, email, firstName, lastName, picture } = req.body;
 
   try {
-    // First check if the user exists by googleId
     let user = await User.findOne({ googleId });
-
     if (!user) {
-      // Check if a user with the same email already exists
       user = await User.findOne({ email });
       if (user) {
-        // If a user with the same email exists, update their details
-        user.googleId = googleId; // Update googleId if needed
+        user.googleId = googleId;
         user.firstname = firstName;
         user.lastname = lastName;
         user.profile_dp = picture;
@@ -199,52 +195,45 @@ router.post('/save-google-user', async (req, res) => {
         await user.save();
         console.log("Existing user updated in MongoDB:", user);
       } else {
-        // If the user doesn't exist, create a new user
         user = new User({
           googleId,
           email,
           firstname: firstName,
           lastname: lastName,
-          role: 'user', // Default role for new users
+          role: 'user',
           profile_dp: picture,
-          loggedInAt: Date.now(), // Track the time user logged in
+          loggedInAt: Date.now(),
         });
-
         await user.save();
-        console.log("User saved to MongoDB:", user);
+        console.log("New user saved to MongoDB:", user);
       }
     } else {
-      // Update existing user details
-      user.email = email; 
-      user.firstname = firstName; 
-      user.lastname = lastName; 
-      user.profile_dp = picture; 
-      user.loggedInAt = Date.now(); 
+      user.email = email;
+      user.firstname = firstName;
+      user.lastname = lastName;
+      user.profile_dp = picture;
+      user.loggedInAt = Date.now();
       await user.save();
-      console.log("Existing user updated in MongoDB:", user);
+      console.log("Existing user updated:", user);
     }
 
-    // Generate JWT token
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.KEY, { expiresIn: '60m' });
 
-    console.log("Generated Token (Signin):", token);
-
-    // Set the cookie with the generated token
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 1000, // 60 minutes
+      maxAge: 60 * 60 * 1000,
       sameSite: 'None',
     });
-
-    console.log("Cookies sent:", req.cookies);
+    console.log("Cookies sent with token:", token);
 
     return res.status(200).json({ message: "User information processed successfully", token });
   } catch (error) {
-    console.error("Error saving user information:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in /save-google-user route:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;

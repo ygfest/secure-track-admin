@@ -17,24 +17,14 @@ export default function AuthCallback() {
 
       axios
         .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then(async (response) => {
           console.log("User Info:", response.data);
 
-          // Send user info to backend for storage
           try {
             const apiUrl = import.meta.env.VITE_API_URL;
 
-            // Set custom headers and enable credentials
-            const headers = {
-              "Content-Type": "application/json", // Ensure the Content-Type is set
-              "Custom-Header": "YourHeaderValue", // Add your custom headers here if needed
-            };
-
-            // Traditional request to save user info in backend
             const saveResponse = await axios.post(
               `${apiUrl}/auth/save-google-user`,
               {
@@ -45,29 +35,36 @@ export default function AuthCallback() {
                 picture: response.data.picture,
               },
               {
-                withCredentials: true, // This is necessary for sending cookies with the request
-                headers: headers, // Custom headers
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" },
               }
             );
 
-            const userRoleResponse = await axios.get(`${apiUrl}/auth/verify`, {
-              withCredentials: true,
-            });
+            // Only proceed if save was successful
+            if (saveResponse.status === 200) {
+              const userRoleResponse = await axios.get(
+                `${apiUrl}/auth/verify`,
+                {
+                  withCredentials: true,
+                }
+              );
 
-            const userRole = userRoleResponse.data.user.role;
-            console.log(userRole);
+              const userRole = userRoleResponse.data.user.role;
+              console.log(userRole);
 
-            // Redirect to home or dashboard
-            if (userRole === "admin") {
-              navigate("/admin");
+              // Navigate based on user role
+              if (userRole === "admin") {
+                navigate("/admin");
+              } else {
+                navigate("/user");
+              }
             } else {
-              navigate("/user");
+              setError("Failed to save user information.");
             }
           } catch (err) {
             console.error("Error saving user info:", err);
             setError("Failed to save user information.");
           }
-
           setLoading(false);
         })
         .catch((err) => {
@@ -76,19 +73,12 @@ export default function AuthCallback() {
           setLoading(false);
         });
     } else {
-      console.error("Access token not found");
       setError("No access token found.");
       setLoading(false);
     }
   }, [navigate]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
   return null;
 }
