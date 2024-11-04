@@ -58,8 +58,6 @@ const NavigationBar = () => {
     setOpenNotif(false);
   };
 
-  console.log("USER REPORTS:", userReports);
-
   useEffect(() => {
     const verifyToken = async () => {
       try {

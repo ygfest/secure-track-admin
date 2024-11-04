@@ -180,7 +180,7 @@ const LuggageTracking = () => {
     return () => {
       debouncedFetchCurrentLocations.cancel();
     };
-  }, [luggageDeets]);
+  }, [JSON.stringify(luggageDeets)]);
 
   const handleLocateUser = (map) => {
     setTrackLocation(true);
@@ -445,9 +445,6 @@ const LuggageTracking = () => {
     className: "",
     iconSize: [30, 30],
   });
-
-  console.log(`ISONLOCATION DEBUG: ${isLocationOn}`);
-  console.log(currentUserLat);
 
   return (
     <>
