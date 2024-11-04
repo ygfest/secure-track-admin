@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
 import Profile from "../assets/sample_profile.jpg";
@@ -9,6 +9,9 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import { GoAlert } from "react-icons/go";
+import { GoShield } from "react-icons/go";
+import { TbLocationExclamation } from "react-icons/tb";
 import { format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
 import { useLocation } from "../context/UserLocationContext";
@@ -23,10 +26,16 @@ const formatDate = (dateObj) => {
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
+  const [openNotif, setOpenNotif] = useState(false);
+  const [alerts, setAlerts] = useState([]);
+  const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
+
+  const prevStatusesRef = useRef([]);
+
   const {
     tamperData,
     fallDetectData,
@@ -35,8 +44,9 @@ const NavBar = () => {
     setIsSeenNotifications,
     currentLink,
     setCurrentLink,
-    openNotif,
-    setOpenNotif,
+    luggageInfo,
+    userReports,
+    statuses,
   } = useUserNotif();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -69,11 +79,11 @@ const NavBar = () => {
       case "Low Temperature":
         return <FaThermometerHalf className="text-primary text-2xl mr-2" />;
       case "Fall Detected":
-        return <FaExclamationTriangle className="text-primary text-2xl mr-2" />;
+        return <GoAlert className="text-primary text-2xl mr-2" />;
       case "Tamper Detected":
-        return <FaShieldAlt className="text-primary text-2xl mr-2" />;
+        return <GoShield className="text-primary text-2xl mr-2" />;
       default:
-        return <FaLock className="text-primary text-2xl mr-2" />;
+        return <TbLocationExclamation className="text-primary text-2xl mr-2" />;
     }
   };
 
@@ -86,75 +96,143 @@ const NavBar = () => {
       case "Fall Detected":
         return "badge-info";
       case "Tamper Detected":
-        return "badge-danger";
+        return "badge-danger bg-red-500 text-white";
+      case "Out of Range":
+        return "badge-danger bg-red-500 text-white";
+      case "In Progress":
+        return "badge-accent";
+      case "Resolved":
+        return "badge-primary text-white";
       default:
         return "badge-primary";
     }
   };
 
-  const renderNotifications = () => {
-    const alerts = [];
+  const updateAlerts = () => {
+    const newAlerts = [];
 
-    tempData?.forEach((temp) => {
-      if (temp.temperature > 30) {
-        alerts.push({
-          type: "High Temperature",
-          criticality: "Critical",
-          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: temp.timestamp,
+    // Default empty arrays if props are undefined
+    const tempArray = tempData || [];
+    const tamperArray = tamperData || [];
+    const fallArray = fallDetectData || [];
+    const geofenceArray = luggageInfo || [];
+    const userReportsStatus = userReports || [];
+
+    userReportsStatus.forEach((report) => {
+      if (report.status === "In Progress") {
+        newAlerts.push({
+          type: "Report Update",
+          criticality: "In Progress",
+          description: `Your report regarding ${report.title} has been received by Developers`,
+          timestamp: new Date(report.updatedAt),
         });
-      } else if (temp.temperature < 10) {
-        alerts.push({
-          type: "Low Temperature",
-          criticality: "Warning",
-          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: temp.timestamp,
+      } else if (report.status === "Resolved") {
+        newAlerts.push({
+          type: "Report Update",
+          criticality: "Resolved",
+          description: `Your report regarding ${report.title} has been Resolved`,
+          timestamp: new Date(report.updatedAt),
         });
       }
     });
 
-    tamperData?.forEach((tamper) => {
-      alerts.push({
+    geofenceArray.forEach((luggage) => {
+      if (luggage.status === "Out of Range") {
+        newAlerts.push({
+          type: "Out of Range",
+          criticality: "Critical",
+          description: `${luggage.luggage_custom_name} is outside the Geofence range `,
+          timestamp: new Date(luggage.updatedAt),
+        });
+      }
+    });
+
+    tempArray.forEach((temp) => {
+      if (temp.temperature > 30) {
+        newAlerts.push({
+          type: "High Temperature",
+          criticality: "Critical",
+          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
+          timestamp: new Date(temp.timestamp),
+        });
+      } else if (temp.temperature < 10) {
+        newAlerts.push({
+          type: "Low Temperature",
+          criticality: "Warning",
+          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
+          timestamp: new Date(temp.timestamp),
+        });
+      }
+    });
+
+    tamperArray.forEach((tamper) => {
+      newAlerts.push({
         type: "Tamper Detected",
         criticality: "Critical",
         description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: tamper.timestamp,
+        timestamp: new Date(tamper.timestamp),
       });
     });
 
-    fallDetectData?.forEach((fall) => {
-      alerts.push({
+    fallArray.forEach((fall) => {
+      newAlerts.push({
         type: "Fall Detected",
-        criticality: "Info",
+        criticality: "Check your bag!",
         description: `Fall detected in ${fall.luggage_custom_name}`,
-        timestamp: fall.timestamp,
+        timestamp: new Date(fall.fall_time),
       });
     });
 
-    return alerts.map((alert, index) => (
-      <div
-        key={index}
-        className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
-      >
-        <div className="card-body flex items-start">
-          <div className="mr-4">{getAlertIcon(alert.type)}</div>
-          <div className="flex-1">
-            <h4 className="card-title text-base flex items-center">
-              {alert.type}
-              <div
-                className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
-              >
-                {alert.criticality}
-              </div>
-            </h4>
-            <p className="text-xs">{alert.description}</p>
-            <p className="text-xs text-gray-500">
-              {formatDate(alert.timestamp)}
-            </p>
+    return newAlerts;
+  };
+
+  useEffect(() => {
+    const newAlerts = updateAlerts();
+
+    // Check if there are new alerts or if statuses have changed
+    const statusesChanged =
+      JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
+
+    if (newAlerts.length > alerts.length || statusesChanged) {
+      setAlerts(newAlerts);
+      setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
+      setIsSeenNotifications(false);
+    } else {
+      setAlerts(newAlerts); // Just update alerts
+      setHasNewAlerts(false); // No new alerts
+    }
+
+    // Update the ref with current statuses
+    prevStatusesRef.current = statuses;
+  }, [tempData, tamperData, fallDetectData, statuses]);
+
+  const renderNotifications = () => {
+    return alerts
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      .map((alert, index) => (
+        <div
+          key={index}
+          className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
+        >
+          <div className="card-body flex items-start">
+            <div className="mr-4">{getAlertIcon(alert.type)}</div>
+            <div className="flex-1">
+              <h4 className="card-title text-base flex items-center">
+                {alert.type}
+                <div
+                  className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
+                >
+                  {alert.criticality}
+                </div>
+              </h4>
+              <p className="text-xs">{alert.description}</p>
+              <p className="text-xs text-gray-500">
+                {formatDate(alert.timestamp)}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    ));
+      ));
   };
 
   const handleLogout = () => {
@@ -311,9 +389,7 @@ const NavBar = () => {
                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 00-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m0 0v1a3 3 0 006 0v-1m-6 0h6"
               />
             </svg>
-            {(tempData?.length ||
-              tamperData?.length ||
-              (fallDetectData?.length && !isSeenNotifications)) && (
+            {(!isSeenNotifications || hasNewAlerts) && (
               <span className="badge badge-xs badge-primary indicator-item"></span>
             )}
           </div>
