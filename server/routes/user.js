@@ -477,6 +477,22 @@ router.get('/reports', async (req, res) => {
   }
 })
 
+router.get('/user-reports/', verifyUser, async(req, res) => {
+  const userId = req.user.id;
+  console.log("THIS IS THE USER ID",userId);
+
+  try {
+    const userReports = await Report.find({userId: userId})
+    if(!userReports || userReports.length === 0){
+      res.status(404).json({status: false, messgae: "No report found"});
+    }
+    res.status(200).json(userReports);
+  } catch (error) {
+    console.error("Error fetching user reports")
+    res.status(400)
+  }
+})
+
 
 router.put('/resolve-reports/:id', verifyUser, async (req, res) => {
   const status = req.body; 

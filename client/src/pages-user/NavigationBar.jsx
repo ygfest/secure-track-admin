@@ -44,6 +44,7 @@ const NavigationBar = () => {
     currentLink,
     setCurrentLink,
     luggageInfo,
+    userReports,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -52,6 +53,8 @@ const NavigationBar = () => {
     setIsOpenProfile(!isOpenProfile);
     setOpenNotif(false);
   };
+
+  console.log("USER REPORTS:", userReports);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -118,7 +121,13 @@ const NavigationBar = () => {
       case "Fall Detected":
         return "badge-info";
       case "Tamper Detected":
-        return "badge-danger";
+        return "badge-danger bg-red-500 text-white";
+      case "Out of Range":
+        return "badge-danger bg-red-500 text-white";
+      case "In Progress":
+        return "badge-accent";
+      case "Resolved":
+        return "badge-primary text-white";
       default:
         return "badge-primary";
     }
@@ -132,6 +141,25 @@ const NavigationBar = () => {
     const tamperArray = tamperData || [];
     const fallArray = fallDetectData || [];
     const geofenceArray = luggageInfo || [];
+    const userReportsStatus = userReports || [];
+
+    userReportsStatus.forEach((report) => {
+      if (report.status === "In Progress") {
+        newAlerts.push({
+          type: "Report Update",
+          criticality: "In Progress",
+          description: `Your report regarding ${report.title} has been received by Developers`,
+          timestamp: new Date(report.updatedAt),
+        });
+      } else if (report.status === "Resolved") {
+        newAlerts.push({
+          type: "Report Update",
+          criticality: "Resolved",
+          description: `Your report regarding ${report.title} has beed Resolved`,
+          timestamp: new Date(report.updatedAt),
+        });
+      }
+    });
 
     geofenceArray.forEach((luggage) => {
       if (luggage.status === "Out of Range") {
@@ -174,7 +202,7 @@ const NavigationBar = () => {
     fallArray.forEach((fall) => {
       newAlerts.push({
         type: "Fall Detected",
-        criticality: "Info",
+        criticality: "Check your bag!",
         description: `Fall detected in ${fall.luggage_custom_name}`,
         timestamp: new Date(fall.fall_time),
       });
@@ -194,7 +222,7 @@ const NavigationBar = () => {
     } else {
       setAlerts(newAlerts); // Just update alerts
     }
-  }, [tempData, tamperData, fallDetectData]); // Runs when tempData, tamperData, or fallDetectData change
+  }, [tempData, tamperData, fallDetectData, userReports]); // Runs when tempData, tamperData, or fallDetectData change
 
   const renderNotifications = () => {
     return alerts
@@ -207,7 +235,11 @@ const NavigationBar = () => {
               <h4 className="card-title text-base flex items-center">
                 {alert.type}
                 <div
-                  className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
+                  className={`badge ${
+                    alert.type !== "Report Update"
+                      ? getAlertColor(alert.type)
+                      : getAlertColor(alert.criticality)
+                  } text-xs ml-2`}
                 >
                   {alert.criticality}
                 </div>
