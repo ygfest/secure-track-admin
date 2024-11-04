@@ -7,9 +7,9 @@ import { SiVite } from "react-icons/si";
 
 export default function Home() {
   return (
-    <main className="bg-white min-w-[460px]">
+    <main className="bg-white">
       {/* Hero Section */}
-      <section className="relative flex h-[80vh] w-full items-center justify-center ">
+      <section className="relative flex h-[80vh] w-full items-center justify-center min-w-[400px] ">
         {/* pattern */}
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#5CC90C,transparent_1px),linear-gradient(to_bottom,#5CC90C,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
         <nav
