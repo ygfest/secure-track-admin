@@ -14,6 +14,7 @@ export const UserNotifProvider = ({ children }) => {
   const [currentLink, setCurrentLink] = useState("/user/");
   const [openNotif, setOpenNotif] = useState(false);
   const [userReports, setUserReports] = useState([]);
+  const [statuses, setStatuses] = useState(null);
 
   useEffect(() => {
     async function fetchFallData() {
@@ -76,13 +77,19 @@ export const UserNotifProvider = ({ children }) => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/user-reports`);
         setUserReports(response.data);
-        console.log(response.data);
+
+        // Extract statuses from each report
+        const newStatuses = response.data.map((report) => report.status);
+        setStatuses(newStatuses); // Update statuses array
+
+        console.log("Fetched user reports:", response.data);
       } catch (error) {
         console.error("Error fetching user reports:", error);
       }
     }
+
     fetchUserReports();
-  }, []);
+  }, [statuses]);
 
   return (
     <UserNotifContext.Provider
@@ -92,6 +99,7 @@ export const UserNotifProvider = ({ children }) => {
         tamperData,
         tempData,
         userReports,
+        statuses,
         isSeenNotifications,
         setIsSeenNotifications,
         currentLink,

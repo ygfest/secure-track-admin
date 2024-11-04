@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
 import Profile from "../assets/sample_profile.jpg";
@@ -30,10 +30,13 @@ const NavigationBar = () => {
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
   const [alerts, setAlerts] = useState([]);
+  const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+
+  const prevStatusesRef = useRef([]);
 
   const {
     tamperData,
@@ -45,6 +48,7 @@ const NavigationBar = () => {
     setCurrentLink,
     luggageInfo,
     userReports,
+    statuses,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -155,7 +159,7 @@ const NavigationBar = () => {
         newAlerts.push({
           type: "Report Update",
           criticality: "Resolved",
-          description: `Your report regarding ${report.title} has beed Resolved`,
+          description: `Your report regarding ${report.title} has been Resolved`,
           timestamp: new Date(report.updatedAt),
         });
       }
@@ -214,15 +218,22 @@ const NavigationBar = () => {
   useEffect(() => {
     const newAlerts = updateAlerts();
 
-    // Check if there are new alerts
-    if (newAlerts.length > alerts.length) {
+    // Check if there are new alerts or if statuses have changed
+    const statusesChanged =
+      JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
+
+    if (newAlerts.length > alerts.length || statusesChanged) {
       setAlerts(newAlerts);
-      //setOpenNotif(true); // Open notifications panel when new alerts arrive
+      setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
       setIsSeenNotifications(false);
     } else {
       setAlerts(newAlerts); // Just update alerts
+      setHasNewAlerts(false); // No new alerts
     }
-  }, [tempData, tamperData, fallDetectData, userReports]); // Runs when tempData, tamperData, or fallDetectData change
+
+    // Update the ref with current statuses
+    prevStatusesRef.current = statuses;
+  }, [tempData, tamperData, fallDetectData, statuses]);
 
   const renderNotifications = () => {
     return alerts
@@ -311,7 +322,7 @@ const NavigationBar = () => {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                {!isSeenNotifications && (
+                {(!isSeenNotifications || hasNewAlerts) && (
                   <span className="badge badge-xs badge-primary indicator-item"></span>
                 )}
               </div>
