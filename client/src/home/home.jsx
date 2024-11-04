@@ -7,9 +7,9 @@ import { SiVite } from "react-icons/si";
 
 export default function Home() {
   return (
-    <main className="bg-white">
+    <main className="bg-white min-w-[460px]">
       {/* Hero Section */}
-      <section className="relative flex h-[80vh] w-full items-center justify-center">
+      <section className="relative flex h-[80vh] w-full items-center justify-center ">
         {/* pattern */}
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#5CC90C,transparent_1px),linear-gradient(to_bottom,#5CC90C,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
         <nav
@@ -20,17 +20,17 @@ export default function Home() {
           <header className="flex w-full items-center justify-between">
             <img src="/st-logo.png" alt="logo" width={120} height={35} />
 
-            <div className="flex gap-1 md:gap-4 items-center flex-nowrap">
+            <div className="flex gap-1 md:gap-4 items-center">
               <Link to="/sign-in">
-                <button className="font-medium min-w-[60px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200">
+                <button className="font-medium min-w-[60px] text-sm md:min-w-[100px] md:text-base p-2 rounded-lg text-primary hover:bg-zinc-200 flex-nowrap">
                   Sign in
                 </button>
               </Link>
               <Link to="/sign-up">
-                <button className="hidden md:inline p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[150px] md:min-w-[120px]">
+                <button className="hidden md:inline p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[150px] md:min-w-[120px] flex-nowrap">
                   Create an account
                 </button>
-                <button className="md:hidden p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[120px] md:min-w-[120px]">
+                <button className="md:hidden p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[120px] md:min-w-[120px] flex-nowrap">
                   Create account
                 </button>
               </Link>

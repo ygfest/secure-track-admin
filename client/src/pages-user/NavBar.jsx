@@ -215,12 +215,14 @@ const NavBar = () => {
           className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
         >
           <div className="card-body flex items-start">
-            <div className="mr-4">{getAlertIcon(alert.type)}</div>
+            <div className="mr-1 md:mr-2">{getAlertIcon(alert.type)}</div>
             <div className="flex-1">
               <h4 className="card-title text-base flex items-center">
                 {alert.type}
                 <div
-                  className={`badge ${getAlertColor(alert.type)} text-xs ml-2`}
+                  className={`badge ${getAlertColor(
+                    alert.type
+                  )} text-xs ml-2 flex-nowrap`}
                 >
                   {alert.criticality}
                 </div>
@@ -396,7 +398,7 @@ const NavBar = () => {
         </button>
         {/* Notifications Popup */}
         {openNotif && (
-          <div className="absolute top-16 right-2 w-[72%] sm:w-72 p-3 rounded-lg shadow-md bg-zinc-950 w-80">
+          <div className="absolute top-16 right-2 w-[75%] md:w-[25%] p-3 rounded-lg shadow-md bg-zinc-950 w-80">
             <h3 className="font-bold text-lg mb-3">Notifications</h3>
             <div
               className="overflow-y-auto"
