@@ -60,7 +60,7 @@ export default function Home() {
       </section>
 
       {/* Flow of cards section */}
-      <section className="relative flex w-full justify-center py-[4rem]">
+      <section className="relative flex w-full justify-center py-[4rem] min-w-[400px]">
         {/* Flow of cards */}
         <div className="w-[90%] max-w-[1200px]">
           {/* Cards Container with Animation */}
@@ -89,7 +89,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative flex w-full justify-center py-[4rem]">
+      <section className="relative flex w-full justify-center py-[4rem] min-w-[400px]">
         {/* 2nd Section Container */}
         <div className=" w-[90%] max-w-[1200px]">
           {/* Cards Container */}
@@ -145,7 +145,7 @@ export default function Home() {
 
       <section className="h-[500px]"></section>
 
-      <footer className="w-full">
+      <footer className="w-full min-w-[400px]">
         <div className="pt-12 pb-4 flex flex-col gap-8">
           <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">
             <p>Built by Stefano San Esteban</p>

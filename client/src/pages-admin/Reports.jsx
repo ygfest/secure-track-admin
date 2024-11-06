@@ -393,7 +393,7 @@ const AdminReports = () => {
 
       {showUpdateModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Update Status</h3>
             <form
               onSubmit={(e) => {
@@ -475,7 +475,7 @@ const AdminReports = () => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">
               Delete Report Permanently
             </h3>

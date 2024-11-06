@@ -380,11 +380,11 @@ const UserManagement = () => {
                               </div>
                             )}
                           </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                          <div className="ml-4 min-w-[140px]">
+                            <div className="text-sm font-medium text-gray-900 flex-nowrap">
                               {user.firstname} {user.lastname}
                             </div>
-                            <span className="badge badge-ghost badge-sm">
+                            <span className="badge badge-ghost badge-sm flex-nowrap">
                               {luggageInfo.filter(
                                 (luggage) => luggage.user_id === user._id
                               ).length +
@@ -482,7 +482,7 @@ const UserManagement = () => {
 
       {showAddModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Add New User</h3>
             <form
               onSubmit={(e) => {
@@ -561,7 +561,7 @@ const UserManagement = () => {
 
       {showUpdateModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Edit User</h3>
             <form
               onSubmit={(e) => {
@@ -635,7 +635,7 @@ const UserManagement = () => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 md:min-w-[30%] rounded-lg shadow-lg">
+          <div className="bg-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Confirm Delete</h3>
             <p>Are you sure you want to delete this user?</p>
             <div className="modal-action">
