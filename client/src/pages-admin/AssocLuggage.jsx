@@ -135,7 +135,6 @@ const AdminAssocLuggage = () => {
 
   const user = usersData.find((user) => user._id === currentLuggage?.user_id);
   const userId = user?._id;
-  console.log(userId);
 
   const ownerName = user?.firstname + " " + user?.lastname;
 

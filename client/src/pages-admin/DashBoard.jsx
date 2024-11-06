@@ -117,7 +117,7 @@ const DashBoard = () => {
       tooltip: {
         callbacks: {
           label: function (tooltipItem) {
-            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+            return `${tooltipItem.raw} users`;
           },
         },
       },
