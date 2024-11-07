@@ -149,27 +149,40 @@ const UserManagement = () => {
 
   const handleAddNew = async (userInfo) => {
     try {
+      // Validate First Name
       if (!userInfo.firstname) {
         toast.error("First name is required");
-      } else if (!userInfo.lastname) {
+        return;
+      }
+
+      if (!userInfo.lastname) {
         toast.error("Last name is required");
+        return;
       }
 
       if (!userInfo.email) {
         toast.error("Email is required");
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        return;
+      } else if (!/\S+@\S+\.\S+/.test(userInfo.email)) {
         toast.error("Invalid email address");
+        return;
       }
 
       if (!userInfo.password) {
         toast.error("Password is required");
-      } else if (!passwordRegex.test(formData.password)) {
-        newErrors.password =
-          "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character";
-      } else if (!userInfo.confimPassword) {
+        return;
+      } else if (!passwordRegex.test(userInfo.password)) {
+        toast.error(
+          "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character"
+        );
+        return;
+      }
+
+      if (!userInfo.confirmPassword) {
         toast.error("Confirm Password is required");
-      } else if (userInfo.password !== userInfo.confirmedPassword) {
-        toast.error("Passwords did not match. Please retry");
+        return;
+      } else if (userInfo.password !== userInfo.confirmPassword) {
+        toast.error("Passwords do not match. Please retry");
         return;
       }
 
@@ -204,6 +217,44 @@ const UserManagement = () => {
   const handleUpdateUser = async (userInfo) => {
     try {
       console.log(userInfo);
+
+      if (!userInfo.firstname) {
+        toast.error("First name is required");
+        return;
+      }
+      if (!userInfo.lastname) {
+        toast.error("Last name is required");
+        return;
+      }
+
+      if (!userInfo.email) {
+        toast.error("Email is required");
+        return;
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        toast.error("Email is Invalid");
+        return;
+      }
+
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+
+      if (!userInfo.password) {
+        toast.error("Password is required");
+        return;
+      } else if (!passwordRegex.test(luggageInfo.password)) {
+        toast.error(
+          "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character"
+        );
+        return;
+      }
+
+      if (!luggageInfo.confirmPassword) {
+        toast.error("Confirm Password is required");
+        return;
+      } else if (luggageInfo.password !== luggageInfo.confimPassword) {
+        toast.error("Password did not match");
+        return;
+      }
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await Axios.put(
         `${apiUrl}/auth/updateuser/${userInfo._id}`,
