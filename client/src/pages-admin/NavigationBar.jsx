@@ -3,12 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
 import Profile from "../assets/sample_profile.jpg";
-import {
-  FaThermometerHalf,
-  FaLock,
-  FaShieldAlt,
-  FaExclamationTriangle,
-} from "react-icons/fa";
+
 import {
   MdDashboard,
   MdTrackChanges,
@@ -224,6 +219,15 @@ const NavigationBar = () => {
           } transition-transform duration-300 ease-in-out`}
         >
           <ul className="mt-8 flex flex-col justify-start space-y-4 h-full">
+            <li className="absolute top-4 right-4 flex justify-center items-center">
+              <button
+                className="text-gray-500 hover:text-gray-200 cursor-pointer"
+                onClick={toggleSideBar}
+              >
+                <MdClose className="text-3xl" />
+              </button>
+            </li>
+
             <li>
               <Link
                 to="/admin/"
@@ -351,14 +355,6 @@ const NavigationBar = () => {
                 </div>
                 <span className="ml-3 font-medium">Profile</span>
               </Link>
-            </li>
-            <li className="absolute bottom-4 right-4 flex justify-center items-center">
-              <button
-                className="text-gray-500 hover:text-gray-200 cursor-pointer"
-                onClick={toggleSideBar}
-              >
-                <FaCircleChevronLeft className="text-3xl" />
-              </button>
             </li>
           </ul>
         </div>
