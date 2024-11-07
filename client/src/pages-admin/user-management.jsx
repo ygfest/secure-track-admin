@@ -144,11 +144,33 @@ const UserManagement = () => {
     setCurrentPage(1);
   };
 
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+
   const handleAddNew = async (userInfo) => {
     try {
-      if (userInfo.password !== userInfo.confirmedPassword) {
+      if (!userInfo.firstname) {
+        toast.error("First name is required");
+      } else if (!userInfo.lastname) {
+        toast.error("Last name is required");
+      }
+
+      if (!userInfo.email) {
+        toast.error("Email is required");
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        toast.error("Invalid email address");
+      }
+
+      if (!userInfo.password) {
+        toast.error("Password is required");
+      } else if (!passwordRegex.test(formData.password)) {
+        newErrors.password =
+          "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character";
+      } else if (!userInfo.confimPassword) {
+        toast.error("Confirm Password is required");
+      } else if (userInfo.password !== userInfo.confirmedPassword) {
         toast.error("Passwords did not match. Please retry");
-        return; // Prevent further execution
+        return;
       }
 
       console.log("User info to add:", userInfo);
@@ -160,7 +182,7 @@ const UserManagement = () => {
 
       if (response.data.status === false) {
         toast.error("Error adding new user");
-        return; // Exit if there is an error response from the API
+        return;
       }
 
       setUsersData((prev) => [...prev, response.data.user]);
