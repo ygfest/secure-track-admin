@@ -79,16 +79,16 @@ export default function Home() {
               ref={(el) => (cardsRef.current[idx] = el)}
               className={`flex items-center justify-between gap-8 p-6 h-[380px] rounded-lg shadow-md bg-light-gray ${
                 idx % 2 === 0 ? "flex-row" : "flex-row-reverse"
-              }`}
+              } flex-wrap md:flex-nowrap`} // Added flex-wrap for responsiveness
             >
-              <div className="w-1/2 flex justify-center items-center">
+              <div className="w-full md:w-1/2 flex justify-center items-center">
                 <img
                   src={feature.image}
                   alt={feature.title}
-                  className="w-[500px] h-[320px] object-cover"
+                  className="w-full max-w-[500px] h-auto object-cover"
                 />
               </div>
-              <div className="w-1/2 space-y-2 text-left">
+              <div className="w-full md:w-1/2 space-y-2 text-left mt-4 md:mt-0">
                 <h3 className="text-lg font-bold text-secondary">
                   {feature.title}
                 </h3>
