@@ -77,7 +77,7 @@ export default function Home() {
             <div
               key={idx}
               ref={(el) => (cardsRef.current[idx] = el)}
-              className={`flex items-center justify-between gap-8 p-6 h-[380px] rounded-lg shadow-md bg-light-gray ${
+              className={`flex items-center justify-between gap-8 p-6 rounded-lg shadow-md bg-light-gray h-auto ${
                 idx % 2 === 0 ? "flex-row" : "flex-row-reverse"
               } flex-wrap md:flex-nowrap`} // Added flex-wrap for responsiveness
             >
