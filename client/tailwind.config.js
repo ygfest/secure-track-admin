@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -20,9 +19,15 @@ export default {
         lg: "1200px",
         xl: "1700px",
       },
-      
       animation: {
         'spin-slow': 'spin 2s linear infinite', // Slower spin animation
+        'fade-in-up': 'fadeInUp 0.8s ease-in-out forwards',
+      },
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: 0, transform: 'translateY(20px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
       },
     },
   },
@@ -30,11 +35,11 @@ export default {
   daisyui: {
     themes: [{
       mytheme: {
-        "primary": "#5CC90C",  /* green grey from your logo*/
-        "secondary": "#3B3F3F",  /* grey */
-        "accent": "#FFD900",  
-        "neutral": "5CC90C",  /* Neutral dark  */
-        "base-100": "#ffffff",  /* Base white*/
+        "primary": "#5CC90C",
+        "secondary": "#3B3F3F",
+        "accent": "#FFD900",
+        "neutral": "#5CC90C",
+        "base-100": "#ffffff",
       },
     }],
   },

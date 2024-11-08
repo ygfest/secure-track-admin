@@ -41,3 +41,17 @@ p {
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(69, 69, 69, 0.69);
 }
+
+::selection {
+  color: white;
+  background: #67dc0e88;
+}
+
+::-moz-selection {
+  color: white;
+  background: #67dc0e88;
+}
+
+html {
+  scroll-behavior: smooth;
+}
