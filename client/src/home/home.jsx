@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { SiVite } from "react-icons/si";
 
 export default function Home() {
+  // Initialize an array of refs for each card.
   const cardsRef = useRef([]);
 
   // Apply fade-in animation on scroll
@@ -19,9 +20,21 @@ export default function Home() {
       { threshold: 0.3 }
     );
 
-    cardsRef.current.forEach((card) => observer.observe(card));
-    return () => cardsRef.current.forEach((card) => observer.unobserve(card));
-  }, []);
+    // Ensure all refs are elements before observing
+    cardsRef.current.forEach((card) => {
+      if (card) {
+        observer.observe(card);
+      }
+    });
+
+    return () => {
+      cardsRef.current.forEach((card) => {
+        if (card) {
+          observer.unobserve(card);
+        }
+      });
+    };
+  }, []); // Empty dependency array ensures it runs only once on mount.
 
   const features = [
     { title: "Real-time Location Tracking", image: "/location.svg" },
@@ -76,7 +89,7 @@ export default function Home() {
           {features.map((feature, idx) => (
             <div
               key={idx}
-              ref={(el) => (cardsRef.current[idx] = el)}
+              ref={(el) => (cardsRef.current[idx] = el)} // Ref each card element
               className={`flex items-center justify-between gap-8 p-6 rounded-lg shadow-md bg-light-gray h-auto ${
                 idx % 2 === 0 ? "flex-row" : "flex-row-reverse"
               } flex-wrap md:flex-nowrap`} // Added flex-wrap for responsiveness

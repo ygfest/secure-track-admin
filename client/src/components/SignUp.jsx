@@ -101,7 +101,7 @@ export default function SignUp() {
     <div className="flex items-center justify-center min-h-screen bg-white">
       <form
         onSubmit={handleSubmit}
-        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-4 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-lg"
+        className="md:mx-4 mx-8 flex w-full max-w-[500px] flex-col gap-4 md:border-2 bg-white md:border-zinc-400 md:border-opacity-25 md:p-8 p-4 rounded-2xl"
       >
         <h2 className="flex text-xl font-semibold justify-start md:justify-normal">
           Create your account
