@@ -74,6 +74,13 @@ export default function Home() {
         </div>
       </section>
 
+      {/*<section className="relative mt-36 flex flex-col items-center min-w-[400px]">
+        <p>Logos...</p>
+        <div className="h-[32px] w-full flex justify-center">
+          <img src="/ST-logo-with-name.png" className="h-full" />
+        </div>
+      </section>*/}
+
       {/* Flow of Cards Section */}
       <section className="relative mt-36 flex flex-col items-center min-w-[400px]">
         <div className="w-[90%] max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -223,7 +230,12 @@ export default function Home() {
       <footer className="w-full min-w-[400px] py-8 text-center">
         <div className="pt-12 pb-4 flex flex-col gap-8">
           <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">
-            <p>Built by Stefano San Esteban</p>
+            <p>
+              Built by{" "}
+              <a href="https://www.instagram.com/__sstefano/">
+                <span className="font-semibold"> Stefano San Esteban</span>
+              </a>
+            </p>
             <p>Powered by</p>
             <SiVite className="size-8 text-primary" />
           </div>
