@@ -116,7 +116,7 @@ export default function Home() {
       </section>
 
       {/* Other Sections */}
-      <section className="h-[500px]"></section>
+      <section className="h-[500px] min-w-[400px]"></section>
       <footer className="w-full min-w-[400px] py-8 text-center">
         <div className="pt-12 pb-4 flex flex-col gap-8">
           <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">

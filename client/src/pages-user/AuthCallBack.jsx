@@ -40,7 +40,6 @@ export default function AuthCallback() {
               }
             );
 
-            // Only proceed if save was successful
             if (saveResponse.status === 200) {
               const userRoleResponse = await axios.get(
                 `${apiUrl}/auth/verify`,
@@ -52,7 +51,6 @@ export default function AuthCallback() {
               const userRole = userRoleResponse.data.user.role;
               console.log(userRole);
 
-              // Navigate based on user role
               if (userRole === "admin") {
                 navigate("/admin");
               } else {
