@@ -181,6 +181,7 @@ router.post('/signin', async (req, res) => {
 router.post('/save-google-user', async (req, res) => {
   console.log("Received request to /save-google-user");
   const { googleId, email, firstName, lastName, picture } = req.body;
+  console.log(req.body)
 
   try {
     let user = await User.findOne({ googleId });
