@@ -36,15 +36,6 @@ export default function Home() {
     };
   }, []); // Empty dependency array ensures it runs only once on mount.
 
-  const features = [
-    { title: "Real-time Location Tracking", image: "/location.svg" },
-    { title: "Intrusion Monitoring", image: "/intrusion.svg" },
-    { title: "Fall Detection", image: "/fall.svg" },
-    { title: "Temperature Monitoring", image: "/temp.svg" },
-    { title: "Geofencing", image: "/geofence.svg" },
-    { title: "Reporting Feature", image: "/reporting.svg" },
-  ];
-
   return (
     <main className="bg-white font-poppins">
       {/* Hero Section */}
@@ -84,39 +75,151 @@ export default function Home() {
       </section>
 
       {/* Flow of Cards Section */}
-      <section className="relative flex flex-col items-center py-16 min-w-[400px]">
-        <div className="w-[90%] max-w-[1200px] space-y-8">
-          {features.map((feature, idx) => (
-            <div
-              key={idx}
-              ref={(el) => (cardsRef.current[idx] = el)} // Ref each card element
-              className={`flex items-center justify-between gap-8 p-6 rounded-lg shadow-md bg-light-gray h-auto ${
-                idx % 2 === 0 ? "flex-row" : "flex-row-reverse"
-              } flex-wrap md:flex-nowrap`} // Added flex-wrap for responsiveness
-            >
-              <div className="w-full md:w-1/2 flex justify-center items-center">
-                <img
-                  src={feature.image}
-                  alt={feature.title}
-                  className="w-full max-w-[500px] h-auto object-cover"
-                />
-              </div>
-              <div className="w-full md:w-1/2 space-y-2 text-left mt-4 md:mt-0">
-                <h3 className="text-lg font-bold text-secondary">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam scelerisque aliquam odio et faucibus.
-                </p>
-              </div>
+      <section className="relative mt-36 flex flex-col items-center min-w-[400px]">
+        <div className="w-[90%] max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Card 1 - Real-time Location Tracking */}
+          <div
+            ref={(el) => (cardsRef.current[0] = el)}
+            className="relative flex flex-col items-center p-8 rounded-lg shadow-lg bg-gradient-to-r from-[#F3F4F6] to-[#E5E7EB] self-start transform -translate-y-12 h-[540px] md:mt-[60px]"
+          >
+            <div className="w-full flex justify-center items-center mb-6">
+              <img
+                src="/location.svg"
+                alt="Real-time Location Tracking"
+                className="w-full max-w-[400px] h-auto object-cover rounded-md"
+              />
             </div>
-          ))}
+            <div className="w-full space-y-4 text-center">
+              <h3 className="text-2xl font-semibold text-secondary">
+                Real-time Location Tracking
+              </h3>
+              <p className="text-base text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                scelerisque aliquam odio et faucibus.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2 - Intrusion Monitoring */}
+          <div
+            ref={(el) => (cardsRef.current[1] = el)}
+            className="relative flex flex-col items-center p-8 rounded-lg shadow-lg bg-gradient-to-r from-[#F3F4F6] to-[#E5E7EB] self-end transform translate-y-12 h-[540px] md:mt-[240px]"
+          >
+            <div className="w-full flex justify-center items-center mb-6">
+              <img
+                src="/intrusion.svg"
+                alt="Intrusion Monitoring"
+                className="w-full max-w-[400px] h-auto object-cover rounded-md"
+              />
+            </div>
+            <div className="w-full space-y-4 text-center">
+              <h3 className="text-2xl font-semibold text-secondary">
+                Intrusion Monitoring
+              </h3>
+              <p className="text-base text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                scelerisque aliquam odio et faucibus.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3 - Fall Detection */}
+          <div
+            ref={(el) => (cardsRef.current[2] = el)}
+            className="relative flex flex-col items-center p-8 rounded-lg shadow-lg bg-gradient-to-r from-[#F3F4F6] to-[#E5E7EB] self-start transform -translate-y-12 h-[540px] md:mt-[-180px]"
+          >
+            <div className="w-full flex justify-center items-center mb-6">
+              <img
+                src="/fall.svg"
+                alt="Fall Detection"
+                className="w-full max-w-[400px] h-auto object-cover rounded-md"
+              />
+            </div>
+            <div className="w-full space-y-4 text-center">
+              <h3 className="text-2xl font-semibold text-secondary">
+                Fall Detection
+              </h3>
+              <p className="text-base text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                scelerisque aliquam odio et faucibus.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 4 - Temperature Monitoring */}
+          <div
+            ref={(el) => (cardsRef.current[3] = el)}
+            className="relative flex flex-col items-center p-8 rounded-lg shadow-lg bg-gradient-to-r from-[#F3F4F6] to-[#E5E7EB] self-end transform translate-y-12 h-[540px] "
+          >
+            <div className="w-full flex justify-center items-center mb-6">
+              <img
+                src="/temp.svg"
+                alt="Temperature Monitoring"
+                className="w-full max-w-[400px] h-auto object-cover rounded-md"
+              />
+            </div>
+            <div className="w-full space-y-4 text-center">
+              <h3 className="text-2xl font-semibold text-secondary">
+                Temperature Monitoring
+              </h3>
+              <p className="text-base text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                scelerisque aliquam odio et faucibus.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 5 - Geofencing */}
+          <div
+            ref={(el) => (cardsRef.current[4] = el)}
+            className="relative flex flex-col items-center p-8 rounded-lg shadow-lg bg-gradient-to-r from-[#F3F4F6] to-[#E5E7EB] self-start transform -translate-y-12 h-[540px] md:mt-[-180px]"
+          >
+            <div className="w-full flex justify-center items-center mb-6">
+              <img
+                src="/geofence.svg"
+                alt="Geofencing"
+                className="w-full max-w-[400px] h-auto object-cover rounded-md"
+              />
+            </div>
+            <div className="w-full space-y-4 text-center">
+              <h3 className="text-2xl font-semibold text-secondary">
+                Geofencing
+              </h3>
+              <p className="text-base text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                scelerisque aliquam odio et faucibus.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 6 - Reporting Feature */}
+          <div
+            ref={(el) => (cardsRef.current[5] = el)}
+            className="relative flex flex-col items-center p-8 rounded-lg shadow-lg bg-gradient-to-r from-[#F3F4F6] to-[#E5E7EB] self-end transform translate-y-12 h-[540px]"
+          >
+            <div className="w-full flex justify-center items-center mb-6">
+              <img
+                src="/reporting.svg"
+                alt="Reporting Feature"
+                className="w-full max-w-[400px] h-auto object-cover rounded-md"
+              />
+            </div>
+            <div className="w-full space-y-4 text-center">
+              <h3 className="text-2xl font-semibold text-secondary">
+                Reporting Feature
+              </h3>
+              <p className="text-base text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                scelerisque aliquam odio et faucibus.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Other Sections */}
       <section className="h-[500px] min-w-[400px]"></section>
+
       <footer className="w-full min-w-[400px] py-8 text-center">
         <div className="pt-12 pb-4 flex flex-col gap-8">
           <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">
