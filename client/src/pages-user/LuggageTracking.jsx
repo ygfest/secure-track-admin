@@ -317,6 +317,9 @@ const LuggageTracking = () => {
     }
   };
 
+  console.log("LAT", currentUserLat);
+  console.log("LONG:", currentUserLong);
+
   useEffect(() => {
     const isNewDataAvailable = luggageDeets.some(
       (luggage) =>

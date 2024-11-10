@@ -72,22 +72,27 @@ export const UserNotifProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    async function fetchUserReports() {
+    const fetchUserReports = async () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/user-reports`);
-        setUserReports(response.data);
 
-        // Extract statuses from each report
+        // Extract statuses from each report in the fetched data
         const newStatuses = response.data.map((report) => report.status);
-        setStatuses(newStatuses); // Update statuses array
+
+        // Compare newStatuses with current statuses; update only if they differ
+        if (JSON.stringify(newStatuses) !== JSON.stringify(statuses)) {
+          setStatuses(newStatuses); // Update statuses to trigger re-render
+          setUserReports(response.data); // Update reports only when statuses change
+        }
       } catch (error) {
         console.error("Error fetching user reports:", error);
       }
-    }
+    };
 
+    // Fetch user reports initially and whenever `statuses` change
     fetchUserReports();
-  }, [statuses]);
+  }, [statuses]); // Depend on `statuses` to re-run when it changes
 
   return (
     <UserNotifContext.Provider

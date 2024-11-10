@@ -446,8 +446,7 @@ const AdminLuggageTracking = () => {
         >
           <TileLayer
             attribution={`&copy; 
-            developed by <a href="https://www.instagram.com/__sstefano/" className="bg-black text-white">Stefano</a> 
-                contributors`}
+            built by <a href="https://www.instagram.com/__sstefano/" className="bg-black text-white">Stefano</a>`}
             url={`https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${
               import.meta.env.VITE_STADIA_API_KEY
             }`}
