@@ -76,6 +76,7 @@ export const UserNotifProvider = ({ children }) => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${apiUrl}/auth/user-reports`);
+        setUserReports(response.data);
 
         // Extract statuses from each report in the fetched data
         const newStatuses = response.data.map((report) => report.status);
@@ -83,7 +84,7 @@ export const UserNotifProvider = ({ children }) => {
         // Compare newStatuses with current statuses; update only if they differ
         if (JSON.stringify(newStatuses) !== JSON.stringify(statuses)) {
           setStatuses(newStatuses); // Update statuses to trigger re-render
-          setUserReports(response.data); // Update reports only when statuses change
+          //  // Update reports only when statuses change
         }
       } catch (error) {
         console.error("Error fetching user reports:", error);
