@@ -52,7 +52,8 @@ const NavigationBar = () => {
     userReports,
     statuses,
     handleNotifClick,
-    geoStatChanged,
+    hasGeoStatUpdated,
+    setHasGeoStatUpdated,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -216,36 +217,26 @@ const NavigationBar = () => {
 
     return newAlerts;
   };
-  const prevLuggageInfoRef = useRef(luggageInfo); // Store previous value of luggageInfo
-
   useEffect(() => {
     const newAlerts = updateAlerts();
 
-    // Compare the current luggageInfo statuses with the previous ones
-    const geofenceStatusChanged = luggageInfo.some((currentLuggage, index) => {
-      const prevLuggage = prevLuggageInfoRef.current[index];
-      return prevLuggage && currentLuggage.status !== prevLuggage.status;
-    });
-
+    // Check if there are new alerts or if statuses have changed
     const statusesChanged =
       JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
 
-    if (
-      newAlerts.length > alerts.length ||
-      statusesChanged ||
-      geofenceStatusChanged
-    ) {
+    if (newAlerts.length > alerts.length || statusesChanged) {
       setAlerts(newAlerts);
-      setHasNewAlerts(true);
+      setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
       setIsSeenNotifications(false);
     } else {
-      setAlerts(newAlerts);
-      setHasNewAlerts(false);
+      setAlerts(newAlerts); // Just update alerts
+      setHasNewAlerts(false); // No new alerts
     }
 
+    // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-    prevLuggageInfoRef.current = luggageInfo; // Update ref after checking
-  }, [tempData, tamperData, fallDetectData, statuses, luggageInfo]); // Dependency on luggageInfo added here
+    setHasGeoStatUpdated(false);
+  }, [tempData, tamperData, fallDetectData, statuses, hasGeoStatUpdated]);
 
   console.log("IS SEEN BA:", isSeenNotifications);
   console.log("HAS BAGO BA?:", hasNewAlerts);

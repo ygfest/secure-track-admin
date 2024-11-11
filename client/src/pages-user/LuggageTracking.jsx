@@ -113,7 +113,7 @@ const LuggageTracking = () => {
   const [lastChecked, setLastChecked] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { openNotif, setOpenNotif } = useUserNotif();
+  const { openNotif, setOpenNotif, setHasGeoStatUpdated } = useUserNotif();
   useEffect(() => {
     axios.defaults.withCredentials = true;
   }, []);
@@ -320,7 +320,7 @@ const LuggageTracking = () => {
         setLuggageDeets(updatedStatuses);
         toast.success("Geofence statuses have been updated");
 
-        //fetchUserReports();
+        setHasGeoStatUpdated(true);
       }
 
       // Ensure geoStatChanged is set only if relevant status change occurred

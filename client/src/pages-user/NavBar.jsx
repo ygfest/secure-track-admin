@@ -50,7 +50,8 @@ const NavBar = () => {
     userReports,
     statuses,
     handleNotifClick,
-    geoStatChanged,
+    hasGeoStatUpdated,
+    setHasGeoStatUpdated,
   } = useUserNotif();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -208,7 +209,8 @@ const NavBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses]);
+    setHasGeoStatUpdated(false);
+  }, [tempData, tamperData, fallDetectData, statuses, hasGeoStatUpdated]);
 
   const renderNotifications = () => {
     return alerts
