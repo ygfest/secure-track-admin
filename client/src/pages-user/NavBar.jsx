@@ -71,7 +71,7 @@ const NavBar = () => {
     };
 
     verifyToken();
-  }, [navigate, apiUrl]);
+  }, [navigate]);
 
   const getAlertIcon = (alertType) => {
     switch (alertType) {
