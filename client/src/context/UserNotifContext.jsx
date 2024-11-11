@@ -17,7 +17,7 @@ export const UserNotifProvider = ({ children }) => {
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
   const [newStatuses, setNewStatuses] = useState(null);
-  const [hasGeoStatUpdated, setHasGeoStatUpdated] = useState(false);
+  const [hasGeoStatUpdated, setHasGeoStatUpdated] = useState(null);
 
   useEffect(() => {
     async function fetchFallData() {

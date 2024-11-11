@@ -235,7 +235,6 @@ const NavigationBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-    setHasGeoStatUpdated(false);
   }, [tempData, tamperData, fallDetectData, statuses, hasGeoStatUpdated]);
 
   console.log("IS SEEN BA:", isSeenNotifications);

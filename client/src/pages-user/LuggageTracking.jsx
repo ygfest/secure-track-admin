@@ -263,7 +263,7 @@ const LuggageTracking = () => {
     if (isUpdating) return; // Prevent re-entry if an update is in progress
 
     setIsUpdating(true);
-    let hasGeoStatusChanged = false;
+    let hasGeoStatusChanges = false;
 
     try {
       const updatedStatuses = await Promise.all(
@@ -295,7 +295,7 @@ const LuggageTracking = () => {
               newStatus === "Out of Range" ||
               newStatus === "Out of Coverage"
             ) {
-              hasGeoStatusChanged = true; // Track status change here
+              hasGeoStatusChanges = true; // Track status change here
             }
 
             await axios.post(
@@ -320,7 +320,7 @@ const LuggageTracking = () => {
         setLuggageDeets(updatedStatuses);
         toast.success("Geofence statuses have been updated");
 
-        setHasGeoStatUpdated(true);
+        setHasGeoStatUpdated(Date.now());
       }
 
       // Ensure geoStatChanged is set only if relevant status change occurred

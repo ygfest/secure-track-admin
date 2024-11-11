@@ -209,7 +209,6 @@ const NavBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-    setHasGeoStatUpdated(false);
   }, [tempData, tamperData, fallDetectData, statuses, hasGeoStatUpdated]);
 
   const renderNotifications = () => {
