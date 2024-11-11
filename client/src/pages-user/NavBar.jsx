@@ -50,6 +50,7 @@ const NavBar = () => {
     userReports,
     statuses,
     handleNotifClick,
+    geoStatChanged,
   } = useUserNotif();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
