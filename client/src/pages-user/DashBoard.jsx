@@ -190,16 +190,21 @@ const DashBoard = () => {
   const tempTitle =
     selectedLuggage === "All" ? "Average Temperature" : "Temperature";
 
-  // Calculate average temperature per timestamp for all luggage
+  // Calculate average temperature per 10-minute interval for all luggage
   const calculateAverageTempPerTimestamp = (data) => {
     const tempMap = {};
     data.forEach((log) => {
-      const timestamp = moment(log.timeStamp).format("MMM DD, YYYY HH:mm");
-      if (!tempMap[timestamp]) {
-        tempMap[timestamp] = { sum: 0, count: 0 };
+      // Round down to the nearest 10-minute interval
+      const timestamp = moment(log.timeStamp)
+        .startOf("minute")
+        .minute(Math.floor(moment(log.timeStamp).minute() / 10) * 10);
+      const intervalLabel = timestamp.format("MMM DD, YYYY HH:mm");
+
+      if (!tempMap[intervalLabel]) {
+        tempMap[intervalLabel] = { sum: 0, count: 0 };
       }
-      tempMap[timestamp].sum += log.temperature;
-      tempMap[timestamp].count += 1;
+      tempMap[intervalLabel].sum += log.temperature;
+      tempMap[intervalLabel].count += 1;
     });
 
     return Object.keys(tempMap).map((timestamp) => ({
@@ -211,7 +216,9 @@ const DashBoard = () => {
   const filteredTempData =
     selectedLuggage === "All"
       ? calculateAverageTempPerTimestamp(tempData)
-      : tempData.filter((log) => log.luggage_custom_name === selectedLuggage);
+      : calculateAverageTempPerTimestamp(
+          tempData.filter((log) => log.luggage_custom_name === selectedLuggage)
+        );
 
   const labels = filteredTempData.map((log) => log.timeStamp);
 
@@ -238,21 +245,22 @@ const DashBoard = () => {
       },
       title: {
         display: true,
-        text: "Temperature Over Time",
+        text: "Temperature Over Time (10-Minute Intervals)",
       },
     },
     scales: {
       x: {
         type: "time",
         time: {
-          unit: "day",
+          unit: "minute", // Set unit to minute
+          stepSize: 10, // Set step size to 10 minutes
           displayFormats: {
-            day: "MMM DD, YYYY",
+            minute: "MMM DD, YYYY HH:mm", // Format for 10-minute intervals
           },
         },
         title: {
           display: true,
-          text: "Date",
+          text: "Date and Time (10-Minute Intervals)",
         },
       },
       y: {
@@ -299,8 +307,13 @@ const DashBoard = () => {
 
   // Stack the intrusion data by counting occurrences within the same day
   const intrusionCounts = tamperData.reduce((counts, log) => {
-    const date = moment(log.timestamp).format("MMM DD, YYYY");
-    counts[date] = (counts[date] || 0) + 1;
+    // Round down to the nearest 10 minutes
+    const tenMinuteInterval = moment(log.timestamp)
+      .startOf("minute")
+      .minute(Math.floor(moment(log.timestamp).minute() / 10) * 10);
+    const intervalLabel = tenMinuteInterval.format("MMM DD, YYYY HH:mm");
+
+    counts[intervalLabel] = (counts[intervalLabel] || 0) + 1;
     return counts;
   }, {});
 
@@ -325,21 +338,22 @@ const DashBoard = () => {
       },
       title: {
         display: true,
-        text: "Intrusion Detection Timeline",
+        text: "Intrusion Detection Timeline (10-Minute Intervals)",
       },
     },
     scales: {
       x: {
         type: "time",
         time: {
-          unit: "day",
+          unit: "minute", // Set to minute
+          stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            day: "MMM DD, YYYY",
+            minute: "HH:mm, MMM DD,", // Format for 10-minute intervals
           },
         },
         title: {
           display: true,
-          text: "Date",
+          text: "Date and Time (10-Minute Intervals)",
         },
       },
       y: {
@@ -353,8 +367,13 @@ const DashBoard = () => {
 
   // Stack the fall data by counting occurrences within the same day
   const fallCounts = fallDetectData.reduce((counts, log) => {
-    const date = moment(log.fall_time).format("MMM DD, YYYY");
-    counts[date] = (counts[date] || 0) + 1;
+    // Round down to the nearest 10 minutes
+    const tenMinuteInterval = moment(log.fall_time)
+      .startOf("minute")
+      .minute(Math.floor(moment(log.fall_time).minute() / 10) * 10);
+    const intervalLabel = tenMinuteInterval.format("MMM DD, YYYY HH:mm");
+
+    counts[intervalLabel] = (counts[intervalLabel] || 0) + 1;
     return counts;
   }, {});
 
@@ -379,21 +398,22 @@ const DashBoard = () => {
       },
       title: {
         display: true,
-        text: "Fall History or Timeline",
+        text: "Fall History or Timeline (10-Minute Intervals)",
       },
     },
     scales: {
       x: {
         type: "time",
         time: {
-          unit: "day",
+          unit: "minute", // Set to minute
+          stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            day: "MMM DD, YYYY",
+            minute: "HH:mm, MMM DD", // Format for 10-minute intervals
           },
         },
         title: {
           display: true,
-          text: "Date",
+          text: "Date and Time (10-Minute Intervals)",
         },
       },
       y: {
