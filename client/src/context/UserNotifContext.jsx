@@ -90,7 +90,7 @@ export const UserNotifProvider = ({ children }) => {
 
   useEffect(() => {
     fetchUserReports();
-  }, []);
+  }, [geoStatChanged]);
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
