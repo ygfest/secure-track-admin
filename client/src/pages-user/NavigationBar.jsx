@@ -216,13 +216,25 @@ const NavigationBar = () => {
 
     return newAlerts;
   };
+  const prevLuggageInfoRef = useRef(luggageInfo); // Store previous value of luggageInfo
 
   useEffect(() => {
     const newAlerts = updateAlerts();
 
+    // Compare the current luggageInfo statuses with the previous ones
+    const geofenceStatusChanged = luggageInfo.some((currentLuggage, index) => {
+      const prevLuggage = prevLuggageInfoRef.current[index];
+      return prevLuggage && currentLuggage.status !== prevLuggage.status;
+    });
+
     const statusesChanged =
       JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
-    if (newAlerts.length > alerts.length || statusesChanged) {
+
+    if (
+      newAlerts.length > alerts.length ||
+      statusesChanged ||
+      geofenceStatusChanged
+    ) {
       setAlerts(newAlerts);
       setHasNewAlerts(true);
       setIsSeenNotifications(false);
@@ -232,7 +244,8 @@ const NavigationBar = () => {
     }
 
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses]);
+    prevLuggageInfoRef.current = luggageInfo; // Update ref after checking
+  }, [tempData, tamperData, fallDetectData, statuses, luggageInfo]); // Dependency on luggageInfo added here
 
   console.log("IS SEEN BA:", isSeenNotifications);
   console.log("HAS BAGO BA?:", hasNewAlerts);

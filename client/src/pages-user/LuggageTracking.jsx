@@ -324,9 +324,6 @@ const LuggageTracking = () => {
       }
 
       // Ensure geoStatChanged is set only if relevant status change occurred
-      if (hasGeoStatusChanged) {
-        setGeoStatChanged(true); // Update geoStatChanged only when necessary
-      }
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
       toast.error(

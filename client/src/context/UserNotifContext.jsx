@@ -79,22 +79,19 @@ export const UserNotifProvider = ({ children }) => {
       const response = await axios.get(`${apiUrl}/auth/user-reports`);
       setUserReports(response.data);
 
-      // Extract statuses from each report in the fetched data
+      // Extract statuses from each report
       const newStatuses = response.data.map((report) => report.status);
+      setStatuses(newStatuses); // Update statuses array
 
-      // Update statuses only if they differ from the current statuses
-      if (JSON.stringify(newStatuses) !== JSON.stringify(statuses)) {
-        setStatuses(newStatuses);
-      }
+      console.log("Fetched user reports:", response.data);
     } catch (error) {
       console.error("Error fetching user reports:", error);
     }
   };
 
-  // Fetch user reports initially and whenever `statuses` change
   useEffect(() => {
     fetchUserReports();
-  }, [statuses]);
+  }, []);
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);

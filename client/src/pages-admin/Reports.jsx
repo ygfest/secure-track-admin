@@ -7,8 +7,6 @@ import hardwareIcon from "../assets/hardware.png";
 import softwareIcon from "../assets/software.png";
 import { toast, Toaster } from "sonner";
 
-import { useUserNotif } from "../context/UserNotifContext";
-
 const AdminReports = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
@@ -23,8 +21,6 @@ const AdminReports = () => {
   const [currentReport, setCurrentReport] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [reportsData, setReportsData] = useState([]);
-
-  const { fetchUserReports } = useUserNotif();
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -187,7 +183,6 @@ const AdminReports = () => {
         prev.map((item) => (item._id === reportData._id ? response.data : item))
       );
       setShowUpdateModal(false);
-      fetchUserReports();
     } catch (error) {
       console.error("Error updating luggage", error);
     }
