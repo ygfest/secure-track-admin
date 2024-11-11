@@ -28,9 +28,7 @@ const formatDate = (dateObj) => {
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
-  const [openNotif, setOpenNotif] = useState(false);
   const [alerts, setAlerts] = useState([]);
-  const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
@@ -44,11 +42,16 @@ const NavigationBar = () => {
     fallDetectData,
     isSeenNotifications,
     setIsSeenNotifications,
+    hasNewAlerts,
+    setHasNewAlerts,
     currentLink,
     setCurrentLink,
+    openNotif,
+    setOpenNotif,
     luggageInfo,
     userReports,
     statuses,
+    handleNotifClick,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -216,22 +219,22 @@ const NavigationBar = () => {
   useEffect(() => {
     const newAlerts = updateAlerts();
 
-    // Check if there are new alerts or if statuses have changed
     const statusesChanged =
       JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
-
     if (newAlerts.length > alerts.length || statusesChanged) {
       setAlerts(newAlerts);
-      setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
+      setHasNewAlerts(true);
       setIsSeenNotifications(false);
     } else {
-      setAlerts(newAlerts); // Just update alerts
-      setHasNewAlerts(false); // No new alerts
+      setAlerts(newAlerts);
+      setHasNewAlerts(false);
     }
 
-    // Update the ref with current statuses
     prevStatusesRef.current = statuses;
   }, [tempData, tamperData, fallDetectData, statuses]);
+
+  console.log("IS SEEN BA:", isSeenNotifications);
+  console.log("HAS BAGO BA?:", hasNewAlerts);
 
   const renderNotifications = () => {
     return alerts
@@ -261,11 +264,6 @@ const NavigationBar = () => {
           </div>
         </div>
       ));
-  };
-
-  const handleNotifClick = () => {
-    setOpenNotif(!openNotif);
-    setIsSeenNotifications(true); // Mark notifications as seen
   };
 
   return (

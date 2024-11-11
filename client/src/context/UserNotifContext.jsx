@@ -11,10 +11,12 @@ export const UserNotifProvider = ({ children }) => {
   const [tamperData, setTamperData] = useState([]);
   const [tempData, setTempData] = useState([]);
   const [isSeenNotifications, setIsSeenNotifications] = useState(true);
+  const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [currentLink, setCurrentLink] = useState("/user/");
   const [openNotif, setOpenNotif] = useState(false);
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
+  const [newStatuses, setNewStatuses] = useState(null);
 
   useEffect(() => {
     async function fetchFallData() {
@@ -71,28 +73,29 @@ export const UserNotifProvider = ({ children }) => {
     fetchLuggageInfo();
   }, []);
 
+  const fetchUserReports = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.get(`${apiUrl}/auth/user-reports`);
+      setUserReports(response.data);
+
+      // Extract statuses from each report
+      const newStatuses = response.data.map((report) => report.status);
+      setStatuses(newStatuses); // Update statuses array
+    } catch (error) {
+      console.error("Error fetching user reports:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchUserReports = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/user-reports`);
-        setUserReports(response.data);
-
-        // Extract statuses from each report in the fetched data
-        const newStatuses = response.data.map((report) => report.status);
-
-        // Compare newStatuses with current statuses; update only if they differ
-        if (JSON.stringify(newStatuses) !== JSON.stringify(statuses)) {
-          setStatuses(newStatuses); // Update statuses to trigger re-render
-        }
-      } catch (error) {
-        console.error("Error fetching user reports:", error);
-      }
-    };
-
-    // Fetch user reports initially and whenever `statuses` change
     fetchUserReports();
-  }, [statuses]); // Depend on `statuses` to re-run when it changes
+  }, []);
+
+  const handleNotifClick = () => {
+    setOpenNotif(!openNotif);
+    setIsSeenNotifications(true);
+    setHasNewAlerts(false);
+  };
 
   return (
     <UserNotifContext.Provider
@@ -103,12 +106,18 @@ export const UserNotifProvider = ({ children }) => {
         tempData,
         userReports,
         statuses,
+        newStatuses,
+        setNewStatuses,
         isSeenNotifications,
         setIsSeenNotifications,
+        hasNewAlerts,
+        setHasNewAlerts,
         currentLink,
         setCurrentLink,
         openNotif,
         setOpenNotif,
+        fetchUserReports,
+        handleNotifClick,
       }}
     >
       {children}
