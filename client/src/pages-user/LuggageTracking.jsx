@@ -258,12 +258,14 @@ const LuggageTracking = () => {
     if (shouldUpdateGeofence) {
       updateGeofenceStatus();
     }
-  }, [luggageDeets, currentUserLat, currentUserLong]); // Add currentUserLat and currentUserLong to the dependencies
+  }, [luggageDeets, currentUserLat, currentUserLong]);
 
   const updateGeofenceStatus = async () => {
     if (isUpdating) return; // Prevent re-entry if an update is in progress
 
     setIsUpdating(true);
+    let hasGeoStatusChanged = false;
+
     try {
       const updatedStatuses = await Promise.all(
         luggageDeets.map(async (luggage) => {
@@ -290,12 +292,20 @@ const LuggageTracking = () => {
               : "In Range";
 
           if (status !== newStatus) {
+            if (
+              newStatus === "Out of Range" ||
+              newStatus === "Out of Coverage"
+            ) {
+              hasGeoStatusChanged = true;
+            }
+
             await axios.post(
               `${
                 import.meta.env.VITE_API_URL
               }/luggage-router/luggage/${_id}/updateStatus`,
               { status: newStatus, luggageId: _id }
             );
+
             return { ...luggage, status: newStatus };
           }
 
@@ -309,8 +319,10 @@ const LuggageTracking = () => {
         toast.success("Geofence statuses have been updated");
 
         fetchUserReports();
-        setGeoStatChanged(true);
       }
+
+      // Set geoStatChanged based on the status change detection
+      setGeoStatChanged(hasGeoStatusChanged);
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
       toast.error(
