@@ -113,7 +113,8 @@ const LuggageTracking = () => {
   const [lastChecked, setLastChecked] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { openNotif, setOpenNotif, fetchUserReports } = useUserNotif();
+  const { openNotif, setOpenNotif, fetchUserReports, setGeoStatChanged } =
+    useUserNotif();
   useEffect(() => {
     axios.defaults.withCredentials = true;
   }, []);
@@ -308,6 +309,7 @@ const LuggageTracking = () => {
         toast.success("Geofence statuses have been updated");
 
         fetchUserReports();
+        setGeoStatChanged(true);
       }
     } catch (error) {
       console.error("Error updating geofence statuses:", error);

@@ -17,6 +17,7 @@ export const UserNotifProvider = ({ children }) => {
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
   const [newStatuses, setNewStatuses] = useState(null);
+  const [geoStatChanged, setGeoStatChanged] = useState(false);
 
   useEffect(() => {
     async function fetchFallData() {
@@ -118,6 +119,8 @@ export const UserNotifProvider = ({ children }) => {
         setOpenNotif,
         fetchUserReports,
         handleNotifClick,
+        geoStatChanged,
+        setGeoStatChanged,
       }}
     >
       {children}

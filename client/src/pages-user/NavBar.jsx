@@ -27,7 +27,6 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [alerts, setAlerts] = useState([]);
-
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
@@ -51,6 +50,7 @@ const NavBar = () => {
     userReports,
     statuses,
     handleNotifClick,
+    geoStatChanged,
   } = useUserNotif();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -194,10 +194,8 @@ const NavBar = () => {
     const newAlerts = updateAlerts();
 
     // Check if there are new alerts or if statuses have changed
-    const statusesChanged =
-      JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
 
-    if (newAlerts.length > alerts.length || statusesChanged) {
+    if (newAlerts.length > alerts.length || geoStatChanged) {
       setAlerts(newAlerts);
       setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
       setIsSeenNotifications(false);
