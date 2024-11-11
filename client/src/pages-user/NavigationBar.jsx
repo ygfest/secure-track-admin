@@ -52,6 +52,7 @@ const NavigationBar = () => {
     userReports,
     statuses,
     handleNotifClick,
+    geoStatChanged,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -221,7 +222,7 @@ const NavigationBar = () => {
 
     const statusesChanged =
       JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
-    if (newAlerts.length > alerts.length || statusesChanged) {
+    if (newAlerts.length > alerts.length || geoStatChanged) {
       setAlerts(newAlerts);
       setHasNewAlerts(true);
       setIsSeenNotifications(false);
@@ -231,7 +232,7 @@ const NavigationBar = () => {
     }
 
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses]);
+  }, [tempData, tamperData, fallDetectData, statuses, geoStatChanged]);
 
   console.log("IS SEEN BA:", isSeenNotifications);
   console.log("HAS BAGO BA?:", hasNewAlerts);
