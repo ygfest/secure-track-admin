@@ -296,7 +296,7 @@ const LuggageTracking = () => {
               newStatus === "Out of Range" ||
               newStatus === "Out of Coverage"
             ) {
-              hasGeoStatusChanged = true;
+              hasGeoStatusChanged = true; // Track status change here
             }
 
             await axios.post(
@@ -314,15 +314,20 @@ const LuggageTracking = () => {
       );
 
       // Only update luggageDeets if there are changes
-      if (JSON.stringify(updatedStatuses) !== JSON.stringify(luggageDeets)) {
+      const luggageDeetsChanged =
+        JSON.stringify(updatedStatuses) !== JSON.stringify(luggageDeets);
+
+      if (luggageDeetsChanged) {
         setLuggageDeets(updatedStatuses);
         toast.success("Geofence statuses have been updated");
 
         fetchUserReports();
       }
 
-      // Set geoStatChanged based on the status change detection
-      setGeoStatChanged(hasGeoStatusChanged);
+      // Ensure geoStatChanged is set only if relevant status change occurred
+      if (hasGeoStatusChanged) {
+        setGeoStatChanged(true); // Update geoStatChanged only when necessary
+      }
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
       toast.error(
