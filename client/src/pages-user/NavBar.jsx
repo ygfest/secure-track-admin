@@ -194,8 +194,10 @@ const NavBar = () => {
     const newAlerts = updateAlerts();
 
     // Check if there are new alerts or if statuses have changed
+    const statusesChanged =
+      JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
 
-    if (newAlerts.length > alerts.length || geoStatChanged) {
+    if (newAlerts.length > alerts.length || statusesChanged) {
       setAlerts(newAlerts);
       setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
       setIsSeenNotifications(false);
@@ -206,7 +208,7 @@ const NavBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses, geoStatChanged]);
+  }, [tempData, tamperData, fallDetectData, statuses]);
 
   const renderNotifications = () => {
     return alerts

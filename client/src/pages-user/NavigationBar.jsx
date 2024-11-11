@@ -68,7 +68,7 @@ const NavigationBar = () => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await fetch(`${apiUrl}/auth/verify`, {
           method: "GET",
-          credentials: "include", // Equivalent to axios withCredentials: true
+          credentials: "include",
         });
 
         const data = await response.json();
@@ -222,7 +222,7 @@ const NavigationBar = () => {
 
     const statusesChanged =
       JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
-    if (newAlerts.length > alerts.length || geoStatChanged) {
+    if (newAlerts.length > alerts.length || statusesChanged) {
       setAlerts(newAlerts);
       setHasNewAlerts(true);
       setIsSeenNotifications(false);
@@ -232,7 +232,7 @@ const NavigationBar = () => {
     }
 
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses, geoStatChanged]);
+  }, [tempData, tamperData, fallDetectData, statuses]);
 
   console.log("IS SEEN BA:", isSeenNotifications);
   console.log("HAS BAGO BA?:", hasNewAlerts);

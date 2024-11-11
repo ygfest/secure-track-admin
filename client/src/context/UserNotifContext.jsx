@@ -17,7 +17,6 @@ export const UserNotifProvider = ({ children }) => {
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
   const [newStatuses, setNewStatuses] = useState(null);
-  const [geoStatChanged, setGeoStatChanged] = useState(false);
 
   useEffect(() => {
     async function fetchFallData() {
@@ -80,17 +79,22 @@ export const UserNotifProvider = ({ children }) => {
       const response = await axios.get(`${apiUrl}/auth/user-reports`);
       setUserReports(response.data);
 
-      // Extract statuses from each report
+      // Extract statuses from each report in the fetched data
       const newStatuses = response.data.map((report) => report.status);
-      setStatuses(newStatuses); // Update statuses array
+
+      // Update statuses only if they differ from the current statuses
+      if (JSON.stringify(newStatuses) !== JSON.stringify(statuses)) {
+        setStatuses(newStatuses);
+      }
     } catch (error) {
       console.error("Error fetching user reports:", error);
     }
   };
 
+  // Fetch user reports initially and whenever `statuses` change
   useEffect(() => {
     fetchUserReports();
-  }, []);
+  }, [statuses]);
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
@@ -119,8 +123,6 @@ export const UserNotifProvider = ({ children }) => {
         setOpenNotif,
         fetchUserReports,
         handleNotifClick,
-        geoStatChanged,
-        setGeoStatChanged,
       }}
     >
       {children}
