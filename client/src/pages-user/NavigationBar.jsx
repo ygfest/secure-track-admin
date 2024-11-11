@@ -52,8 +52,7 @@ const NavigationBar = () => {
     userReports,
     statuses,
     handleNotifClick,
-    hasGeoStatUpdated,
-    setHasGeoStatUpdated,
+    geoStatusUpdateCount,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -235,7 +234,7 @@ const NavigationBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses, hasGeoStatUpdated]);
+  }, [tempData, tamperData, fallDetectData, statuses, geoStatusUpdateCount]);
 
   console.log("IS SEEN BA:", isSeenNotifications);
   console.log("HAS BAGO BA?:", hasNewAlerts);

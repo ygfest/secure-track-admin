@@ -17,7 +17,7 @@ export const UserNotifProvider = ({ children }) => {
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
   const [newStatuses, setNewStatuses] = useState(null);
-  const [hasGeoStatUpdated, setHasGeoStatUpdated] = useState(null);
+  const [geoStatusUpdateCount, setGeoStatusUpdateCount] = useState(null);
 
   useEffect(() => {
     async function fetchFallData() {
@@ -94,6 +94,8 @@ export const UserNotifProvider = ({ children }) => {
     fetchUserReports();
   }, []);
 
+  console.log("COUNTER:", geoStatusUpdateCount);
+
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
     setIsSeenNotifications(true);
@@ -121,8 +123,8 @@ export const UserNotifProvider = ({ children }) => {
         setOpenNotif,
         fetchUserReports,
         handleNotifClick,
-        hasGeoStatUpdated,
-        setHasGeoStatUpdated,
+        geoStatusUpdateCount,
+        setGeoStatusUpdateCount,
       }}
     >
       {children}
