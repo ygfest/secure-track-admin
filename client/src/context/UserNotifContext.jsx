@@ -22,11 +22,11 @@ export const UserNotifProvider = ({ children }) => {
   const [openNotif, setOpenNotif] = useState(false);
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [lastUpdate, setLastUpdate] = useState(null); // Track the last update time
   const [geoStatusUpdateCount, setGeoStatusUpdateCount] = useState(null);
 
   // useRef to hold the previous statuses to detect changes
-  const previousStatuses = useRef([]);
-
+  const previousStatusesRef = useRef([]);
   useEffect(() => {
     async function fetchFallData() {
       try {
@@ -85,38 +85,43 @@ export const UserNotifProvider = ({ children }) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await axios.get(`${apiUrl}/auth/user-reports`);
-      setUserReports(response.data);
+      const newUserReports = response.data;
+      setUserReports(newUserReports);
 
-      // Extract statuses from each report
-      const updatedStatuses = response.data.map((report) => report.status);
+      // Extract the statuses from the new reports
+      const newStatuses = newUserReports.map((report) => report.status);
 
-      // Only update statuses if they actually differ from the previous ones
+      // Check if the statuses have changed (deep comparison)
       if (
-        JSON.stringify(updatedStatuses) !==
-        JSON.stringify(previousStatuses.current)
+        JSON.stringify(newStatuses) !==
+        JSON.stringify(previousStatusesRef.current)
       ) {
-        setStatuses(updatedStatuses);
-        previousStatuses.current = updatedStatuses; // Update the ref to the latest statuses
+        console.log("Statuses have changed, updating...");
+        setStatuses(newStatuses);
+        previousStatusesRef.current = newStatuses; // Save the current statuses to ref
       }
-
-      console.log("Fetched user reports:", response.data);
     } catch (error) {
       console.error("Error fetching user reports:", error);
     }
   };
 
+  // Fetch user reports initially
   useEffect(() => {
-    // Initial fetch on mount
     fetchUserReports();
   }, []);
 
+  // Refetch user reports if there is a change in the status array
   useEffect(() => {
-    // Refetch user reports if there's a change in the statuses array
-    if (JSON.stringify(statuses) !== JSON.stringify(previousStatuses.current)) {
+    // Check if any status changed compared to the previous statuses
+    const statusesHaveChanged = userReports.some((report, index) => {
+      return report.status !== previousStatusesRef.current[index];
+    });
+
+    if (statusesHaveChanged) {
+      console.log("Refetching due to status change...");
       fetchUserReports();
-      console.log("I AM BEING REFETCHED!");
     }
-  }, [statuses]);
+  }, [userReports]);
 
   console.log("COUNTER:", geoStatusUpdateCount);
 
@@ -125,7 +130,6 @@ export const UserNotifProvider = ({ children }) => {
     setIsSeenNotifications(true);
     setHasNewAlerts(false);
   };
-
   return (
     <UserNotifContext.Provider
       value={{
