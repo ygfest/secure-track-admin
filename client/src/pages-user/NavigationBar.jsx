@@ -22,7 +22,7 @@ import { parse, format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
 
 const formatDate = (dateObj) => {
-  return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
+  return format(dateObj, "MM/dd/yyyy, h:mm a");
 };
 
 const NavigationBar = () => {
