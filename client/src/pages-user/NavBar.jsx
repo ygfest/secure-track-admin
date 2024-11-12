@@ -20,13 +20,15 @@ const formatDate = (dateObj) => {
   if (!dateObj || isNaN(new Date(dateObj))) {
     return "Invalid date";
   }
-  return format(new Date(dateObj), "MM/dd/yyyy, h:mm a");
+  return format(new Date(dateObj), "MM/dd/yyyy, HH:mm:ss");
 };
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
+  const [openNotif, setOpenNotif] = useState(false);
   const [alerts, setAlerts] = useState([]);
+  const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
@@ -41,16 +43,10 @@ const NavBar = () => {
     isSeenNotifications,
     setIsSeenNotifications,
     currentLink,
-    hasNewAlerts,
-    setHasNewAlerts,
     setCurrentLink,
-    openNotif,
-    setOpenNotif,
     luggageInfo,
     userReports,
     statuses,
-    handleNotifClick,
-    geoStatusUpdateCount,
   } = useUserNotif();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -75,7 +71,7 @@ const NavBar = () => {
     };
 
     verifyToken();
-  }, [navigate]);
+  }, [navigate, apiUrl]);
 
   const getAlertIcon = (alertType) => {
     switch (alertType) {
@@ -208,7 +204,7 @@ const NavBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses, geoStatusUpdateCount]);
+  }, [tempData, tamperData, fallDetectData, statuses]);
 
   const renderNotifications = () => {
     return alerts
@@ -256,6 +252,11 @@ const NavBar = () => {
 
   const toggleSideBar = () => setIsOpen(!isOpen);
   const handleDropProfile = () => setIsDropProfile(!isDropProfile);
+
+  const handleNotifClick = () => {
+    setOpenNotif(!openNotif);
+    setIsSeenNotifications(true);
+  };
 
   return (
     <div

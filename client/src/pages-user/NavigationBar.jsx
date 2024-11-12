@@ -22,13 +22,15 @@ import { parse, format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
 
 const formatDate = (dateObj) => {
-  return format(dateObj, "MM/dd/yyyy, h:mm a");
+  return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
 };
 
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
+  const [openNotif, setOpenNotif] = useState(false);
   const [alerts, setAlerts] = useState([]);
+  const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
@@ -42,17 +44,11 @@ const NavigationBar = () => {
     fallDetectData,
     isSeenNotifications,
     setIsSeenNotifications,
-    hasNewAlerts,
-    setHasNewAlerts,
     currentLink,
     setCurrentLink,
-    openNotif,
-    setOpenNotif,
     luggageInfo,
     userReports,
     statuses,
-    handleNotifClick,
-    geoStatusUpdateCount,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -68,7 +64,7 @@ const NavigationBar = () => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await fetch(`${apiUrl}/auth/verify`, {
           method: "GET",
-          credentials: "include",
+          credentials: "include", // Equivalent to axios withCredentials: true
         });
 
         const data = await response.json();
@@ -216,6 +212,7 @@ const NavigationBar = () => {
 
     return newAlerts;
   };
+
   useEffect(() => {
     const newAlerts = updateAlerts();
 
@@ -234,10 +231,7 @@ const NavigationBar = () => {
 
     // Update the ref with current statuses
     prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses, geoStatusUpdateCount]);
-
-  console.log("IS SEEN BA:", isSeenNotifications);
-  console.log("HAS BAGO BA?:", hasNewAlerts);
+  }, [tempData, tamperData, fallDetectData, statuses]);
 
   const renderNotifications = () => {
     return alerts
@@ -267,6 +261,11 @@ const NavigationBar = () => {
           </div>
         </div>
       ));
+  };
+
+  const handleNotifClick = () => {
+    setOpenNotif(!openNotif);
+    setIsSeenNotifications(true); // Mark notifications as seen
   };
 
   return (

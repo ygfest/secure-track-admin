@@ -23,7 +23,7 @@ import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
-import { useUserNotif } from "../context/UserNotifContext";
+
 import L from "leaflet";
 import { useLocation } from "../context/UserLocationContext";
 
@@ -113,7 +113,6 @@ const LuggageTracking = () => {
   const [lastChecked, setLastChecked] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { openNotif, setOpenNotif, setGeoStatusUpdateCount } = useUserNotif();
   useEffect(() => {
     axios.defaults.withCredentials = true;
   }, []);
@@ -172,7 +171,7 @@ const LuggageTracking = () => {
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
-      59000
+      9000
     );
     debouncedFetchCurrentLocations();
 
@@ -180,7 +179,7 @@ const LuggageTracking = () => {
     return () => {
       debouncedFetchCurrentLocations.cancel();
     };
-  }, [JSON.stringify(luggageDeets)]);
+  }, [luggageDeets]);
 
   const handleLocateUser = (map) => {
     setTrackLocation(true);
@@ -257,14 +256,12 @@ const LuggageTracking = () => {
     if (shouldUpdateGeofence) {
       updateGeofenceStatus();
     }
-  }, [luggageDeets, currentUserLat, currentUserLong]);
+  }, [luggageDeets, currentUserLat, currentUserLong]); // Add currentUserLat and currentUserLong to the dependencies
 
   const updateGeofenceStatus = async () => {
     if (isUpdating) return; // Prevent re-entry if an update is in progress
 
     setIsUpdating(true);
-    let hasGeoStatusChanges = false;
-
     try {
       const updatedStatuses = await Promise.all(
         luggageDeets.map(async (luggage) => {
@@ -291,20 +288,12 @@ const LuggageTracking = () => {
               : "In Range";
 
           if (status !== newStatus) {
-            if (
-              newStatus === "Out of Range" ||
-              newStatus === "Out of Coverage"
-            ) {
-              hasGeoStatusChanges = true; // Track status change here
-            }
-
             await axios.post(
               `${
                 import.meta.env.VITE_API_URL
               }/luggage-router/luggage/${_id}/updateStatus`,
               { status: newStatus, luggageId: _id }
             );
-
             return { ...luggage, status: newStatus };
           }
 
@@ -313,17 +302,10 @@ const LuggageTracking = () => {
       );
 
       // Only update luggageDeets if there are changes
-      const luggageDeetsChanged =
-        JSON.stringify(updatedStatuses) !== JSON.stringify(luggageDeets);
-
-      if (luggageDeetsChanged) {
+      if (JSON.stringify(updatedStatuses) !== JSON.stringify(luggageDeets)) {
         setLuggageDeets(updatedStatuses);
         toast.success("Geofence statuses have been updated");
-
-        setGeoStatusUpdateCount((prevCount) => prevCount + 1);
       }
-
-      // Ensure geoStatChanged is set only if relevant status change occurred
     } catch (error) {
       console.error("Error updating geofence statuses:", error);
       toast.error(
@@ -333,9 +315,6 @@ const LuggageTracking = () => {
       setIsUpdating(false); // Reset update state after completion
     }
   };
-
-  console.log("LAT", currentUserLat);
-  console.log("LONG:", currentUserLong);
 
   useEffect(() => {
     const isNewDataAvailable = luggageDeets.some(
@@ -483,7 +462,6 @@ const LuggageTracking = () => {
         <div
           onClick={() => {
             setClicked((prevClick) => !prevClick);
-            setOpenNotif(false);
           }}
           className={`card w-full md:w-[560px] shadow-xl px-0 md:px-2 md:py-6 py-2 absolute z-10 md:top-20 min-w-2 rounded-2xl rounded-br-none rounded-bl-none md:rounded-br-2xl md:rounded-bl-2xl md:right-2 transition-all duration-500 text-white ${
             clicked ? "bottom-0" : "bottom-[-65%]"
