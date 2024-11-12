@@ -171,7 +171,7 @@ const LuggageTracking = () => {
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
-      9000
+      59000
     );
     debouncedFetchCurrentLocations();
 
