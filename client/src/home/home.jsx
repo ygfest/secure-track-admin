@@ -250,8 +250,11 @@ export default function Home() {
               ×
             </button>
 
-            <div className="">
-              <h2 className="text-2xl font-bold text-secondary mb-4">Help</h2>
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-secondary mb-4">
+                Help | Users Guide
+              </h2>
+              <p className="text-gray-600">Slide {currentSlide + 1} of 4</p>
             </div>
 
             {/* Carousel Sections */}
@@ -368,20 +371,21 @@ export default function Home() {
             )}
 
             {/* Navigation Controls */}
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-between items-center mt-4">
               <button
                 onClick={() => setCurrentSlide(currentSlide - 1)}
-                className="text-secondary"
+                className="flex items-center text-primary"
                 disabled={currentSlide === 0}
               >
-                Previous
+                <span className="mr-1">◀</span> Previous
               </button>
+
               <button
                 onClick={() => setCurrentSlide(currentSlide + 1)}
-                className="text-secondary"
+                className="flex items-center text-primary"
                 disabled={currentSlide === 3}
               >
-                Next
+                Next <span className="ml-1">▶</span>
               </button>
             </div>
           </div>
