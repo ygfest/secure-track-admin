@@ -3,6 +3,7 @@ import { FiUser } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { SiVite } from "react-icons/si";
 import { FiHelpCircle } from "react-icons/fi";
+import { MdNavigateNext } from "react-icons/md";
 
 export default function Home() {
   // Initialize an array of refs for each card.
@@ -377,7 +378,10 @@ export default function Home() {
                 className="flex items-center text-primary"
                 disabled={currentSlide === 0}
               >
-                <span className="mr-1">◀</span> Previous
+                <span className="mr-1">
+                  <MdNavigateNext className="rotate-180" />
+                </span>{" "}
+                Previous
               </button>
 
               <button
@@ -385,7 +389,10 @@ export default function Home() {
                 className="flex items-center text-primary"
                 disabled={currentSlide === 3}
               >
-                Next <span className="ml-1">▶</span>
+                Next{" "}
+                <span className="ml-1">
+                  <MdNavigateNext />
+                </span>
               </button>
             </div>
           </div>
