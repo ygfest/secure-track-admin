@@ -402,83 +402,101 @@ export default function Home() {
       {/* Other Sections */}
       <section className="h-[500px] min-w-[400px]"></section>
 
-      <footer className="w-full min-w-[400px] py-8 text-center bg-secondary text-white">
-        <div className="flex flex-row justify-evenly gap-8  h-[240px]">
-          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-center items-center ">
-            <div className="flex flec-row">
-              <img src="/PhilSCA-Official-Logo.png" className="h-32" />
-
-              <img src="/ics.svg" className="h-32" />
-            </div>
-            <div>
-              <img src="/ST-with-name.svg" className="h-32" />
+      <footer className="w-full min-w-[400px]  py-16 text-center bg-secondary text-white">
+        <div className="flex flex-wrap justify-evenly gap-8 h-auto">
+          {/* Logos Section */}
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              <img
+                src="/PhilSCA-Official-Logo.png"
+                className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                alt="PhilSCA Logo"
+              />
+              <img
+                src="/ics.svg"
+                className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                alt="ICS Logo"
+              />
+              <img
+                src="/ST-with-name.svg"
+                className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                alt="SecureTrack Logo"
+              />
             </div>
           </div>
-          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-evenly ">
-            <p className=" text-white font-normal text-start">
+
+          {/* Researchers Section */}
+          <div className="text-sm md:text-base text-left flex flex-col items-start gap-4">
+            <p className="text-white font-normal">
               RESEARCHERS <br />
-              <a href="https://www.instagram.com/__sstefano/">
-                <span className="text-gray-400 font-light hover:text-primary">
-                  {" "}
-                  dela Pena, Scavenger
-                </span>
+              <a
+                href="https://www.instagram.com/__sstefano/"
+                className="text-gray-400 font-light hover:text-primary transition-colors"
+              >
+                dela Pena, Scavenger
               </a>
-              <a href="https://www.instagram.com/__sstefano/">
-                <span className="text-gray-400 font-light hover:text-primary">
-                  {" "}
-                  <br /> Blanquisco, John Christopher
-                </span>
+              <br />
+              <a
+                href="https://www.instagram.com/__sstefano/"
+                className="text-gray-400 font-light hover:text-primary transition-colors"
+              >
+                Blanquisco, John Christopher
               </a>
-              <a href="https://www.instagram.com/__sstefano/">
-                <span className="text-gray-400 font-light hover:text-primary">
-                  {" "}
-                  <br /> San Esteban, Stefano
-                </span>
+              <br />
+              <a
+                href="https://www.instagram.com/__sstefano/"
+                className="text-gray-400 font-light hover:text-primary transition-colors"
+              >
+                San Esteban, Stefano
               </a>
             </p>
-            <div className="flex flex-col items-start">
+            <div>
               <p>ADVISER</p>
-              <p className="text-gray-400 font-light hover:text-primary">
+              <p className="text-gray-400 font-light hover:text-primary transition-colors">
                 Glen Arwin Bristol
               </p>
             </div>
           </div>
-          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-evenly">
-            <p className=" text-white font-normal text-start">
+
+          {/* Research Coordinator and Panel Section */}
+          <div className="text-sm md:text-base text-left flex flex-col items-start gap-4">
+            <p className="text-white font-normal">
               RESEARCH COORDINATOR <br />
-              <a href="https://www.instagram.com/__sstefano/">
-                <span className="text-gray-400 font-light hover:text-primary">
-                  {" "}
-                  Assistant Prof. Mary Ann Aballiar-Vista
-                </span>
+              <a
+                href="https://www.instagram.com/__sstefano/"
+                className="text-gray-400 font-light hover:text-primary transition-colors"
+              >
+                Assistant Prof. Mary Ann Aballiar-Vista
               </a>
             </p>
-            <div className="flex flex-col items-start">
+            <div>
               <p>PANEL</p>
-              <p className="text-gray-400 font-light hover:text-primary">
+              <p className="text-gray-400 font-light hover:text-primary transition-colors">
                 Mr. Alvin J. Paz
               </p>
-              <p className="text-gray-400 font-light hover:text-primary">
+              <p className="text-gray-400 font-light hover:text-primary transition-colors">
                 Mr. Darwin Catalan
               </p>
-              <p className="text-gray-400 font-light hover:text-primary">
+              <p className="text-gray-400 font-light hover:text-primary transition-colors">
                 Mr. Erickson Antonio
               </p>
             </div>
           </div>
-          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-evenly ">
-            <p className=" text-white font-normal text-start">
+
+          {/* Built By and Powered By Section */}
+          <div className="text-sm md:text-base text-left flex flex-col items-start gap-4">
+            <p className="text-white font-normal">
               BUILT BY <br />
-              <a href="https://www.instagram.com/__sstefano/">
-                <span className="text-gray-400 font-light hover:text-primary">
-                  {" "}
-                  Stefano San Esteban
-                </span>
+              <a
+                href="https://www.instagram.com/__sstefano/"
+                className="text-gray-400 font-light hover:text-primary transition-colors"
+              >
+                Stefano San Esteban
               </a>
             </p>
-            <div>
+            <div className="flex items-center gap-2">
               <p>POWERED BY</p>
-              <SiVite className="flex size-8 text-gray-400 hover:text-primary justify-center" />
+              <SiVite className="text-gray-400 hover:text-primary text-3xl transition-colors" />
             </div>
           </div>
         </div>
