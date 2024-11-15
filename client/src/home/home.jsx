@@ -402,7 +402,7 @@ export default function Home() {
       {/* Other Sections */}
       <section className="h-[500px] min-w-[400px]"></section>
 
-      <footer className="w-full min-w-[400px]  py-16 text-center bg-secondary text-white">
+      <footer className="w-full min-w-[400px]  py-8 text-center bg-secondary text-white">
         <div className="flex flex-wrap justify-evenly gap-8 h-auto">
           {/* Logos Section */}
           <div className="flex flex-col items-center gap-6">
@@ -433,14 +433,14 @@ export default function Home() {
                 href="https://www.instagram.com/__sstefano/"
                 className="text-gray-400 font-light hover:text-primary transition-colors"
               >
-                dela Pena, Scavenger
+                Blanquisco, John Christopher
               </a>
               <br />
               <a
                 href="https://www.instagram.com/__sstefano/"
                 className="text-gray-400 font-light hover:text-primary transition-colors"
               >
-                Blanquisco, John Christopher
+                dela Pena, Scavenger
               </a>
               <br />
               <a
