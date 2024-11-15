@@ -402,21 +402,85 @@ export default function Home() {
       {/* Other Sections */}
       <section className="h-[500px] min-w-[400px]"></section>
 
-      <footer className="w-full min-w-[400px] py-8 text-center">
-        <div className="pt-12 pb-4 flex flex-col gap-8">
-          <div className="text-textMuted/70 text-sm md:text-base grid gap-2 place-items-center">
-            <p>
-              Built by{" "}
+      <footer className="w-full min-w-[400px] py-8 text-center bg-secondary text-white">
+        <div className="flex flex-row justify-evenly gap-8  h-[240px]">
+          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-center items-center ">
+            <div className="flex flec-row">
+              <img src="/PhilSCA-Official-Logo.png" className="h-32" />
+
+              <img src="/ics.svg" className="h-32" />
+            </div>
+            <div>
+              <img src="/ST-with-name.svg" className="h-32" />
+            </div>
+          </div>
+          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-evenly ">
+            <p className=" text-white font-normal text-start">
+              RESEARCHERS <br />
               <a href="https://www.instagram.com/__sstefano/">
-                <span className="font-semibold"> Stefano San Esteban</span>
+                <span className="text-gray-400 font-light hover:text-primary">
+                  {" "}
+                  dela Pena, Scavenger
+                </span>
+              </a>
+              <a href="https://www.instagram.com/__sstefano/">
+                <span className="text-gray-400 font-light hover:text-primary">
+                  {" "}
+                  <br /> Blanquisco, John Christopher
+                </span>
+              </a>
+              <a href="https://www.instagram.com/__sstefano/">
+                <span className="text-gray-400 font-light hover:text-primary">
+                  {" "}
+                  <br /> San Esteban, Stefano
+                </span>
               </a>
             </p>
-            <p>Powered by</p>
-            <SiVite className="size-8 text-primary" />
+            <div className="flex flex-col items-start">
+              <p>ADVISER</p>
+              <p className="text-gray-400 font-light hover:text-primary">
+                Glen Arwin Bristol
+              </p>
+            </div>
           </div>
-          <p className="text-sm text-textMuted/60 md:text-left text-center">
-            This web app is still under testing
-          </p>
+          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-evenly">
+            <p className=" text-white font-normal text-start">
+              RESEARCH COORDINATOR <br />
+              <a href="https://www.instagram.com/__sstefano/">
+                <span className="text-gray-400 font-light hover:text-primary">
+                  {" "}
+                  Assistant Prof. Mary Ann Aballiar-Vista
+                </span>
+              </a>
+            </p>
+            <div className="flex flex-col items-start">
+              <p>PANEL</p>
+              <p className="text-gray-400 font-light hover:text-primary">
+                Mr. Alvin J. Paz
+              </p>
+              <p className="text-gray-400 font-light hover:text-primary">
+                Mr. Darwin Catalan
+              </p>
+              <p className="text-gray-400 font-light hover:text-primary">
+                Mr. Erickson Antonio
+              </p>
+            </div>
+          </div>
+          <div className="text-textMuted/70 text-sm md:text-base flex flex-col h-full gap-2 items-start justify-evenly ">
+            <p className=" text-white font-normal text-start">
+              BUILT BY <br />
+              <a href="https://www.instagram.com/__sstefano/">
+                <span className="text-gray-400 font-light hover:text-primary">
+                  {" "}
+                  Stefano San Esteban
+                </span>
+              </a>
+            </p>
+            <div>
+              <p>POWERED BY</p>
+              <SiVite className="flex size-8 text-gray-400 hover:text-primary justify-center" />
+            </div>
+          </div>
         </div>
       </footer>
     </main>
