@@ -402,11 +402,11 @@ export default function Home() {
       {/* Other Sections */}
       <section className="h-[500px] min-w-[400px]"></section>
 
-      <footer className="w-full min-w-[400px]  py-8 text-center bg-secondary text-white">
-        <div className="flex flex-wrap justify-evenly gap-8 h-auto">
+      <footer className="w-full min-w-[400px] py-8 text-left bg-secondary text-white">
+        <div className="flex flex-wrap justify-between gap-8 h-auto px-4">
           {/* Logos Section */}
-          <div className="flex flex-col items-center gap-6">
-            <div className="flex flex-wrap items-center justify-center gap-6">
+          <div className="flex flex-col items-start gap-6">
+            <div className="flex flex-wrap items-center justify-start gap-6">
               <img
                 src="/PhilSCA-Official-Logo.png"
                 className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
@@ -426,8 +426,8 @@ export default function Home() {
           </div>
 
           {/* Researchers Section */}
-          <div className="text-sm md:text-base text-left flex flex-col items-start gap-4">
-            <p className="text-white font-normal">
+          <div className="text-sm md:text-base flex flex-col items-start gap-4">
+            <p className="font-normal">
               RESEARCHERS <br />
               <a
                 href="https://www.instagram.com/__sstefano/"
@@ -459,14 +459,14 @@ export default function Home() {
           </div>
 
           {/* Research Coordinator and Panel Section */}
-          <div className="text-sm md:text-base text-left flex flex-col items-start gap-4">
-            <p className="text-white font-normal">
+          <div className="text-sm md:text-base flex flex-col items-start gap-4">
+            <p className="font-normal">
               RESEARCH COORDINATOR <br />
               <a
                 href="https://www.instagram.com/__sstefano/"
                 className="text-gray-400 font-light hover:text-primary transition-colors"
               >
-                Assistant Prof. Mary Ann Aballiar-Vista
+                Assistant Prof. Mary Ann
               </a>
             </p>
             <div>
@@ -484,8 +484,8 @@ export default function Home() {
           </div>
 
           {/* Built By and Powered By Section */}
-          <div className="text-sm md:text-base text-left flex flex-col items-start gap-4">
-            <p className="text-white font-normal">
+          <div className="text-sm md:text-base flex flex-col items-start gap-4">
+            <p className="font-normal">
               BUILT BY <br />
               <a
                 href="https://www.instagram.com/__sstefano/"
