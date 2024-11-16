@@ -489,9 +489,10 @@ export default function Home() {
               BUILT BY <br />
               <a
                 href="https://www.instagram.com/__sstefano/"
-                className="text-gray-400 font-light hover:text-primary transition-colors"
+                className="text-gray-400 font-light hover:text-primary transition-colors flex items-center"
               >
-                Stefano San Esteban
+                <img src="/ST.svg" alt="ST logo" className="h-6 " />
+                efano San Esteban
               </a>
             </p>
             <div className="flex items-center gap-2">
