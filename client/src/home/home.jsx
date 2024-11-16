@@ -453,7 +453,7 @@ export default function Home() {
             <div>
               <p>ADVISER</p>
               <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Glen Arwin Bristol
+                Dr. Glen Arwin Bristol
               </p>
             </div>
           </div>
@@ -466,7 +466,7 @@ export default function Home() {
                 href="https://www.instagram.com/__sstefano/"
                 className="text-gray-400 font-light hover:text-primary transition-colors"
               >
-                Assistant Prof. Mary Ann
+                Asst. Prof. Mary Ann Aballiar-Vista
               </a>
             </p>
             <div>
@@ -491,7 +491,7 @@ export default function Home() {
                 href="https://www.instagram.com/__sstefano/"
                 className="text-gray-400 font-light hover:text-primary transition-colors flex items-center"
               >
-                <img src="/ST.svg" alt="ST logo" className="h-6 " />
+                <img src="/ST.svg" alt="ST logo" className="h-6 opacity-69" />
                 efano San Esteban
               </a>
             </p>
