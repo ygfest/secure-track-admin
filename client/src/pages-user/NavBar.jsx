@@ -20,7 +20,7 @@ const formatDate = (dateObj) => {
   if (!dateObj || isNaN(new Date(dateObj))) {
     return "Invalid date";
   }
-  return format(new Date(dateObj), "MM/dd, HH:mm aa");
+  return format(new Date(dateObj), "MM/dd, hh:mm aa");
 };
 
 const NavBar = () => {
