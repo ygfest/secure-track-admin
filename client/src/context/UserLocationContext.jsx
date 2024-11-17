@@ -50,6 +50,7 @@ export const UserLocationProvider = ({ children }) => {
             });
             setCurrentUserLat(latitude);
             setCurrentUserLong(longitude);
+            setLocationUpdatedAt(Date.now());
             console.log("Location updated:", latitude, longitude);
           } catch (err) {
             console.error("Error updating location:", err);
