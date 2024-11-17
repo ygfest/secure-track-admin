@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: null
   },
+  locationUpdatedAt: {
+    type: Date,
+  },
   googleId: {
     type: String,
     unique: true,

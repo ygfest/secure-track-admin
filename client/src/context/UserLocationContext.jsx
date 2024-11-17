@@ -9,6 +9,7 @@ export const UserLocationProvider = ({ children }) => {
   const [isLocationOn, setIsLocationOn] = useState(false);
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
+  const [locationUpdatedAt, setLocationUpdatedAt] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fetch initial location status on component mount
@@ -21,6 +22,7 @@ export const UserLocationProvider = ({ children }) => {
         setIsLocationOn(response.data.user.isLocationOn);
         setCurrentUserLat(Number(response.data.user.latitude));
         setCurrentUserLong(Number(response.data.user.longitude));
+        setLocationUpdatedAt(response.data.user.locationUpdatedAt);
         console.log(
           "Initial Location Status:",
           response.data.user.isLocationOn
@@ -44,6 +46,7 @@ export const UserLocationProvider = ({ children }) => {
               latitude,
               longitude,
               isLocationOn: locationStatus,
+              locationUpdatedAt: Date.now(),
             });
             setCurrentUserLat(latitude);
             setCurrentUserLong(longitude);
@@ -88,7 +91,13 @@ export const UserLocationProvider = ({ children }) => {
 
   return (
     <UserLocationContext.Provider
-      value={{ isLocationOn, toggleLocation, currentUserLat, currentUserLong }}
+      value={{
+        isLocationOn,
+        toggleLocation,
+        currentUserLat,
+        currentUserLong,
+        locationUpdatedAt,
+      }}
     >
       {children}
     </UserLocationContext.Provider>

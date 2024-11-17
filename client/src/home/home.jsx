@@ -496,7 +496,7 @@ export default function Home() {
               </a>
             </p>
             <div className="flex items-center gap-2">
-              <p>POWERED BY</p>
+              g<p>POWERED BY</p>
               <SiVite className="text-gray-400 hover:text-primary text-3xl transition-colors" />
             </div>
           </div>

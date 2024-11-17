@@ -106,7 +106,8 @@ const LuggageTracking = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, currentUserLat, currentUserLong } = useLocation();
+  const { isLocationOn, currentUserLat, currentUserLong, locationUpdatedAt } =
+    useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 20;
   const center = [currentUserLat, currentUserLong];
@@ -613,7 +614,13 @@ const LuggageTracking = () => {
                   zIndexOffset={100000}
                 >
                   <Popup>
-                    You are here <br />
+                    <span className="flex font-medium text-center">
+                      You are here{" "}
+                    </span>
+                    <br />
+                    <span className="text-gray-400">
+                      {formatStationarySince(locationUpdatedAt)}
+                    </span>
                   </Popup>
                 </Marker>
                 <Circle

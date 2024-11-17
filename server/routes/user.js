@@ -44,6 +44,7 @@ router.get('/verify', verifyUser, async (req, res) => {
         isLocationOn: user.isLocationOn,
         latitude: user.latitude,
         longitude: user.longitude,
+        locationUpdatedAt: user.locationUpdatedAt,
         profile_dp: user.profile_dp,
         loggedInAt: user.loggedInAt,
         createdAt: user.createdAt,
@@ -328,7 +329,7 @@ router.get('/logout', (req, res) => {
 });
 
 router.put('/update-location', verifyUser, async (req, res) => {
-  const { latitude, longitude, isLocationOn } = req.body;
+  const { latitude, longitude, isLocationOn, locationUpdatedAt } = req.body;
   const userId = req.user.id; // Extracted from the verified token
   console.log(req.body);
   console.log("Updating location for user ID:", userId); // Add this line to log the userId
@@ -342,6 +343,7 @@ router.put('/update-location', verifyUser, async (req, res) => {
       latitude,
       longitude,
       isLocationOn,
+      locationUpdatedAt,
     }, {new: true});
 
     res.json({ status: 'success', message: 'Location updated successfully' });
