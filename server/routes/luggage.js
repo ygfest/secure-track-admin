@@ -336,22 +336,21 @@ router.put('/update-location', verifyUser, async (req, res) => {
     );
 
     if (!updatedLuggageLocation) {
-      // Add return to prevent further execution
+
       return res
         .status(404)
         .json({ status: false, message: "Luggage not found", luggage: updatedLuggageLocation });
     }
-
-    // Successful response
+    console.log("LUGGAGE LOCATION UPDATED")
     return res.json({ 
       status: true, 
       message: "Luggage location status updated successfully", 
       luggage: updatedLuggageLocation 
     });
+    
   } catch (error) {
     console.error('Error updating location:', error);
 
-    // Add return here as well to ensure proper response handling
     return res.status(500).send('Server error');
   }
 });
