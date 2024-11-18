@@ -82,7 +82,7 @@ export const UserNotifProvider = ({ children }) => {
         const newStatuses = response.data.map((report) => report.status);
         setStatuses(newStatuses); // Update statuses array
 
-        console.log("Fetched user reports:", response.data);
+        //console.log("Fetched user reports:", response.data);
       } catch (error) {
         console.error("Error fetching user reports:", error);
       }

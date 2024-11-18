@@ -176,7 +176,7 @@ const AdminLuggageTracking = () => {
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
-      9000
+      59000
     );
     debouncedFetchCurrentLocations();
 
@@ -184,7 +184,7 @@ const AdminLuggageTracking = () => {
     return () => {
       debouncedFetchCurrentLocations.cancel();
     };
-  }, [luggageDeets]);
+  }, [JSON.stringify(luggageDeets)]);
 
   const handleLocateUser = (map) => {
     setTrackLocation(true);

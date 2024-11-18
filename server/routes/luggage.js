@@ -320,4 +320,42 @@ router.post('/luggage/:id/updateStatus', verifyUser, async (req, res) => {
 });
 
 
+router.put('/update-location', verifyUser, async (req, res) => {
+  const { latitude, longitude, locationUpdatedAt } = req.body;
+  const luggage_tag_number = "ST123456789";
+
+  try {
+    const updatedLuggageLocation = await Luggage.findOneAndUpdate(
+      { luggage_tag_number: luggage_tag_number },
+      {
+        latitude,
+        longitude,
+        updatedAt: locationUpdatedAt,
+      },
+      { new: true }
+    );
+
+    if (!updatedLuggageLocation) {
+      // Add return to prevent further execution
+      return res
+        .status(404)
+        .json({ status: false, message: "Luggage not found", luggage: updatedLuggageLocation });
+    }
+
+    // Successful response
+    return res.json({ 
+      status: true, 
+      message: "Luggage location status updated successfully", 
+      luggage: updatedLuggageLocation 
+    });
+  } catch (error) {
+    console.error('Error updating location:', error);
+
+    // Add return here as well to ensure proper response handling
+    return res.status(500).send('Server error');
+  }
+});
+
+
+
 module.exports = router;

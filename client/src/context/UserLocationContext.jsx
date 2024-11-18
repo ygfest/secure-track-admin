@@ -10,6 +10,11 @@ export const UserLocationProvider = ({ children }) => {
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
   const [locationUpdatedAt, setLocationUpdatedAt] = useState(null);
+
+  const [currentLuggageLat, setCurrentLuggageLat] = useState(null);
+  const [currentLuggageLong, setCurrentLuggageLong] = useState(null);
+
+  const [userRole, setUserRole] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fetch initial location status on component mount
@@ -23,6 +28,7 @@ export const UserLocationProvider = ({ children }) => {
         setCurrentUserLat(Number(response.data.user.latitude));
         setCurrentUserLong(Number(response.data.user.longitude));
         setLocationUpdatedAt(response.data.user.locationUpdatedAt);
+        setUserRole(response.data.user.role);
         console.log(
           "Initial Location Status:",
           response.data.user.isLocationOn
@@ -42,16 +48,28 @@ export const UserLocationProvider = ({ children }) => {
           const { latitude, longitude } = position.coords;
 
           try {
-            await axios.put(`${apiUrl}/auth/update-location`, {
-              latitude,
-              longitude,
-              isLocationOn: locationStatus,
-              locationUpdatedAt: Date.now(),
-            });
-            setCurrentUserLat(latitude);
-            setCurrentUserLong(longitude);
-            setLocationUpdatedAt(Date.now());
-            console.log("Location updated:", latitude, longitude);
+            if (userRole === "user") {
+              await axios.put(`${apiUrl}/auth/update-location`, {
+                latitude,
+                longitude,
+                isLocationOn: locationStatus,
+                locationUpdatedAt: Date.now(),
+              });
+              setCurrentUserLat(latitude);
+              setCurrentUserLong(longitude);
+              setLocationUpdatedAt(Date.now());
+              console.log("Location updated for USER:", latitude, longitude);
+            } else if (userRole === "admin") {
+              await axios.put(`${apiUrl}/luggage-router/update-location`, {
+                latitude,
+                longitude,
+                locationUpdatedAt: Date.now(),
+              });
+              setCurrentLuggageLat(latitude);
+              setCurrentLuggageLong(longitude);
+              setLocationUpdatedAt(Date.now());
+              console.log("Location updated for LUGGAGE:", latitude, longitude);
+            }
           } catch (err) {
             console.error("Error updating location:", err);
           }

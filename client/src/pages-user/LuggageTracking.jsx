@@ -180,7 +180,7 @@ const LuggageTracking = () => {
     return () => {
       debouncedFetchCurrentLocations.cancel();
     };
-  }, [luggageDeets]);
+  }, [JSON.stringify(luggageDeets)]);
 
   const handleLocateUser = (map) => {
     setTrackLocation(true);
