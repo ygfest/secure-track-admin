@@ -547,7 +547,7 @@ const LuggageTracking = () => {
           </div>
         </div>
         <MapContainer
-          center={center || defaultCenter}
+          center={center === null ? defaultCenter : center}
           zoom={center ? focusedZoom : defaultZoom}
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
