@@ -15,6 +15,7 @@ export const UserLocationProvider = ({ children }) => {
   const [currentLuggageLong, setCurrentLuggageLong] = useState(null);
 
   const [userRole, setUserRole] = useState(null);
+  const [userId, setUserId] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fetch initial location status on component mount
@@ -29,6 +30,7 @@ export const UserLocationProvider = ({ children }) => {
         setCurrentUserLong(Number(response.data.user.longitude));
         setLocationUpdatedAt(response.data.user.locationUpdatedAt);
         setUserRole(response.data.user.role);
+        setUserId(response.data.user.userID);
         console.log(
           "Initial Location Status:",
           response.data.user.isLocationOn
@@ -59,7 +61,10 @@ export const UserLocationProvider = ({ children }) => {
               setCurrentUserLong(longitude);
               setLocationUpdatedAt(Date.now());
               console.log("Location updated for USER:", latitude, longitude);
-            } else if (userRole === "admin") {
+            } else if (
+              userRole === "admin" &&
+              userId === "66f7dedffe3d65c0c8ce7b4a"
+            ) {
               await axios.put(`${apiUrl}/luggage-router/update-location`, {
                 latitude,
                 longitude,
