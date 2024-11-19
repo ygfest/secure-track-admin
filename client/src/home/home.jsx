@@ -108,11 +108,10 @@ export default function Home() {
                 Real-time Location Tracking
               </h3>
               <p className="text-base text-gray-600">
-                Never lose sight of your belongings. SecureTrack’s advanced
-                real-time GPS tracking ensures you always know where your
-                luggage is, whether it’s en route to your next destination or
-                waiting for you at the terminal. With instant updates, you stay
-                connected to your valuables every step of the journey.
+                Never lose sight of your belongings. SecureTrack’s advanced GPS
+                tracking keeps you updated on your luggage’s exact location,
+                whether it’s en route to your destination or waiting at the
+                terminal.
               </p>
             </div>
           </div>
@@ -134,10 +133,9 @@ export default function Home() {
                 Intrusion Monitoring
               </h3>
               <p className="text-base text-gray-600">
-                Stay alerted to unauthorized access. SecureTrack’s intrusion
-                monitoring system detects tampering or unauthorized attempts to
-                open your luggage, instantly notifying you via the app. Your
-                peace of mind is our priority.
+                Protect your valuables from unauthorized access. SecureTrack’s
+                smart sensors instantly alert you if tampering or forced entry
+                is detected, ensuring your peace of mind.
               </p>
             </div>
           </div>
@@ -159,11 +157,9 @@ export default function Home() {
                 Fall Detection
               </h3>
               <p className="text-base text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibusProtect your valuables from
-                unexpected impacts. SecureTrack’s fall detection feature
-                identifies sudden drops or harsh handling of your luggage,
-                ensuring you’re aware of potential damage risks in real time.
+                Shield your belongings from unexpected impacts. SecureTrack
+                detects sudden drops or rough handling, notifying you in
+                real-time about potential damage risks.
               </p>
             </div>
           </div>
@@ -185,11 +181,9 @@ export default function Home() {
                 Temperature Monitoring
               </h3>
               <p className="text-base text-gray-600">
-                Keep sensitive items safe. Whether you’re traveling with
-                perishable goods, electronics, or delicate items, SecureTrack’s
-                temperature monitoring ensures you’re informed about the
-                environmental conditions around your luggage, helping you take
-                action when necessary.
+                Keep delicate items safe. From perishable goods to sensitive
+                electronics, SecureTrack monitors temperature changes, so you
+                can act swiftly if conditions become unsuitable.
               </p>
             </div>
           </div>
@@ -211,11 +205,9 @@ export default function Home() {
                 Geofencing
               </h3>
               <p className="text-base text-gray-600">
-                Set boundaries for your luggage effortlessly. SecureTrack’s
-                geofencing feature allows you to define safe zones within a
-                user-specific radius. Receive alerts if your luggage moves
-                outside the designated boundary, giving you extra security
-                during layovers or in crowded spaces.
+                Define safety zones for your luggage. Receive instant alerts if
+                your belongings move outside your designated boundaries—perfect
+                for crowded terminals or layovers.
               </p>
             </div>
           </div>
@@ -237,13 +229,9 @@ export default function Home() {
                 Reporting Feature
               </h3>
               <p className="text-base text-gray-600">
-                Stay informed and take action efficiently. SecureTrack not only
-                provides comprehensive reports on your luggage’s journey,
-                including timestamps, location history, and incident alerts, but
-                it also enables users to report device anomalies or software
-                issues directly to developers and administrators. This seamless
-                reporting mechanism ensures timely resolutions, enhancing the
-                reliability of your luggage monitoring experience.
+                Easily report device or software issues to developers and
+                administrators for swift resolutions, ensuring reliable luggage
+                monitoring.
               </p>
             </div>
           </div>
