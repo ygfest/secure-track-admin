@@ -103,7 +103,7 @@ export default function Home() {
                 className="w-full max-w-[500px] h-auto object-cover rounded-md"
               />
             </div>
-            <div className="w-full space-y-4 text-center">
+            <div className="w-full space-y-4 text-start">
               <h3 className="text-2xl font-semibold text-secondary">
                 Real-time Location Tracking
               </h3>
@@ -128,7 +128,7 @@ export default function Home() {
                 className="w-full max-w-[500px] h-auto object-cover rounded-md"
               />
             </div>
-            <div className="w-full space-y-4 text-center">
+            <div className="w-full space-y-4 text-start">
               <h3 className="text-2xl font-semibold text-secondary">
                 Intrusion Monitoring
               </h3>
@@ -152,7 +152,7 @@ export default function Home() {
                 className="w-full max-w-[500px] h-auto object-cover rounded-md"
               />
             </div>
-            <div className="w-full space-y-4 text-center">
+            <div className="w-full space-y-4 text-start">
               <h3 className="text-2xl font-semibold text-secondary">
                 Fall Detection
               </h3>
@@ -176,7 +176,7 @@ export default function Home() {
                 className="w-full max-w-[500px] h-auto object-cover rounded-md"
               />
             </div>
-            <div className="w-full space-y-4 text-center">
+            <div className="w-full space-y-4 text-start">
               <h3 className="text-2xl font-semibold text-secondary">
                 Temperature Monitoring
               </h3>
@@ -200,7 +200,7 @@ export default function Home() {
                 className="w-full max-w-[500px] h-auto object-cover rounded-md"
               />
             </div>
-            <div className="w-full space-y-4 text-center">
+            <div className="w-full space-y-4 text-start">
               <h3 className="text-2xl font-semibold text-secondary">
                 Geofencing
               </h3>
@@ -224,7 +224,7 @@ export default function Home() {
                 className="w-full max-w-[400px] h-auto object-cover rounded-md"
               />
             </div>
-            <div className="w-full space-y-4 text-center">
+            <div className="w-full space-y-4 text-start">
               <h3 className="text-2xl font-semibold text-secondary">
                 Reporting Feature
               </h3>
