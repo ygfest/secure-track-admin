@@ -79,9 +79,9 @@ export default function AuthCallback() {
 
   if (loading)
     return (
-      <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">
+      <div className="bg-white h-[100vh] w-[100vw] flex flex-col items-center justify-center">
         <img src="/ST-without-name.svg" className="h-24 mb-8" />
-        <BarLoader color="white" size={40} data-testid="loader" />
+        <BarLoader color="#272829" size={40} data-testid="loader" />
       </div>
     );
   if (error) return <div>Error: {error}</div>;
