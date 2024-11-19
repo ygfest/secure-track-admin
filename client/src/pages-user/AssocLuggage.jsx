@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
 import { toast, Toaster } from "sonner";
+import { LuGhost } from "react-icons/lu";
 
 const AssocLuggage = () => {
   const navigate = useNavigate();
@@ -287,89 +288,104 @@ const AssocLuggage = () => {
                   <th className="py-3 px-6"></th>
                 </tr>
               </thead>
-              <tbody className="text-gray-600 text-sm font-light">
-                {paginatedData.map((luggage) => {
-                  const user = usersData.find(
-                    (user) => user._id === luggage.user_id
-                  );
-                  return (
-                    <tr
-                      key={luggage._id}
-                      className="border-b border-gray-200 hover:bg-gray-100"
+              {paginatedData.length > 0 ? (
+                <tbody className="text-gray-600 text-sm font-light">
+                  {paginatedData.map((luggage) => {
+                    const user = usersData.find(
+                      (user) => user._id === luggage.user_id
+                    );
+                    return (
+                      <tr
+                        key={luggage._id}
+                        className="border-b border-gray-200 hover:bg-gray-100"
+                      >
+                        <td className="py-3 px-6 text-left">
+                          <input type="checkbox" className="checkbox" />
+                        </td>
+                        <td className="py-3 px-6 text-left">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-10 w-10">
+                              <img
+                                className="h-10 w-10 rounded-full"
+                                src={LuggageIcon}
+                                alt="Luggage"
+                              />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">
+                                {luggage.luggage_custom_name}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {luggage.luggage_tag_number}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 px-6 text-left">
+                          {user
+                            ? `${user.firstname} ${user.lastname}`
+                            : "Unknown User"}
+                          <br />
+                          <span className="badge badge-ghost badge-sm">
+                            Owner
+                          </span>
+                        </td>
+                        <td className="py-3 px-6 text-left">
+                          {luggage.currentLocation}
+                        </td>
+                        <td className="py-3 px-6 text-left">
+                          <span
+                            className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                              luggage.status === "In Range"
+                                ? "bg-green-100 text-green-800"
+                                : luggage.status === "Out of Range"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {luggage.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-6 text-left">
+                          <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                            <button
+                              className="btn w-full md:max-w-16 btn-sm btn-outline btn-primary mr-2"
+                              onClick={() => {
+                                setCurrentLuggage(luggage);
+                                setShowUpdateModal(true);
+                              }}
+                            >
+                              Update
+                            </button>
+                            <button
+                              className="btn w-full md:max-w-16 btn-sm btn-outline btn-danger"
+                              onClick={() => {
+                                setCurrentLuggage(luggage);
+                                setShowDeleteModal(true);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              ) : (
+                <tbody>
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="text-center py-6 text-gray-600 text-sm font-light"
                     >
-                      <td className="py-3 px-6 text-left">
-                        <input type="checkbox" className="checkbox" />
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={LuggageIcon}
-                              alt="Luggage"
-                            />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {luggage.luggage_custom_name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {luggage.luggage_tag_number}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        {user
-                          ? `${user.firstname} ${user.lastname}`
-                          : "Unknown User"}
-                        <br />
-                        <span className="badge badge-ghost badge-sm">
-                          Owner
-                        </span>
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        {luggage.currentLocation}
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                            luggage.status === "In Range"
-                              ? "bg-green-100 text-green-800"
-                              : luggage.status === "Out of Range"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {luggage.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        <div className="flex flex-col md:flex-row gap-2 md:gap-0">
-                          <button
-                            className="btn w-full md:max-w-16 btn-sm btn-outline btn-primary mr-2"
-                            onClick={() => {
-                              setCurrentLuggage(luggage);
-                              setShowUpdateModal(true);
-                            }}
-                          >
-                            Update
-                          </button>
-                          <button
-                            className="btn w-full md:max-w-16 btn-sm btn-outline btn-danger"
-                            onClick={() => {
-                              setCurrentLuggage(luggage);
-                              setShowDeleteModal(true);
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
+                      No luggage registered yet{" "}
+                      <LuGhost className="text-xl ml-2 mr-2 inline" /> Get and
+                      register yours now!
+                    </td>
+                  </tr>
+                </tbody>
+              )}
             </table>
           </div>
         </div>
