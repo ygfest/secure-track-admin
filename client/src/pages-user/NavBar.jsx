@@ -241,11 +241,11 @@ const NavBar = () => {
         ))
     ) : (
       <div className="">
-        <div className="card w-full bg-black max-h-64 shadow-xl mb-2">
-          <div className="card-body flex items-center py-12">
-            <IoNotificationsOutline className="text-6xl text-gray-500" />
-            <p className="text-2xl">No notifications.</p>
-            <p className="text-gray-400 text-sm">
+        <div className="card w-full bg-zinc-950 max-h-64 shadow-xl mb-2">
+          <div className="card-body flex flex-col items-center py-12 text-center">
+            <IoNotificationsOutline className="text-6xl text-gray-500 mb-4" />
+            <p className="text-2xl whitespace-nowrap">No notifications.</p>
+            <p className="text-gray-400 text-sm whitespace-nowrap">
               Don't worry, we'll let you know.
             </p>
           </div>
