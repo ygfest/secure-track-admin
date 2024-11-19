@@ -14,8 +14,6 @@ export const UserLocationProvider = ({ children }) => {
   const [currentLuggageLat, setCurrentLuggageLat] = useState(null);
   const [currentLuggageLong, setCurrentLuggageLong] = useState(null);
 
-  const [luggageDeets, setLuggageDeets] = useState([]);
-
   const [userRole, setUserRole] = useState(null);
   const [userId, setUserId] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -62,7 +60,6 @@ export const UserLocationProvider = ({ children }) => {
               setCurrentUserLat(latitude);
               setCurrentUserLong(longitude);
               setLocationUpdatedAt(Date.now());
-              fetchLuggageData();
               console.log("Location updated for USER:", latitude, longitude);
             } else if (
               userRole === "admin" &&
@@ -75,7 +72,6 @@ export const UserLocationProvider = ({ children }) => {
               });
               setCurrentLuggageLat(latitude);
               setCurrentLuggageLong(longitude);
-
               setLocationUpdatedAt(Date.now());
               console.log("Location updated for LUGGAGE:", latitude, longitude);
             }
@@ -117,20 +113,6 @@ export const UserLocationProvider = ({ children }) => {
     }
   };
 
-  const fetchLuggageData = async () => {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
-      setLuggageDeets(datas.data);
-    } catch (error) {
-      console.error("Error fetching luggage data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchLuggageData();
-  }, []);
-
   return (
     <UserLocationContext.Provider
       value={{
@@ -139,9 +121,6 @@ export const UserLocationProvider = ({ children }) => {
         currentUserLat,
         currentUserLong,
         locationUpdatedAt,
-        luggageDeets,
-        setLuggageDeets,
-        fetchLuggageData,
       }}
     >
       {children}
