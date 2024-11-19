@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BarLoader } from "react-spinners";
 
 export default function AuthCallback() {
   const [loading, setLoading] = useState(true);
@@ -76,7 +77,13 @@ export default function AuthCallback() {
     }
   }, [navigate]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">
+        <img src="/ST-without-name.svg" className="h-24 mb-8" />
+        <BarLoader color="white" size={40} data-testid="loader" />
+      </div>
+    );
   if (error) return <div>Error: {error}</div>;
   return null;
 }
