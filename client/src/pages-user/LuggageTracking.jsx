@@ -447,7 +447,12 @@ const LuggageTracking = () => {
     iconSize: [30, 30],
   });
 
-  if (currentUserLat === null || currentUserLong === null) {
+  if (
+    currentUserLat === null ||
+    currentUserLong === null ||
+    profileDp === null ||
+    profileName === null
+  ) {
     return (
       <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">
         <img src="/ST-without-name.svg" className="h-24 mb-8" />
