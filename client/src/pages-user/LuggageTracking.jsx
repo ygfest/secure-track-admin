@@ -23,6 +23,7 @@ import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
+import { BarLoader } from "react-spinners";
 
 import L from "leaflet";
 import { useLocation } from "../context/UserLocationContext";
@@ -447,7 +448,12 @@ const LuggageTracking = () => {
   });
 
   if (currentUserLat === null || currentUserLong === null) {
-    return <div>Loading map...</div>; // Show a loader while fetching coordinates
+    return (
+      <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">
+        <img src="/ST-without-name.svg" className="h-24 mb-8" />
+        <BarLoader color="white" size={40} data-testid="loader" />
+      </div>
+    );
   }
   return (
     <>
