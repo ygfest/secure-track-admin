@@ -112,6 +112,10 @@ const LuggageTracking = () => {
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 20;
   const center = [currentUserLat, currentUserLong];
+  const defaultCenter = [15.973, 121.0868];
+  const defaultZoom = 8;
+  const focusedZoom = 16;
+
   const [lastChecked, setLastChecked] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -450,7 +454,6 @@ const LuggageTracking = () => {
   if (
     currentUserLat === null ||
     currentUserLong === null ||
-    profileDp === null ||
     profileName === null
   ) {
     return (
@@ -544,8 +547,8 @@ const LuggageTracking = () => {
           </div>
         </div>
         <MapContainer
-          center={[currentUserLat, currentUserLong]}
-          zoom={16}
+          center={center || defaultCenter}
+          zoom={center ? focusedZoom : defaultZoom}
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
         >

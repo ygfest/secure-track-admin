@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   isLocationOn: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   latitude: {
     type: Number,
