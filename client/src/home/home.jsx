@@ -108,8 +108,11 @@ export default function Home() {
                 Real-time Location Tracking
               </h3>
               <p className="text-base text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibus.
+                Never lose sight of your belongings. SecureTrack’s advanced
+                real-time GPS tracking ensures you always know where your
+                luggage is, whether it’s en route to your next destination or
+                waiting for you at the terminal. With instant updates, you stay
+                connected to your valuables every step of the journey.
               </p>
             </div>
           </div>
@@ -131,8 +134,10 @@ export default function Home() {
                 Intrusion Monitoring
               </h3>
               <p className="text-base text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibus.
+                Stay alerted to unauthorized access. SecureTrack’s intrusion
+                monitoring system detects tampering or unauthorized attempts to
+                open your luggage, instantly notifying you via the app. Your
+                peace of mind is our priority.
               </p>
             </div>
           </div>
@@ -155,7 +160,10 @@ export default function Home() {
               </h3>
               <p className="text-base text-gray-600">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibus.
+                scelerisque aliquam odio et faucibusProtect your valuables from
+                unexpected impacts. SecureTrack’s fall detection feature
+                identifies sudden drops or harsh handling of your luggage,
+                ensuring you’re aware of potential damage risks in real time.
               </p>
             </div>
           </div>
@@ -177,8 +185,11 @@ export default function Home() {
                 Temperature Monitoring
               </h3>
               <p className="text-base text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibus.
+                Keep sensitive items safe. Whether you’re traveling with
+                perishable goods, electronics, or delicate items, SecureTrack’s
+                temperature monitoring ensures you’re informed about the
+                environmental conditions around your luggage, helping you take
+                action when necessary.
               </p>
             </div>
           </div>
@@ -200,8 +211,11 @@ export default function Home() {
                 Geofencing
               </h3>
               <p className="text-base text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibus.
+                Set boundaries for your luggage effortlessly. SecureTrack’s
+                geofencing feature allows you to define safe zones within a
+                user-specific radius. Receive alerts if your luggage moves
+                outside the designated boundary, giving you extra security
+                during layovers or in crowded spaces.
               </p>
             </div>
           </div>
@@ -223,8 +237,13 @@ export default function Home() {
                 Reporting Feature
               </h3>
               <p className="text-base text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                scelerisque aliquam odio et faucibus.
+                Stay informed and take action efficiently. SecureTrack not only
+                provides comprehensive reports on your luggage’s journey,
+                including timestamps, location history, and incident alerts, but
+                it also enables users to report device anomalies or software
+                issues directly to developers and administrators. This seamless
+                reporting mechanism ensures timely resolutions, enhancing the
+                reliability of your luggage monitoring experience.
               </p>
             </div>
           </div>
