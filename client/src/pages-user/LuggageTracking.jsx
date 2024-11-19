@@ -95,7 +95,7 @@ const LuggageTracking = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [luggageDeets, setLuggageDeets] = useState([]);
+
   const [usersData, setUsersData] = useState([]);
   const [userId, setUserId] = useState();
   const [showAddModal, setShowAddModal] = useState(false);
@@ -106,8 +106,15 @@ const LuggageTracking = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, currentUserLat, currentUserLong, locationUpdatedAt } =
-    useLocation();
+  const {
+    isLocationOn,
+    currentUserLat,
+    currentUserLong,
+    locationUpdatedAt,
+    luggageDeets,
+    setLuggageDeets,
+    fetchLuggageData,
+  } = useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
   const radius = 20;
   const center = [currentUserLat, currentUserLong];
@@ -329,20 +336,6 @@ const LuggageTracking = () => {
       setLastChecked(new Date()); // Update the last checked time to now
     }
   }, [luggageDeets, lastChecked]); // Run whenever luggageDeets change
-
-  useEffect(() => {
-    const fetchLuggageData = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
-        setLuggageDeets(datas.data);
-      } catch (error) {
-        console.error("Error fetching luggage data:", error);
-      }
-    };
-
-    fetchLuggageData();
-  }, []);
 
   const handleMarkerClick = (luggage, index) => {
     setSelectedMarker(luggage);
