@@ -446,6 +446,9 @@ const LuggageTracking = () => {
     iconSize: [30, 30],
   });
 
+  if (currentUserLat === null || currentUserLong === null) {
+    return <div>Loading map...</div>; // Show a loader while fetching coordinates
+  }
   return (
     <>
       <NavBar />
@@ -530,8 +533,8 @@ const LuggageTracking = () => {
           </div>
         </div>
         <MapContainer
-          center={[14.5266402, 121.0228581]}
-          zoom={15}
+          center={[currentUserLat, currentUserLong]}
+          zoom={16}
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
         >
