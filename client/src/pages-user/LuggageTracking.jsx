@@ -635,9 +635,13 @@ const LuggageTracking = () => {
                       You are here{" "}
                     </span>
                     <br />
-                    <span className="text-gray-400">
-                      {formatStationarySince(locationUpdatedAt)}
-                    </span>
+                    {locationUpdatedAt !== null ? (
+                      <span className="text-gray-400">
+                        {formatStationarySince(locationUpdatedAt)}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </Popup>
                 </Marker>
                 <Circle

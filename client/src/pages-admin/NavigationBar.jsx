@@ -14,6 +14,7 @@ import {
   MdClose,
 } from "react-icons/md";
 import { FaCircleChevronLeft } from "react-icons/fa6";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { parse, format } from "date-fns";
 import { useAdminNavBarContext } from "../context/AdminNavBarContext";
 
@@ -85,20 +86,46 @@ const NavigationBar = () => {
       });
   };
 
-  const renderNotifications = () => {
-    return notifications
-      .sort((a, b) => b.timestamp - a.timestamp) // Sort by timestamp descending
-      .map((notification, index) => (
-        <div key={index} className="card w-full bg-[#f2f5f8] shadow-xl mb-2">
-          <div className="card-body flex items-start">
-            <h4 className="card-title text-base">{notification.message}</h4>
-            <p className="text-xs text-gray-500">
-              {formatDate(notification.timestamp)}
-            </p>
+  const renderNotifications = () =>
+    alerts.length > 0 ? (
+      alerts
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp descending
+        .map((alert, index) => (
+          <div key={index} className="card w-full bg-[#f2f5f8] shadow-xl mb-2">
+            <div className="card-body flex items-start">
+              <div className="mr-4">{getAlertIcon(alert.type)}</div>
+              <div className="flex-1">
+                <h4 className="card-title text-base flex items-center">
+                  {alert.type}
+                  <div
+                    className={`badge ${
+                      alert.type !== "Report Update"
+                        ? getAlertColor(alert.type)
+                        : getAlertColor(alert.criticality)
+                    } text-xs ml-2`}
+                  >
+                    {alert.criticality}
+                  </div>
+                </h4>
+                <p className="text-xs">{alert.description}</p>
+                <p className="text-xs text-gray-500">
+                  {formatDate(alert.timestamp)}
+                </p>
+              </div>
+            </div>
           </div>
+        ))
+    ) : (
+      <div className="card w-full bg-white mb-2 py-24">
+        <div className="card-body flex items-center">
+          <IoNotificationsOutline className="text-6xl text-gray-500" />
+          <p className="text-2xl">No notifications.</p>
+          <p className="text-gray-400 text-sm">
+            Don't worry, we'll let you know.
+          </p>
         </div>
-      ));
-  };
+      </div>
+    );
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);

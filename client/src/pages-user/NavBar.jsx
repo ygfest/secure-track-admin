@@ -12,6 +12,7 @@ import {
 import { GoAlert } from "react-icons/go";
 import { GoShield } from "react-icons/go";
 import { TbLocationExclamation } from "react-icons/tb";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
 import { useLocation } from "../context/UserLocationContext";
@@ -206,36 +207,51 @@ const NavBar = () => {
     prevStatusesRef.current = statuses;
   }, [tempData, tamperData, fallDetectData, statuses]);
 
-  const renderNotifications = () => {
-    return alerts
-      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-      .map((alert, index) => (
-        <div
-          key={index}
-          className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
-        >
-          <div className="card-body flex items-start">
-            <div className="mr-1 md:mr-2">{getAlertIcon(alert.type)}</div>
-            <div className="flex-1">
-              <h4 className="card-title text-base flex items-center">
-                {alert.type}
-                <div
-                  className={`badge ${getAlertColor(
-                    alert.type
-                  )} text-xs ml-2 flex-nowrap`}
-                >
-                  {alert.criticality}
-                </div>
-              </h4>
-              <p className="text-xs">{alert.description}</p>
-              <p className="text-xs text-gray-500">
-                {formatDate(alert.timestamp)}
-              </p>
+  const renderNotifications = () =>
+    alerts.length > 0 ? (
+      alerts
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp descending
+        .map((alert, index) => (
+          <div
+            key={index}
+            className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
+          >
+            <div className="card-body flex items-start">
+              <div className="mr-4">{getAlertIcon(alert.type)}</div>
+              <div className="flex-1">
+                <h4 className="card-title text-base flex items-center">
+                  {alert.type}
+                  <div
+                    className={`badge ${
+                      alert.type !== "Report Update"
+                        ? getAlertColor(alert.type)
+                        : getAlertColor(alert.criticality)
+                    } text-xs ml-2`}
+                  >
+                    {alert.criticality}
+                  </div>
+                </h4>
+                <p className="text-xs">{alert.description}</p>
+                <p className="text-xs text-gray-500">
+                  {formatDate(alert.timestamp)}
+                </p>
+              </div>
             </div>
           </div>
+        ))
+    ) : (
+      <div className="">
+        <div className="card w-full bg-black max-h-64 shadow-xl mb-2">
+          <div className="card-body flex items-center py-12">
+            <IoNotificationsOutline className="text-6xl text-gray-500" />
+            <p className="text-2xl">No notifications.</p>
+            <p className="text-gray-400 text-sm">
+              Don't worry, we'll let you know.
+            </p>
+          </div>
         </div>
-      ));
-  };
+      </div>
+    );
 
   const handleLogout = () => {
     axios

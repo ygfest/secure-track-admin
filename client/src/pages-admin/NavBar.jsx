@@ -9,6 +9,7 @@ import {
   FaShieldAlt,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { useLocation } from "../context/UserLocationContext";
 import { useAdminNavBarContext } from "../context/AdminNavBarContext";
 
@@ -20,6 +21,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [adminProfileDp, setAdminProfileDp] = useState("");
   const [adminProfile, setAdminProfile] = useState("");
   const [adminLastName, setAdminLastName] = useState("");
+  const [alerts, setAlerts] = useState([]);
 
   const {
     isSeenNotifications,
@@ -52,6 +54,49 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   }, [navigate]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  const renderNotifications = () =>
+    alerts.length > 0 ? (
+      alerts
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp descending
+        .map((alert, index) => (
+          <div
+            key={index}
+            className="card w-full bg-zinc-800 max-h-64 shadow-xl mb-2"
+          >
+            <div className="card-body flex items-start">
+              <div className="mr-4">{getAlertIcon(alert.type)}</div>
+              <div className="flex-1">
+                <h4 className="card-title text-base flex items-center">
+                  {alert.type}
+                  <div
+                    className={`badge ${
+                      alert.type !== "Report Update"
+                        ? getAlertColor(alert.type)
+                        : getAlertColor(alert.criticality)
+                    } text-xs ml-2`}
+                  >
+                    {alert.criticality}
+                  </div>
+                </h4>
+                <p className="text-xs">{alert.description}</p>
+                <p className="text-xs text-gray-500">
+                  {formatDate(alert.timestamp)}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))
+    ) : (
+      <div className="">
+        <div className="card w-full bg-black max-h-64 shadow-xl mb-2">
+          <div className="card-body flex items-center py-16">
+            <IoNotificationsOutline className="text-6xl text-gray-500" />
+            <p className="text-2xl">No notifications.</p>
+          </div>
+        </div>
+      </div>
+    );
 
   const handleLogout = () => {
     axios
@@ -235,9 +280,14 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
             </div>
           </button>
           {openNotif && (
-            <div className="absolute top-16 right-3 p-3 rounded-md shadow-md bg-[#020202a0] w-80">
+            <div className="absolute top-16 right-2 w-[75%] md:w-[25%] p-3 rounded-lg shadow-md bg-zinc-950 w-80">
               <h3 className="font-bold text-lg mb-3">Notifications</h3>
-              {renderNotifications()}
+              <div
+                className="overflow-y-auto"
+                style={{ maxHeight: "400px", overflowX: "hidden" }}
+              >
+                {renderNotifications()}
+              </div>
             </div>
           )}
 
