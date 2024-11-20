@@ -44,7 +44,7 @@ export default function Home() {
   const toggleHelpModal = () => setShowHelpModal(!showHelpModal);
 
   return (
-    <main className="bg-white font-poppins overflow-x-hidden">
+    <main className="bg-white font-poppins">
       {/* Hero Section */}
       <section className="relative flex h-[80vh] w-full items-center justify-center">
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#5CC90C,transparent_1px),linear-gradient(to_bottom,#5CC90C,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
