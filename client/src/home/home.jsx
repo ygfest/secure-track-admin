@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <main className="bg-white font-poppins overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative flex h-[80vh] w-full items-center justify-center min-w-[400px]">
+      <section className="relative flex h-[80vh] w-full items-center justify-center">
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#5CC90C,transparent_1px),linear-gradient(to_bottom,#5CC90C,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_60%_0%,#000_80%,transparent_110%)]" />
         <nav className="fixed left-1/2 top-4 z-40 w-[90%] max-w-[1200px] -translate-x-1/2 rounded-3xl border-2 border-[#42393962] px-4 py-3 backdrop-blur-sm backdrop-saturate-150 bg-white md:px-8 md:py-4">
           <header className="flex w-full items-center justify-between">
@@ -89,7 +89,7 @@ export default function Home() {
       </section>*/}
 
       {/* Flow of Cards Section */}
-      <section className="relative mt-36 flex flex-col items-center min-w-[400px]">
+      <section className="relative mt-36 flex flex-col items-center">
         <div className="w-[90%] max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Card 1 - Real-time Location Tracking */}
           <div
@@ -407,9 +407,9 @@ export default function Home() {
       )}
 
       {/* Other Sections */}
-      <section className="h-[500px] min-w-[400px]"></section>
+      <section className="h-[500px] "></section>
 
-      <footer className="w-full min-w-[400px] py-8 text-left bg-secondary text-white">
+      <footer className="w-full py-8 text-left bg-secondary text-white">
         <div className="flex flex-wrap justify-between gap-8 h-auto px-4">
           {/* Logos Section */}
           <div className="flex flex-col items-start gap-6">
