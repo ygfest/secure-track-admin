@@ -205,7 +205,7 @@ const NavigationBar = () => {
     fallArray.forEach((fall) => {
       newAlerts.push({
         type: "Fall Detected",
-        criticality: "Check your bag!",
+        criticality: "Warning",
         description: `Fall detected in ${fall.luggage_custom_name}`,
         timestamp: new Date(fall.fall_time),
       });
@@ -250,7 +250,7 @@ const NavigationBar = () => {
                       alert.type !== "Report Update"
                         ? getAlertColor(alert.type)
                         : getAlertColor(alert.criticality)
-                    } text-xs ml-2`}
+                    } text-xs whitespace-nowrap ml-2`}
                   >
                     {alert.criticality}
                   </div>
@@ -582,7 +582,7 @@ const NavigationBar = () => {
         </div>
       </div>
       {openNotif && (
-        <div className="fixed top-16 right-2 w-[72%] sm:w-96 bg-white shadow-lg rounded-lg z-[25] p-4 border border-gray-300">
+        <div className="fixed top-16 right-2 w-[85%] sm:w-96 bg-white shadow-lg rounded-lg z-[25] p-4 border border-gray-300">
           <h3 className="text-lg font-medium mb-2 text-gray-800">
             Notifications
           </h3>

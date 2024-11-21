@@ -631,13 +631,13 @@ const LuggageTracking = () => {
                   zIndexOffset={100000}
                 >
                   <Popup>
-                    <span className="flex font-medium text-center">
-                      You are here{" "}
+                    <span className="flex font-medium text-center justify-center">
+                      My location{" "}
                     </span>
                     <br />
                     {locationUpdatedAt !== null ? (
-                      <span className="text-gray-400">
-                        {formatStationarySince(locationUpdatedAt)}
+                      <span className="text-gray-400 text-xs">
+                        <RelativeTime shipmentDate={locationUpdatedAt} />
                       </span>
                     ) : (
                       ""
