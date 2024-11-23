@@ -358,7 +358,12 @@ router.put('/update-location', verifyUser, async (req, res) => {
 router.put('/update-current-location', verifyUser, async (req, res) => {
   const { luggageId, currentLocation } = req.body;
 
-  if (!luggageId || !currentLocation) {
+  if (currentLocation === null) {
+    console.log("Current location reset to null for luggage:", luggageId);
+  }
+
+
+  if (!luggageId) {
     return res.status(400).json({
       status: false,
       message: "Missing required fields: luggageId or currentLocation",

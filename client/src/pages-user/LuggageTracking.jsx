@@ -177,7 +177,7 @@ const LuggageTracking = () => {
                   `${apiUrl}/luggage-router/update-current-location`,
                   {
                     luggageId,
-                    currentLocation: "No location",
+                    currentLocation: null,
                   }
                 );
                 return { ...luggageLoc, currentLocation: "Unknown Location" };
@@ -189,7 +189,7 @@ const LuggageTracking = () => {
                 `${apiUrl}/luggage-router/update-current-location`,
                 {
                   luggageId,
-                  currentLocation: "No location",
+                  currentLocation: null,
                 }
               );
               return { ...luggageLoc, currentLocation: "Unknown Location" };
@@ -561,12 +561,13 @@ const LuggageTracking = () => {
                     {luggageDeet.status}
                   </div>
                 </div>
-                <p className="text-xs text-[#ffffff8b]">
-                  At {luggageDeet?.currentLocation}
-                </p>
-                <p className="text-xs text-[#ffffff8b]">
-                  {formatStationarySince(luggageDeet.stationary_since)}
-                </p>
+                {luggageDeet.currentLocation === null ? (
+                  <p className="text-xs text-[#ffffff8b]">No Location</p>
+                ) : (
+                  <p className="text-xs text-[#ffffff8b]">
+                    {formatStationarySince(luggageDeet.stationary_since)}
+                  </p>
+                )}
               </div>
             ))}
             <div
