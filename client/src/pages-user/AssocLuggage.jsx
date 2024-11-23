@@ -239,7 +239,7 @@ const AssocLuggage = () => {
   return (
     <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
-        <Toaster />
+        <Toaster position="top-right" />
         <div className="flex justify-between mb-5 gap-4">
           <button
             className="btn bg-[#5CC90C] text-white rounded-3xl"
