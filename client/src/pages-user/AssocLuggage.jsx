@@ -147,6 +147,7 @@ const AssocLuggage = () => {
       setShowAddModal(false);
       window.location.reload();
     } catch (error) {
+      toast.error("Luggage Tag already in use");
       console.error("Error adding luggage", error);
     }
   };
