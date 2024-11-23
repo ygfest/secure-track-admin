@@ -14,14 +14,16 @@ const LuggageSchema = new Schema({
     },
     latitude: { 
         type: Number, 
-        required: true, 
-        default: 14.473052991282165,
+        //required: true, 
+        default: null,
+        //hme default: 14.473052991282165,
         //default: 14.5268427
     },
     longitude: { 
         type: Number, 
-        required: true, 
-        default: 121.02543655162846,
+        //required: true, 
+        default: null,
+        // hme default: 121.02543655162846,
         //default: 121.0235876
     },
     timestamp: { 
@@ -42,7 +44,7 @@ const LuggageSchema = new Schema({
         type: Date, 
         default: Date.now 
     },
-    destination: { 
+    currentLocation: { 
         type: String, 
     },
     updatedAt: {  

@@ -355,6 +355,47 @@ router.put('/update-location', verifyUser, async (req, res) => {
   }
 });
 
+router.put('/update-current-location', verifyUser, async (req, res) => {
+  const { luggageId, currentLocation } = req.body;
+
+  if (!luggageId || !currentLocation) {
+    return res.status(400).json({
+      status: false,
+      message: "Missing required fields: luggageId or currentLocation",
+    });
+  }
+
+  console.log("Request to update current location received.");
+
+  try {
+    const updatedLuggageCurrentLocations = await Luggage.findByIdAndUpdate(
+      luggageId,
+      { currentLocation },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedLuggageCurrentLocations) {
+      return res.status(404).json({
+        status: false,
+        message: "Luggage not found",
+      });
+    }
+
+    console.log("LUGGAGE LOCATION UPDATED");
+    return res.json({
+      status: true,
+      message: "Luggage location updated successfully",
+      luggage: updatedLuggageCurrentLocations,
+    });
+  } catch (error) {
+    console.error('Error updating luggage current location:', error);
+    return res.status(500).json({
+      status: false,
+      message: "Server error",
+    });
+  }
+});
+
 
 
 module.exports = router;

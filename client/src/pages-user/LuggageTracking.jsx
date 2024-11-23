@@ -150,6 +150,7 @@ const LuggageTracking = () => {
       try {
         const updatedLuggageDeets = await Promise.all(
           luggageDeets.map(async (luggageLoc) => {
+            const luggageId = luggageLoc._id;
             const response = await fetch(
               `https://photon.komoot.io/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}`
             );
@@ -158,26 +159,56 @@ const LuggageTracking = () => {
               if (data && data.features && data.features.length > 0) {
                 const properties = data.features[0].properties;
                 const locationName = `${properties.name}, ${properties.city}, ${properties.state}, ${properties.country}`;
+                console.log("LUGGAGE FETCH LOCATION CALLED");
+
+                // Update the current location in the database
+                const apiUrl = import.meta.env.VITE_API_URL;
+                await axios.put(
+                  `${apiUrl}/luggage-router/update-current-location`,
+                  {
+                    luggageId,
+                    currentLocation: locationName,
+                  }
+                );
                 return { ...luggageLoc, currentLocation: locationName };
               } else {
+                const apiUrl = import.meta.env.VITE_API_URL;
+                await axios.put(
+                  `${apiUrl}/luggage-router/update-current-location`,
+                  {
+                    luggageId,
+                    currentLocation: "No location",
+                  }
+                );
                 return { ...luggageLoc, currentLocation: "Unknown Location" };
               }
             } else {
               console.error("Error fetching location:", response.status);
+              const apiUrl = import.meta.env.VITE_API_URL;
+              await axios.put(
+                `${apiUrl}/luggage-router/update-current-location`,
+                {
+                  luggageId,
+                  currentLocation: "No location",
+                }
+              );
               return { ...luggageLoc, currentLocation: "Unknown Location" };
             }
           })
         );
-        setLuggageDeets(updatedLuggageDeets);
+
+        fetchLuggageData();
       } catch (error) {
         console.error("Error fetching locations: ", error);
       }
     };
 
+    //fetchCurrentLocations();
+
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
-      59000
+      10000
     );
     debouncedFetchCurrentLocations();
 
@@ -186,6 +217,21 @@ const LuggageTracking = () => {
       debouncedFetchCurrentLocations.cancel();
     };
   }, [JSON.stringify(luggageDeets)]);
+
+  const fetchLuggageData = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
+      setLuggageDeets(datas.data);
+      console.log("CURRENT ADDRESS FETCHED AGAIN");
+    } catch (error) {
+      console.error("Error fetching luggage data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLuggageData();
+  }, []);
 
   const handleLocateUser = (map) => {
     setTrackLocation(true);
@@ -262,7 +308,7 @@ const LuggageTracking = () => {
     if (shouldUpdateGeofence) {
       updateGeofenceStatus();
     }
-  }, [luggageDeets, currentUserLat, currentUserLong]); // Add currentUserLat and currentUserLong to the dependencies
+  }, [luggageDeets, currentUserLat, currentUserLong]);
 
   const updateGeofenceStatus = async () => {
     if (isUpdating) return; // Prevent re-entry if an update is in progress
@@ -334,20 +380,6 @@ const LuggageTracking = () => {
       setLastChecked(new Date()); // Update the last checked time to now
     }
   }, [luggageDeets, lastChecked]); // Run whenever luggageDeets change
-
-  useEffect(() => {
-    const fetchLuggageData = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
-        setLuggageDeets(datas.data);
-      } catch (error) {
-        console.error("Error fetching luggage data:", error);
-      }
-    };
-
-    fetchLuggageData();
-  }, []);
 
   const handleMarkerClick = (luggage, index) => {
     setSelectedMarker(luggage);
@@ -530,7 +562,7 @@ const LuggageTracking = () => {
                   </div>
                 </div>
                 <p className="text-xs text-[#ffffff8b]">
-                  At {luggageDeet.currentLocation}
+                  At {luggageDeet?.currentLocation}
                 </p>
                 <p className="text-xs text-[#ffffff8b]">
                   {formatStationarySince(luggageDeet.stationary_since)}
@@ -565,61 +597,65 @@ const LuggageTracking = () => {
             iconCreateFunction={createClusterCustomIcon}
             maxClusterRadius={5}
           >
-            {luggageDeets.map((luggage, index) => (
-              <Marker
-                key={luggage._id}
-                position={[luggage.latitude, luggage.longitude]}
-                icon={luggageIcon}
-                ref={(el) => (markerRefs.current[index] = el)}
-                eventHandlers={{
-                  click: () => handleMarkerClick(luggage, index),
-                }}
-              >
-                <Popup>
-                  {usersData && luggage.user_id && (
-                    <>
-                      <span className="text-lg font-bold font-poppins">
-                        {luggage.luggage_custom_name}
-                      </span>
-                      <br />
-                      <span className="font-poppins">
-                        <span className="font-poppins font-semibold">
-                          Tracking Number:{" "}
+            {luggageDeets.map((luggage, index) =>
+              luggage.latitude === null || luggage.longitude === null ? (
+                ""
+              ) : (
+                <Marker
+                  key={luggage._id}
+                  position={[luggage.latitude, luggage.longitude]}
+                  icon={luggageIcon}
+                  ref={(el) => (markerRefs.current[index] = el)}
+                  eventHandlers={{
+                    click: () => handleMarkerClick(luggage, index),
+                  }}
+                >
+                  <Popup>
+                    {usersData && luggage.user_id && (
+                      <>
+                        <span className="text-lg font-bold font-poppins">
+                          {luggage.luggage_custom_name}
+                        </span>
+                        <br />
+                        <span className="font-poppins">
+                          <span className="font-poppins font-semibold">
+                            Tracking Number:{" "}
+                          </span>{" "}
+                          {luggage.luggage_tag_number}
                         </span>{" "}
-                        {luggage.luggage_tag_number}
-                      </span>{" "}
-                      <br />
-                      <span className="font-poppins">
-                        <span className="font-poppins font-semibold">
-                          {" "}
-                          Location:
+                        <br />
+                        <span className="font-poppins">
+                          <span className="font-poppins font-semibold">
+                            {" "}
+                            Location:
+                          </span>{" "}
+                          {luggage.currentLocation}
                         </span>{" "}
-                        {luggage.currentLocation}
-                      </span>{" "}
-                      <br />
-                      <br />
-                      <span
-                        className={`font-poppins ${
-                          luggage.status === "In Range"
-                            ? "text-green-500"
-                            : luggage.status === "Out of Range"
-                            ? "text-yellow-500"
-                            : "text-red-500"
-                        }`}
-                      >
-                        Status: {luggage.status}
-                      </span>
-                    </>
+                        <br />
+                        <br />
+                        <span
+                          className={`font-poppins ${
+                            luggage.status === "In Range"
+                              ? "text-green-500"
+                              : luggage.status === "Out of Range"
+                              ? "text-yellow-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          Status: {luggage.status}
+                        </span>
+                      </>
+                    )}
+                  </Popup>
+                  {selectedMarker && selectedMarker._id === luggage._id && (
+                    <FlyToLocation
+                      latitude={luggage?.latitude}
+                      longitude={luggage?.longitude}
+                    />
                   )}
-                </Popup>
-                {selectedMarker && selectedMarker._id === luggage._id && (
-                  <FlyToLocation
-                    latitude={luggage.latitude}
-                    longitude={luggage.longitude}
-                  />
-                )}
-              </Marker>
-            ))}
+                </Marker>
+              )
+            )}
           </MarkerClusterGroup>
           {isLocationOn &&
             currentUserLat !== null &&
@@ -630,13 +666,13 @@ const LuggageTracking = () => {
                   icon={userIcon}
                   zIndexOffset={100000}
                 >
-                  <Popup>
+                  <Popup className="p-4">
                     <span className="flex font-medium text-center justify-center">
                       My location{" "}
                     </span>
                     <br />
                     {locationUpdatedAt !== null ? (
-                      <span className="text-gray-400 text-xs">
+                      <span className="text-gray-400 text-xs whitespace-nowrap">
                         <RelativeTime shipmentDate={locationUpdatedAt} />
                       </span>
                     ) : (
