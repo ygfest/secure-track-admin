@@ -160,12 +160,12 @@ const AdminLuggageTracking = () => {
                 const locationName = `${properties.name}, ${properties.city}, ${properties.state}, ${properties.country}`;
                 console.log("LUGGAGE FETCH LOCATION CALLED");
 
+                // Update the current location in the database
+                // Check if location has changed
                 let stationary_since = luggageLoc.stationary_since;
                 if (locationName !== luggageLoc.currentLocation) {
                   stationary_since = Date.now();
                 }
-
-                // Update the current location in the database
                 const apiUrl = import.meta.env.VITE_API_URL;
                 await axios.put(
                   `${apiUrl}/luggage-router/update-current-location`,
@@ -181,26 +181,34 @@ const AdminLuggageTracking = () => {
                   stationary_since,
                 };
               } else {
+                let stationary_since = luggageLoc.stationary_since;
+                if (luggageLoc.currentLocation !== null) {
+                  stationary_since = Date.now();
+                }
                 const apiUrl = import.meta.env.VITE_API_URL;
                 await axios.put(
                   `${apiUrl}/luggage-router/update-current-location`,
                   {
                     luggageId,
                     currentLocation: null,
-                    stationary_since: luggageLoc.stationary_since || Date.now(),
+                    stationary_since: stationary_since,
                   }
                 );
                 return { ...luggageLoc, currentLocation: "Unknown Location" };
               }
             } else {
               console.error("Error fetching location:", response.status);
+              let stationary_since = luggageLoc.stationary_since;
+              if (luggageLoc.currentLocation !== null) {
+                stationary_since = Date.now();
+              }
               const apiUrl = import.meta.env.VITE_API_URL;
               await axios.put(
                 `${apiUrl}/luggage-router/update-current-location`,
                 {
                   luggageId,
                   currentLocation: null,
-                  stationary_since: luggageLoc.stationary_since || Date.now(),
+                  stationary_since: stationary_since,
                 }
               );
               return { ...luggageLoc, currentLocation: "Unknown Location" };

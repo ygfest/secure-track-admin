@@ -182,26 +182,34 @@ const LuggageTracking = () => {
                   stationary_since,
                 };
               } else {
+                let stationary_since = luggageLoc.stationary_since;
+                if (luggageLoc.currentLocation !== null) {
+                  stationary_since = Date.now();
+                }
                 const apiUrl = import.meta.env.VITE_API_URL;
                 await axios.put(
                   `${apiUrl}/luggage-router/update-current-location`,
                   {
                     luggageId,
                     currentLocation: null,
-                    stationary_since: luggageLoc.stationary_since || Date.now(),
+                    stationary_since: stationary_since,
                   }
                 );
                 return { ...luggageLoc, currentLocation: "Unknown Location" };
               }
             } else {
               console.error("Error fetching location:", response.status);
+              let stationary_since = luggageLoc.stationary_since;
+              if (luggageLoc.currentLocation !== null) {
+                stationary_since = Date.now();
+              }
               const apiUrl = import.meta.env.VITE_API_URL;
               await axios.put(
                 `${apiUrl}/luggage-router/update-current-location`,
                 {
                   luggageId,
                   currentLocation: null,
-                  stationary_since: luggageLoc.stationary_since || Date.now(),
+                  stationary_since: stationary_since,
                 }
               );
               return { ...luggageLoc, currentLocation: "Unknown Location" };

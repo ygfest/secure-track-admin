@@ -275,11 +275,12 @@ router.delete('/delete-tracking-data/:tagNumber', verifyUser, async (req, res) =
     const deletedFallData = await FallDetectionLog.deleteMany({ luggage_tag_number: luggageTagNumber });
     const deletedTamperData = await TamperDetectionLog.deleteMany({ luggage_tag_number: luggageTagNumber });
     const deletedTempData = await TempLog.deleteMany({ luggage_tag_number: luggageTagNumber });
+    const deleteLocationdata = await Luggage.findOneAndUpdate({luggage_tag_number: luggageTagNumber}, {latitude: null, longitude: null}, {new: true})
 
     if (
       deletedFallData.deletedCount === 0 &&
       deletedTamperData.deletedCount === 0 &&
-      deletedTempData.deletedCount === 0
+      deletedTempData.deletedCount === 0 && deleteLocationdata.deletedCount === 0
     ) {
       return res.status(404).json({ status: false, message: "Luggage not found" });
     }
