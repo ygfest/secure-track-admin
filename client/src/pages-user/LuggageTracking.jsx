@@ -162,15 +162,25 @@ const LuggageTracking = () => {
                 console.log("LUGGAGE FETCH LOCATION CALLED");
 
                 // Update the current location in the database
+                // Check if location has changed
+                let stationary_since = luggageLoc.stationary_since;
+                if (locationName !== luggageLoc.currentLocation) {
+                  stationary_since = Date.now();
+                }
                 const apiUrl = import.meta.env.VITE_API_URL;
                 await axios.put(
                   `${apiUrl}/luggage-router/update-current-location`,
                   {
                     luggageId,
                     currentLocation: locationName,
+                    stationary_since,
                   }
                 );
-                return { ...luggageLoc, currentLocation: locationName };
+                return {
+                  ...luggageLoc,
+                  currentLocation: locationName,
+                  stationary_since,
+                };
               } else {
                 const apiUrl = import.meta.env.VITE_API_URL;
                 await axios.put(
@@ -178,6 +188,7 @@ const LuggageTracking = () => {
                   {
                     luggageId,
                     currentLocation: null,
+                    stationary_since: luggageLoc.stationary_since || Date.now(),
                   }
                 );
                 return { ...luggageLoc, currentLocation: "Unknown Location" };
@@ -190,6 +201,7 @@ const LuggageTracking = () => {
                 {
                   luggageId,
                   currentLocation: null,
+                  stationary_since: luggageLoc.stationary_since || Date.now(),
                 }
               );
               return { ...luggageLoc, currentLocation: "Unknown Location" };
@@ -440,12 +452,12 @@ const LuggageTracking = () => {
         toast.success("Luggage added succesfully");
         window.location.reload();
       } else {
-        toast.error("Error adding Luggage");
+        toast.error("Luggage Tag already in use");
       }
       setShowAddModal(false);
     } catch (error) {
       console.log("error adding luggage", error);
-      toast.error("Error Adding Luggage");
+      toast.error("Luggage Tag already in use");
     }
   };
 
@@ -542,7 +554,7 @@ const LuggageTracking = () => {
                     {luggageDeet.luggage_custom_name}
                   </h4>
                   <div className="badge badge-primary badge-sm md:badge-md  text-white text-xs rounded-none font-poppins whitespace-nowrap ">
-                    <RelativeTime shipmentDate={luggageDeet.timestamps} />
+                    <RelativeTime shipmentDate={luggageDeet.updatedAt} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -565,9 +577,12 @@ const LuggageTracking = () => {
                   <p className="text-xs text-[#ffffff8b]">No Location</p>
                 ) : (
                   <p className="text-xs text-[#ffffff8b]">
-                    {formatStationarySince(luggageDeet.stationary_since)}
+                    At {luggageDeet.currentLocation}
                   </p>
                 )}
+                <p className="text-xs text-[#ffffff8b]">
+                  {formatStationarySince(luggageDeet.stationary_since)}
+                </p>
               </div>
             ))}
             <div

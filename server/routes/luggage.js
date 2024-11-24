@@ -356,7 +356,7 @@ router.put('/update-location', verifyUser, async (req, res) => {
 });
 
 router.put('/update-current-location', verifyUser, async (req, res) => {
-  const { luggageId, currentLocation } = req.body;
+  const { luggageId, currentLocation, stationary_since } = req.body;
 
   if (currentLocation === null) {
     console.log("Current location reset to null for luggage:", luggageId);
@@ -375,7 +375,7 @@ router.put('/update-current-location', verifyUser, async (req, res) => {
   try {
     const updatedLuggageCurrentLocations = await Luggage.findByIdAndUpdate(
       luggageId,
-      { currentLocation },
+      { currentLocation, stationary_since, },
       { new: true } // Return the updated document
     );
 

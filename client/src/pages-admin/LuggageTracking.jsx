@@ -149,6 +149,7 @@ const AdminLuggageTracking = () => {
       try {
         const updatedLuggageDeets = await Promise.all(
           luggageDeets.map(async (luggageLoc) => {
+            const luggageId = luggageLoc._id;
             const response = await fetch(
               `https://photon.komoot.io/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}`
             );
@@ -157,26 +158,68 @@ const AdminLuggageTracking = () => {
               if (data && data.features && data.features.length > 0) {
                 const properties = data.features[0].properties;
                 const locationName = `${properties.name}, ${properties.city}, ${properties.state}, ${properties.country}`;
-                return { ...luggageLoc, currentLocation: locationName };
+                console.log("LUGGAGE FETCH LOCATION CALLED");
+
+                let stationary_since = luggageLoc.stationary_since;
+                if (locationName !== luggageLoc.currentLocation) {
+                  stationary_since = Date.now();
+                }
+
+                // Update the current location in the database
+                const apiUrl = import.meta.env.VITE_API_URL;
+                await axios.put(
+                  `${apiUrl}/luggage-router/update-current-location`,
+                  {
+                    luggageId,
+                    currentLocation: locationName,
+                    stationary_since,
+                  }
+                );
+                return {
+                  ...luggageLoc,
+                  currentLocation: locationName,
+                  stationary_since,
+                };
               } else {
+                const apiUrl = import.meta.env.VITE_API_URL;
+                await axios.put(
+                  `${apiUrl}/luggage-router/update-current-location`,
+                  {
+                    luggageId,
+                    currentLocation: null,
+                    stationary_since: luggageLoc.stationary_since || Date.now(),
+                  }
+                );
                 return { ...luggageLoc, currentLocation: "Unknown Location" };
               }
             } else {
               console.error("Error fetching location:", response.status);
+              const apiUrl = import.meta.env.VITE_API_URL;
+              await axios.put(
+                `${apiUrl}/luggage-router/update-current-location`,
+                {
+                  luggageId,
+                  currentLocation: null,
+                  stationary_since: luggageLoc.stationary_since || Date.now(),
+                }
+              );
               return { ...luggageLoc, currentLocation: "Unknown Location" };
             }
           })
         );
-        setLuggageDeets(updatedLuggageDeets);
+
+        fetchLuggageData();
       } catch (error) {
         console.error("Error fetching locations: ", error);
       }
     };
 
+    //fetchCurrentLocations();
+
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
-      59000
+      10000
     );
     debouncedFetchCurrentLocations();
 
@@ -185,6 +228,21 @@ const AdminLuggageTracking = () => {
       debouncedFetchCurrentLocations.cancel();
     };
   }, [JSON.stringify(luggageDeets)]);
+
+  const fetchLuggageData = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const datas = await axios.get(`${apiUrl}/luggage-router/luggage-admin`);
+      setLuggageDeets(datas.data);
+      console.log("CURRENT ADDRESS FETCHED AGAIN");
+    } catch (error) {
+      console.error("Error fetching luggage data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLuggageData();
+  }, []);
 
   const handleLocateUser = (map) => {
     setTrackLocation(true);
@@ -231,20 +289,6 @@ const AdminLuggageTracking = () => {
     usersData._id === luggageDeets.user_id
       ? `${usersData.firstname} ${usersData.lastname}`
       : null;
-
-  useEffect(() => {
-    const fetchLuggageData = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const datas = await axios.get(`${apiUrl}/luggage-router/luggage-admin`);
-        setLuggageDeets(datas.data);
-      } catch (error) {
-        console.error("Error fetching luggage data:", error);
-      }
-    };
-
-    fetchLuggageData();
-  }, []);
 
   const handleMarkerClick = (luggage, index) => {
     setSelectedMarker(luggage);
@@ -388,7 +432,7 @@ const AdminLuggageTracking = () => {
                     {luggageDeet.luggage_custom_name}
                   </h4>
                   <div className="badge badge-primary badge-sm md:badge-md  text-white text-xs rounded-none font-poppins whitespace-nowrap">
-                    <RelativeTime shipmentDate={luggageDeet.timestamp} />
+                    <RelativeTime shipmentDate={luggageDeet.updatedAt} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -407,9 +451,13 @@ const AdminLuggageTracking = () => {
                     {luggageDeet.status}
                   </div>
                 </div>
-                <p className="text-xs text-[#ffffff8b]">
-                  At {luggageDeet.currentLocation}
-                </p>
+                {luggageDeet.currentLocation === null ? (
+                  <p className="text-xs text-[#ffffff8b]">No Location</p>
+                ) : (
+                  <p className="text-xs text-[#ffffff8b]">
+                    At {luggageDeet.currentLocation}
+                  </p>
+                )}
                 <p className="text-xs text-[#ffffff8b]">
                   {formatStationarySince(luggageDeet.stationary_since)}
                 </p>
@@ -457,77 +505,83 @@ const AdminLuggageTracking = () => {
             iconCreateFunction={createClusterCustomIcon}
             maxClusterRadius={8}
           >
-            {luggageDeets.map((luggage, index) => (
-              <Marker
-                key={luggage._id}
-                position={[luggage.latitude, luggage.longitude]}
-                icon={luggageIcon}
-                ref={(el) => (markerRefs.current[index] = el)}
-                eventHandlers={{
-                  click: () => handleMarkerClick(luggage, index),
-                }}
-              >
-                <Popup>
-                  {usersData && luggage.user_id && (
-                    <>
-                      <span className="text-lg font-bold font-poppins">
-                        {luggage.luggage_custom_name}
-                      </span>
-                      <br />
-                      <span className="font-poppins">
-                        <span className="font-poppins font-semibold">
-                          Tracking Number:
-                        </span>{" "}
-                        {luggage.luggage_tag_number}
-                      </span>{" "}
-                      <br />
-                      <span className="font-poppins">
-                        <span className="font-poppins font-semibold">
-                          Location:
-                        </span>{" "}
-                        {luggage.currentLocation}
-                      </span>{" "}
-                      <br />
-                      <span className="font-poppins">
-                        <span className="font-poppins font-semibold">
-                          Owner:{" "}
+            {luggageDeets.map((luggage, index) =>
+              luggage.latitude === null || luggage.longitude === null ? (
+                ""
+              ) : (
+                <Marker
+                  key={luggage._id}
+                  position={[luggage.latitude, luggage.longitude]}
+                  icon={luggageIcon}
+                  ref={(el) => (markerRefs.current[index] = el)}
+                  eventHandlers={{
+                    click: () => handleMarkerClick(luggage, index),
+                  }}
+                >
+                  <Popup>
+                    {usersData && luggage.user_id && (
+                      <>
+                        <span className="text-lg font-bold font-poppins">
+                          {luggage.luggage_custom_name}
                         </span>
+                        <br />
+                        <span className="font-poppins">
+                          <span className="font-poppins font-semibold">
+                            Tracking Number:
+                          </span>{" "}
+                          {luggage.luggage_tag_number}
+                        </span>{" "}
+                        <br />
+                        <span className="font-poppins">
+                          <span className="font-poppins font-semibold">
+                            Location:
+                          </span>{" "}
+                          {luggage.currentLocation}
+                        </span>{" "}
+                        <br />
+                        <span className="font-poppins">
+                          <span className="font-poppins font-semibold">
+                            Owner:{" "}
+                          </span>
 
-                        {usersData.find((user) => user._id === luggage.user_id)
-                          ? `${
-                              usersData.find(
-                                (user) => user._id === luggage.user_id
-                              ).firstname
-                            } ${
-                              usersData.find(
-                                (user) => user._id === luggage.user_id
-                              ).lastname
-                            }`
-                          : "Unknown Owner"}
-                      </span>
-                      <br />
-                      <span
-                        className={`font-poppins ${
-                          luggage.status === "In Range"
-                            ? "text-green-500"
-                            : luggage.status === "Out of Range"
-                            ? "text-yellow-500"
-                            : "text-red-500"
-                        }`}
-                      >
-                        Status: {luggage.status}
-                      </span>
-                    </>
+                          {usersData.find(
+                            (user) => user._id === luggage.user_id
+                          )
+                            ? `${
+                                usersData.find(
+                                  (user) => user._id === luggage.user_id
+                                ).firstname
+                              } ${
+                                usersData.find(
+                                  (user) => user._id === luggage.user_id
+                                ).lastname
+                              }`
+                            : "Unknown Owner"}
+                        </span>
+                        <br />
+                        <span
+                          className={`font-poppins ${
+                            luggage.status === "In Range"
+                              ? "text-green-500"
+                              : luggage.status === "Out of Range"
+                              ? "text-yellow-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          Status: {luggage.status}
+                        </span>
+                      </>
+                    )}
+                  </Popup>
+                  {selectedMarker && selectedMarker._id === luggage._id && (
+                    <FlyToLocation
+                      latitude={luggage.latitude}
+                      longitude={luggage.longitude}
+                    />
                   )}
-                </Popup>
-                {selectedMarker && selectedMarker._id === luggage._id && (
-                  <FlyToLocation
-                    latitude={luggage.latitude}
-                    longitude={luggage.longitude}
-                  />
-                )}
-              </Marker>
-            ))}
+                </Marker>
+              )
+            )}
           </MarkerClusterGroup>
           {isLocationOn &&
             currentUserLat !== null &&
