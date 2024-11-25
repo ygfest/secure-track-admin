@@ -103,7 +103,7 @@ router.get('/fall-logs2', verifyUser, async (req, res) => {
       const logs = await FallDetectionLog.find({ luggage_tag_number: luggage.luggage_tag_number }).lean();
       logs.forEach(log => {
         log.luggage_custom_name = luggage.luggage_custom_name;
-        console.log('Fall Time:', log.fall_time); // Log to check format
+        //console.log('Fall Time:', log.fall_time); 
       });
       fallLogs.push(...logs);
     }

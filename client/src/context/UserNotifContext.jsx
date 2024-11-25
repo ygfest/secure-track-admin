@@ -28,7 +28,7 @@ export const UserNotifProvider = ({ children }) => {
     }
 
     fetchFallData();
-  }, []);
+  }, [fallDetectData]);
 
   useEffect(() => {
     async function fetchTamperLogs() {
@@ -43,7 +43,7 @@ export const UserNotifProvider = ({ children }) => {
       }
     }
     fetchTamperLogs();
-  }, []);
+  }, [tamperData]);
 
   useEffect(() => {
     async function fetchTempLogs() {
@@ -56,7 +56,7 @@ export const UserNotifProvider = ({ children }) => {
       }
     }
     fetchTempLogs();
-  }, []);
+  }, [tempData]);
 
   useEffect(() => {
     async function fetchLuggageInfo() {

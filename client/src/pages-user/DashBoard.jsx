@@ -26,6 +26,7 @@ import {
   ArcElement,
 } from "chart.js";
 import "chartjs-adapter-moment";
+import { useUserNotif } from "../context/UserNotifContext";
 
 ChartJS.register(
   CategoryScale,
@@ -43,11 +44,10 @@ ChartJS.register(
 const DashBoard = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
-  const [fallDetectData, setFallDetectData] = useState([]);
-  const [tamperData, setTamperData] = useState([]);
   const [selectedLuggage, setSelectedLuggage] = useState("All");
   const [userFirstName, setUserFirstName] = useState("");
-  const [tempData, setTempData] = useState([]);
+
+  const { tamperData, tempData, fallDetectData } = useUserNotif();
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -79,20 +79,6 @@ const DashBoard = () => {
     verifyToken();
   }, [navigate]);
 
-  useEffect(() => {
-    async function fetchFallData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/fall-logs2`);
-        setFallDetectData(response.data);
-      } catch (error) {
-        console.log("Error fetching fall data");
-      }
-    }
-
-    fetchFallData();
-  }, []);
-
   const totalFall =
     selectedLuggage === "All"
       ? fallDetectData.length
@@ -100,40 +86,12 @@ const DashBoard = () => {
           (fall) => fall.luggage_custom_name === selectedLuggage
         ).length;
 
-  useEffect(() => {
-    async function fetchTamperLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/luggage-router/tamper-logs2`
-        );
-        setTamperData(response.data);
-      } catch (error) {
-        console.log("error fetching tamper logs", error);
-      }
-    }
-    fetchTamperLogs();
-  }, []);
-
   const totalTamper =
     selectedLuggage === "All"
       ? tamperData.length
       : tamperData.filter(
           (tamper) => tamper.luggage_custom_name === selectedLuggage
         ).length;
-
-  useEffect(() => {
-    async function fetchTempLogs() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/temp-logs`);
-        setTempData(response.data);
-      } catch (error) {
-        console.log("Error fetching temp logs", error);
-      }
-    }
-    fetchTempLogs();
-  }, []);
 
   const sumTemp = tempData.reduce((sum, data) => sum + data.temperature, 0);
   const avgTemp =
@@ -450,8 +408,8 @@ const DashBoard = () => {
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaThermometerHalf className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{`-`}</h2>
-              {/*<h2 className="text-3xl font-bold">{`${displayTemp}°C`}</h2>*/}
+              {/*<h2 className="text-3xl font-bold">{`-`}</h2>*/}
+              <h2 className="text-3xl font-bold">{`${displayTemp}°C`}</h2>
               <p className="text-gray-600">{tempTitle}</p>
             </div>
           </div>

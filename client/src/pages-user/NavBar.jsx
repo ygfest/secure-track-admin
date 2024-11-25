@@ -154,14 +154,14 @@ const NavBar = () => {
           type: "High Temperature",
           criticality: "Critical",
           description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: new Date(temp.timestamp),
+          timestamp: new Date(temp.timeStamp),
         });
       } else if (temp.temperature < 10) {
         newAlerts.push({
           type: "Low Temperature",
           criticality: "Warning",
           description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: new Date(temp.timestamp),
+          timestamp: new Date(temp.timeStamp),
         });
       }
     });
@@ -171,7 +171,7 @@ const NavBar = () => {
         type: "Tamper Detected",
         criticality: "Critical",
         description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: new Date(tamper.timestamp),
+        timestamp: new Date(tamper.impactTime),
       });
     });
 

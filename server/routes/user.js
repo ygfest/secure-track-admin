@@ -259,7 +259,7 @@ router.post('/forgot-password', async (req, res) => {
       from: process.env.GOOGLE_USER,
       to: email,
       subject: 'Secure Track Account Reset Password',
-      text: `http://localhost:5173/reset-password/${token}`
+      text: `${process.env.REACT_APP_API_URL}/reset-password/${token}`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -482,7 +482,7 @@ router.get('/reports', async (req, res) => {
 
 router.get('/user-reports/', verifyUser, async(req, res) => {
   const userId = req.user.id;
-  console.log("THIS IS THE USER ID",userId);
+  ///console.log("THIS IS THE USER ID",userId);
 
   try {
     const userReports = await Report.find({userId: userId})
@@ -519,7 +519,7 @@ router.put('/resolve-reports/:id', verifyUser, async (req, res) => {
 router.put('/update-reports/:id', verifyUser, async (req, res) => {
   const { status } = req.body; 
   const reportId = req.params.id; 
-  console.log(status)
+  //console.log(status)
 
   try {
     const updatedReport = await Report.findByIdAndUpdate(reportId, {

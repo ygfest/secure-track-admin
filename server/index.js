@@ -44,7 +44,7 @@ const ref2 = db.ref("Temperature");
 const ref3 = db.ref("movementData");
 
 // Models and Schemas
-const ImpactDataModel = mongoose.models.ImpactData || mongoose.model('ImpactData', new mongoose.Schema({
+const ImpactDataModel = mongoose.models.TamperDetectionLog || mongoose.model('TamperDetectionLog', new mongoose.Schema({
     firebaseId: { type: String, required: true, unique: true },
     luggage_tag_number: { type: String, default: "ST123456789" },
     impact: String,
