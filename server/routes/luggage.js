@@ -208,7 +208,8 @@ router.post('/addluggage', verifyUser, async (req, res) => {
     const newLuggage = new Luggage({
       luggage_custom_name,
       luggage_tag_number,
-      user_id
+      user_id,
+      updatedAt: Date.now(),
     });
 
     const savedLuggage = await newLuggage.save();
