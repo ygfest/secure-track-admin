@@ -259,7 +259,7 @@ router.post('/forgot-password', async (req, res) => {
       from: process.env.GOOGLE_USER,
       to: email,
       subject: 'Secure Track Account Reset Password',
-      text: `${process.env.REACT_APP_API_URL}/reset-password/${token}`
+      text: `${process.env.REACT_APP_API_URL}reset-password/${token}`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
