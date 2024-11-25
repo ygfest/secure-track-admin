@@ -7,12 +7,13 @@ const ObjectId = Schema.Types.ObjectId;
 
 const TempLogSchema = new Schema(
   {
+    firebaseId: { type: String, required: true, unique: true },
     luggage_tag_number: { type: String, ref: "Luggage", required: true },
     temperature: { type: Number },
-    timeStamp: { type: Date, default: null },
+    timeStamp: { type: Date, required:true },
   },
   {
-    collection: "sensor_data",
+    collection: "tempLogzzz",
   }
 );
 

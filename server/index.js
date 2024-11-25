@@ -4,14 +4,12 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const admin = require('firebase-admin');
-
 dotenv.config();
 
 const UserRouter = require('./routes/user');
 const LuggageRouter = require('./routes/luggage');
 const uploadRouter = require('./routes/uploadthing');
 const app = express();
-const { createRouteHandler } = require('uploadthing/express');
 
 app.use(express.json());
 app.use(cors({
@@ -26,23 +24,13 @@ app.use('/luggage-router', LuggageRouter);
 app.use('/api/uploadthing', uploadRouter);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_STRING, {
-    connectTimeoutMS: 10000,
-})
-.then(() => console.log('Successfully connected to MongoDB Atlas'))
-.catch(err => console.error('MongoDB connection error:', err.message));
+mongoose.connect(process.env.MONGO_STRING, { connectTimeoutMS: 10000 })
+    .then(() => console.log('Successfully connected to MongoDB Atlas'))
+    .catch(err => console.error('MongoDB connection error:', err.message));
 
-mongoose.connection.on('connected', () => {
-    console.log('Mongoose connected to MongoDB Atlas');
-});
-
-mongoose.connection.on('error', (err) => {
-    console.error('Mongoose connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-    console.log('Mongoose disconnected');
-});
+mongoose.connection.on('connected', () => console.log('Mongoose connected to MongoDB Atlas'));
+mongoose.connection.on('error', (err) => console.error('Mongoose connection error:', err));
+mongoose.connection.on('disconnected', () => console.log('Mongoose disconnected'));
 
 // Firebase Admin SDK Initialization
 admin.initializeApp({
@@ -51,94 +39,236 @@ admin.initializeApp({
 });
 
 const db = admin.database();
-
-//Fb Refs
 const ref = db.ref("impactData");
-const impactsRefs = db.ref("impacts")
+const ref2 = db.ref("Temperature");
+const ref3 = db.ref("movementData");
 
+// Models and Schemas
+const ImpactDataModel = mongoose.models.ImpactData || mongoose.model('ImpactData', new mongoose.Schema({
+    firebaseId: { type: String, required: true, unique: true },
+    luggage_tag_number: { type: String, default: "ST123456789" },
+    impact: String,
+    impactTime: { type: Date, required: true },
+}));
 
-// Define a Mongoose schema
-const ImpactDataSchema = new mongoose.Schema({
-    firebaseId: { type: String, required: true, unique: true }, // Add unique constraint to firebaseId
-    impact: String, // You can add other fields here if needed
-});
-const ImpactDataModel = mongoose.model('ImpactData', ImpactDataSchema);
+const TempDataModel = mongoose.models.TempLog || mongoose.model('TempLog', new mongoose.Schema({
+    firebaseId: { type: String, required: true, unique: true },
+    luggage_tag_number: { type: String, default: "ST123456789" },
+    temperature: { type: Number },
+    timeStamp: { type: Date, required: true },
+}, { collection: "tempLogzzz" }));
 
-// Function to sync initial data from Firebase to MongoDB
-async function syncInitialData() {
+const FallDataModel = mongoose.models.FallDetectionLog || mongoose.model('FallDetectionLog', new mongoose.Schema({
+    firebaseId: { type: String, required: true, unique: true },
+    luggage_tag_number: { type: String, default: "ST123456789" },
+    message: { type: String, required: true },
+    fall_time: { type: Date, required: true },
+    severity: { type: String, required: true },
+}, { collection: 'fallDatazz' }));
+
+// Sync Data on Startup
+async function syncAllData() {
+    await syncInitialImpactData();
+    await syncInitialTempData();
+    await syncInitialFallData();
+
+    // After syncing initial data, start listening for real-time updates
+    startRealTimeListeners();
+}
+
+// Sync Functions
+async function syncInitialImpactData() {
     try {
         const snapshot = await ref.once('value');
         const impactData = snapshot.val();
-
         if (impactData) {
             for (const key in impactData) {
-                const existingDoc = await ImpactDataModel.findOne({ firebaseId: key });
-                if (!existingDoc) {
-                    // Only create a new document if it does not already exist
-                    await ImpactDataModel.create({ firebaseId: key, impact: impactData[key].impact });
+                if (!(await ImpactDataModel.findOne({ firebaseId: key }))) {
+                    await ImpactDataModel.create({ firebaseId: key, impact: impactData[key].impact, impactTime: Date.now() });
                 }
             }
-            console.log('Initial data synced to MongoDB successfully');
+            console.log('Initial impact data synced successfully.');
         } else {
-            console.log('No initial data found in Firebase');
+            console.log('No initial impact data found.');
+        }
+    } catch (error) {
+        console.error('Error syncing impact data:', error);
+    }
+}
+
+async function syncInitialTempData() {
+    try {
+        const snapshot = await ref2.once('value');
+        const tempData = snapshot.val();
+
+        if (tempData) {
+            for (const key in tempData) {
+                const existingDoc = await TempDataModel.findOne({ firebaseId: key });
+                if (!existingDoc) {
+                    await TempDataModel.create({
+                        firebaseId: key,
+                        luggage_tag_number: "ST123456789", 
+                        temperature: tempData[key].Temperature,
+                        timeStamp: Date.now(),
+                    });
+                }
+            }
+            console.log('Initial temp data synced to MongoDB successfully');
+        } else {
+            console.log('No initial temp data found in Firebase');
         }
     } catch (error) {
         console.error('Error syncing initial data:', error);
     }
 }
 
-// Sync initial data on server startup
-syncInitialData();
-
-// Sync Firebase Realtime Database changes to MongoDB
-ref.on('child_changed', async (snapshot) => {
-    const updatedData = snapshot.val();
-    const firebaseId = snapshot.key; // Get the firebase ID from the snapshot key
+async function syncInitialFallData() {
     try {
-        const existingDoc = await ImpactDataModel.findOne({ firebaseId: firebaseId });
-        if (existingDoc) {
-            // Update only if it exists
-            await existingDoc.updateOne({ impact: updatedData.impact });
+        const snapshot = await ref3.once('value');
+        const fallData = snapshot.val();
+        if (fallData) {
+            for (const key in fallData) {
+                if (!(await FallDataModel.findOne({ firebaseId: key }))) {
+                    await FallDataModel.create({ firebaseId: key, luggage_tag_number: "ST123456789", message: fallData[key].movement, severity: fallData[key].severity, fall_time: Date.now() });
+                }
+            }
+            console.log('Initial fall data synced successfully.');
         } else {
-            // Create a new document if it doesn't exist
-            await ImpactDataModel.create({ firebaseId: firebaseId, impact: updatedData.impact });
-        }
-        console.log('Data synced to MongoDB successfully');
-    } catch (error) {
-        console.error('Error syncing data:', error);
-    }
-});
-
-ref.on('child_added', async (snapshot) => {
-    const newData = snapshot.val();
-    const firebaseId = snapshot.key; 
-    try {
-        
-        const existingDoc = await ImpactDataModel.findOne({ firebaseId: firebaseId });
-        if (!existingDoc) {
-            await ImpactDataModel.create({ firebaseId: firebaseId, impact: newData.impact });
-            console.log('New data added to MongoDB');
+            console.log('No initial fall data found.');
         }
     } catch (error) {
-        console.error('Error adding new data to MongoDB:', error);
+        console.error('Error syncing fall data:', error);
     }
-});
+}
 
-ref.on('child_removed', async (snapshot) => {
-    const firebaseId = snapshot.key;
-    try {
-        await ImpactDataModel.deleteOne({ firebaseId: firebaseId });
-        console.log('Data removed from MongoDB');
-    } catch (error) {
-        console.error('Error removing data from MongoDB:', error);
-    }
-});
+// Start Real-Time Listeners
+function startRealTimeListeners() {
+    // Impact Data Listener
+    ref.on('child_added', async (snapshot) => {
+        const newData = snapshot.val();
+        const firebaseId = snapshot.key; 
+        try {
+            const existingDoc = await ImpactDataModel.findOne({ firebaseId: firebaseId });
+            if (!existingDoc) {
+                await ImpactDataModel.create({ firebaseId: firebaseId, luggage_tag_number: "ST123456789", impact: newData.impact, impactTime: Date.now() });
+                console.log('New Impact data added to MongoDB');
+            }
+        } catch (error) {
+            console.error('Error adding new impact data to MongoDB:', error);
+        }
+    });
+
+    ref2.on('child_added', async (snapshot) => {
+        const newData = snapshot.val();
+        const firebaseId = snapshot.key; 
+        try {
+            const existingDoc = await TempDataModel.findOne({ firebaseId: firebaseId });
+            if (!existingDoc) {
+                await TempDataModel.create({ firebaseId: firebaseId, luggage_tag_number: "ST123456789", temperature: newData.Temperature, timeStamp: Date.now() });
+                console.log('New Temp data added to MongoDB');
+            }
+        } catch (error) {
+            console.error('Error adding new Temp data to MongoDB:', error);
+        }
+    });
+
+    ref3.on('child_added', async (snapshot) => {
+        const newData = snapshot.val();
+        const firebaseId = snapshot.key; 
+        try {
+            const existingDoc = await FallDataModel.findOne({ firebaseId: firebaseId });
+            if (!existingDoc) {
+                await FallDataModel.create({ firebaseId: firebaseId, luggage_tag_number: "ST123456789", message: newData.movement, severity: newData.severity, fall_time: Date.now() });
+                console.log('New Fall data added to MongoDB');
+            }
+        } catch (error) {
+            console.error('Error adding new Fall data to MongoDB:', error);
+        }
+    });
+
+    // Child Changed Listeners
+    ref.on('child_changed', async (snapshot) => {
+        const firebaseId = snapshot.key;
+        const updatedData = snapshot.val();
+        try {
+            const doc = await ImpactDataModel.findOne({ firebaseId });
+            if (doc) {
+                await doc.updateOne({ impact: updatedData.impact });
+                console.log('Impact data updated in MongoDB.');
+            }
+        } catch (error) {
+            console.error('Error updating impact data:', error);
+        }
+    });
+
+    ref2.on('child_changed', async (snapshot) => {
+        const firebaseId = snapshot.key;
+        const updatedData = snapshot.val();
+        try {
+            const doc = await TempDataModel.findOne({ firebaseId });
+            if (doc) {
+                await doc.updateOne({ temperature: updatedData.Temperature });
+                console.log('Temperature data updated in MongoDB.');
+            }
+        } catch (error) {
+            console.error('Error updating temperature data:', error);
+        }
+    });
+
+    ref3.on('child_changed', async (snapshot) => {
+        const firebaseId = snapshot.key;
+        const updatedData = snapshot.val();
+        try {
+            const doc = await FallDataModel.findOne({ firebaseId });
+            if (doc) {
+                await doc.updateOne({ message: updatedData.movement });
+                console.log('Fall data updated in MongoDB.');
+            }
+        } catch (error) {
+            console.error('Error updating fall data:', error);
+        }
+    });
+
+    // Child Removed Listeners
+    ref.on('child_removed', async (snapshot) => {
+        const firebaseId = snapshot.key;
+        try {
+            await ImpactDataModel.deleteOne({ firebaseId: firebaseId });
+            console.log('Impact Data removed from MongoDB');
+        } catch (error) {
+            console.error('Error removing impact data from MongoDB:', error);
+        }
+    });
+
+    ref2.on('child_removed', async (snapshot) => {
+        const firebaseId = snapshot.key;
+        try {
+            await TempDataModel.deleteOne({ firebaseId: firebaseId });
+            console.log('Temp Data removed from MongoDB');
+        } catch (error) {
+            console.error('Error removing temp data from MongoDB:', error);
+        }
+    });
+
+    ref3.on('child_removed', async (snapshot) => {
+        const firebaseId = snapshot.key;
+        try {
+            await FallDataModel.deleteOne({ firebaseId: firebaseId });
+            console.log('Fall Data removed from MongoDB');
+        } catch (error) {
+            console.error('Error removing fall data from MongoDB:', error);
+        }
+    });
+}
+
+// Sync Data and Start Real-Time Listeners
+syncAllData();
 
 
+// Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
 
 
 
