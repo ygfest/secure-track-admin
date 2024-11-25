@@ -28,7 +28,6 @@ const ResetPassword = () => {
   const validate = () => {
     const newErrors = {};
 
-    // Password validation
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 

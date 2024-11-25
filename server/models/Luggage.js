@@ -50,7 +50,7 @@ const LuggageSchema = new Schema({
     updatedAt: {  
         type: Date,
         default: null,
-        required: true // 
+        required: true, // 
     }
 }, {
     collection: 'luggage',
