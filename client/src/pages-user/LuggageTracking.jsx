@@ -103,6 +103,7 @@ const LuggageTracking = () => {
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
   const navigate = useNavigate();
+  const [shouldFly, setShouldFly] = useState(false);
 
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
@@ -404,14 +405,30 @@ const LuggageTracking = () => {
   const handleMarkerClick = (luggage, index) => {
     setSelectedMarker(luggage);
     markerRefs.current[index].openPopup();
+    setShouldFly(true); // Enable fly-to behavior
   };
 
-  const FlyToLocation = ({ latitude, longitude }) => {
+  const FlyToLocation = ({ latitude, longitude, shouldFly, onFlyComplete }) => {
     const map = useMap();
+
     useEffect(() => {
-      map.flyTo([latitude, longitude], 16, { animate: true });
-    }, [latitude, longitude, map]);
+      if (shouldFly) {
+        map.flyTo([latitude, longitude], 18, { animate: true });
+
+        // Ensure the fly-to action completes before resetting the state
+        const timeout = setTimeout(() => {
+          onFlyComplete(); // Reset the `shouldFly` state
+        }, 1500); // Duration matches the map.flyTo animation duration
+
+        return () => clearTimeout(timeout); // Cleanup to prevent memory leaks
+      }
+    }, [latitude, longitude, shouldFly, map, onFlyComplete]);
+
     return null;
+  };
+
+  const handleFlyComplete = () => {
+    setShouldFly(false); // Reset after flying
   };
 
   useEffect(() => {
@@ -675,6 +692,8 @@ const LuggageTracking = () => {
                     <FlyToLocation
                       latitude={luggage?.latitude}
                       longitude={luggage?.longitude}
+                      shouldFly={shouldFly}
+                      onFlyComplete={handleFlyComplete}
                     />
                   )}
                 </Marker>
