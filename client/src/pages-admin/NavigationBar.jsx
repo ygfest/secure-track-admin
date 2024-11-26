@@ -219,7 +219,7 @@ const NavigationBar = () => {
                     <Link
                       to="/admin/profile"
                       onClick={() => {
-                        toggleSideBar();
+                        setIsOpen(false);
                         setCurrentLink("/admin/profile");
                       }}
                     >
@@ -389,7 +389,7 @@ const NavigationBar = () => {
         </div>
       </div>
       {openNotif && (
-        <div className="fixed top-16 right-0 w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
+        <div className="fixed top-16 right-0 w-[85%] sm:w-96 bg-white shadow-lg rounded-lg z-10 p-4 border border-gray-300">
           <h3 className="text-lg font-medium mb-2 text-gray-800">
             Notifications
           </h3>
