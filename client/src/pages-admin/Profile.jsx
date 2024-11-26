@@ -156,82 +156,14 @@ const AdminProfile = () => {
           </div>
           <div className="flex flex-col gap-4 mt-4">
             <h2 className="text-2xl font-bold text-start">
-              {userProfile.firstname} {userProfile.lastname}
+              {userProfile.firstname} {userProfile.lastname} (Admin/Developer)
             </h2>
             <p className="text-sm text-start">
               {userProfile.email} • Joined{" "}
               {new Date(userProfile.createdAt).toLocaleDateString()}
             </p>
-            {userProfile.bio && (
-              <p className="text-center">{userProfile.bio}</p>
-            )}
-            <div className="flex justify-end mt-4">
-              {editMode ? (
-                <>
-                  <button
-                    onClick={handleSave}
-                    className="bg-primary text-white px-4 py-2 rounded-md mr-2"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => setEditMode(false)}
-                    className="bg-secondary text-white px-4 py-2 rounded-md"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => setEditMode(true)}
-                  className="bg-primary text-white px-4 py-2 rounded-md"
-                >
-                  Edit
-                </button>
-              )}
-            </div>
           </div>
           <hr className="border-t-2 border-primary my-6" />
-          <form onSubmit={handleReportSubmit} className="space-y-4">
-            <label htmlFor="type">Select Anomaly Type:</label>
-            <select
-              id="type"
-              name="type"
-              value={report.type}
-              onChange={(e) => setReport({ ...report, type: e.target.value })}
-              className="w-full p-2 border rounded-md"
-              required
-            >
-              <option value="device-anomaly">Device Anomaly</option>
-              <option value="software-anomaly">Software Anomaly</option>
-            </select>
-
-            <input
-              type="text"
-              placeholder="Title"
-              value={report.title}
-              onChange={(e) => setReport({ ...report, title: e.target.value })}
-              className="w-full p-2 border rounded-md"
-              required
-            />
-
-            <textarea
-              placeholder="Describe the issue"
-              value={report.description}
-              onChange={(e) =>
-                setReport({ ...report, description: e.target.value })
-              }
-              className="w-full p-2 border rounded-md"
-              rows="4"
-              required
-            ></textarea>
-            <button
-              type="submit"
-              className="w-full bg-secondary text-white py-2 rounded-md"
-            >
-              Submit Report
-            </button>
-          </form>
         </div>
       </div>
     </>
