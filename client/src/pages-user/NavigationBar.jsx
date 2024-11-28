@@ -198,7 +198,7 @@ const NavigationBar = () => {
         type: "Tamper Detected",
         criticality: "Critical",
         description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: new Date(tamper.impactTime),
+        timestamp: new Date(tamper.tamperTime),
       });
     });
 

@@ -49,7 +49,8 @@ router.get('/verify', verifyUser, async (req, res) => {
         loggedInAt: user.loggedInAt,
         createdAt: user.createdAt,
         phone: user.phone,
-        googleId: user.googleId
+        googleId: user.googleId,
+        geofenceRadius: user.geofenceRadius,
       }
     });
   } catch (error) {
@@ -601,6 +602,25 @@ router.put('/modify-role/:id', verifyUser, async (req, res) => {
   }
 });
 
+
+router.put('/select-radius/:id', verifyUser, async(req, res) => {
+  const {radius} = req.body;
+  const userId = req.params.id;
+
+  try {
+    const updatedRadius = await User.findByIdAndUpdate(userId, {
+      geofenceRadius:radius,
+    }, {new: true})
+
+    if(!updatedRadius){
+      res.status(404).json({status: false, message:"User not found"})
+    }
+    res.status(200).json(updatedRadius)
+  } catch (error) {
+    console.log("Error updating radius")
+    res.status(500).json({status:false, message: "Error updating radius"})
+  }
+})
 
 
 module.exports = router;

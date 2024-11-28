@@ -5,10 +5,10 @@ const ObjectId = Schema.Types.ObjectId;
 const TamperDetectionLogSchema = new Schema({
     firebaseId: { type: String, required: true, unique: true },
     luggage_tag_number: { type: String, ref: 'Luggage', required: true },
-    impact: {type: String},
-    impactTime: { type: Date, required:true, },
+    alert: {type: String},
+    tamperTime: { type: Date, required:true, },
 }, {
-    collection: 'impactdatas'
+    collection: 'tamperDatas'
 });
 
 module.exports = mongoose.model('TamperDetectionLog', TamperDetectionLogSchema);

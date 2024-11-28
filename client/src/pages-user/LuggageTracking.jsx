@@ -111,7 +111,7 @@ const LuggageTracking = () => {
   const { isLocationOn, currentUserLat, currentUserLong, locationUpdatedAt } =
     useLocation();
   const mapRef = useRef(null); // Ref to store the map instance
-  const radius = 20;
+  const [radius, setRadius] = useState(null);
   const center = [currentUserLat, currentUserLong];
   const defaultCenter = [15.973, 121.0868];
   const defaultZoom = 8;
@@ -136,6 +136,7 @@ const LuggageTracking = () => {
           setProfileDp(response.data.user.profile_dp);
           setProfileName(response.data.user.firstname);
           setProfileLastName(response.data.user.lastname);
+          setRadius(response.data.user.geofenceRadius);
         }
       } catch (error) {
         console.error("Error verifying token:", error);

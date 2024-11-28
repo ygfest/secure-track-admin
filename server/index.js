@@ -39,16 +39,16 @@ admin.initializeApp({
 });
 
 const db = admin.database();
-const ref = db.ref("impactData");
+const ref = db.ref("tamperData");
 const ref2 = db.ref("Temperature");
 const ref3 = db.ref("movementData");
 
 // Models and Schemas
-const ImpactDataModel = mongoose.models.TamperDetectionLog || mongoose.model('TamperDetectionLog', new mongoose.Schema({
+const TamperDataModel = mongoose.models.TamperDetectionLog || mongoose.model('TamperDetectionLog', new mongoose.Schema({
     firebaseId: { type: String, required: true, unique: true },
     luggage_tag_number: { type: String, default: "ST123456789" },
-    impact: String,
-    impactTime: { type: Date, required: true },
+    alert: String,
+    tamperTime: { type: Date, required: true },
 }));
 
 const TempDataModel = mongoose.models.TempLog || mongoose.model('TempLog', new mongoose.Schema({
@@ -68,7 +68,7 @@ const FallDataModel = mongoose.models.FallDetectionLog || mongoose.model('FallDe
 
 // Sync Data on Startup
 async function syncAllData() {
-    await syncInitialImpactData();
+    await syncInitialTamperData();
     await syncInitialTempData();
     await syncInitialFallData();
 
@@ -77,22 +77,22 @@ async function syncAllData() {
 }
 
 // Sync Functions
-async function syncInitialImpactData() {
+async function syncInitialTamperData() {
     try {
         const snapshot = await ref.once('value');
-        const impactData = snapshot.val();
-        if (impactData) {
-            for (const key in impactData) {
-                if (!(await ImpactDataModel.findOne({ firebaseId: key }))) {
-                    await ImpactDataModel.create({ firebaseId: key, impact: impactData[key].impact, impactTime: Date.now() });
+        const tamperData = snapshot.val();
+        if (tamperData) {
+            for (const key in tamperData) {
+                if (!(await TamperDataModel.findOne({ firebaseId: key }))) {
+                    await TamperDataModel.create({ firebaseId: key, luggage_tag_number: "ST123456789",  alert: tamperData[key].alert, tamperTime: Date.now() });
                 }
             }
-            console.log('Initial impact data synced successfully.');
+            console.log('Initial tamper data synced successfully.');
         } else {
-            console.log('No initial impact data found.');
+            console.log('No initial tamper data found.');
         }
     } catch (error) {
-        console.error('Error syncing impact data:', error);
+        console.error('Error syncing tamper data:', error);
     }
 }
 
@@ -148,13 +148,13 @@ function startRealTimeListeners() {
         const newData = snapshot.val();
         const firebaseId = snapshot.key; 
         try {
-            const existingDoc = await ImpactDataModel.findOne({ firebaseId: firebaseId });
+            const existingDoc = await TamperDataModel.findOne({ firebaseId: firebaseId });
             if (!existingDoc) {
-                await ImpactDataModel.create({ firebaseId: firebaseId, luggage_tag_number: "ST123456789", impact: newData.impact, impactTime: Date.now() });
-                console.log('New Impact data added to MongoDB');
+                await TamperDataModel.create({ firebaseId: firebaseId, luggage_tag_number: "ST123456789", alert: newData.alert, tamperTime: Date.now() });
+                console.log('New tamper data added to MongoDB');
             }
         } catch (error) {
-            console.error('Error adding new impact data to MongoDB:', error);
+            console.error('Error adding new tamper data to MongoDB:', error);
         }
     });
 
@@ -191,9 +191,9 @@ function startRealTimeListeners() {
         const firebaseId = snapshot.key;
         const updatedData = snapshot.val();
         try {
-            const doc = await ImpactDataModel.findOne({ firebaseId });
+            const doc = await TamperDataModel.findOne({ firebaseId });
             if (doc) {
-                await doc.updateOne({ impact: updatedData.impact });
+                await doc.updateOne({ alert: updatedData.alert });
                 console.log('Impact data updated in MongoDB.');
             }
         } catch (error) {
@@ -233,7 +233,7 @@ function startRealTimeListeners() {
     ref.on('child_removed', async (snapshot) => {
         const firebaseId = snapshot.key;
         try {
-            await ImpactDataModel.deleteOne({ firebaseId: firebaseId });
+            await TamperDataModel.deleteOne({ firebaseId: firebaseId });
             console.log('Impact Data removed from MongoDB');
         } catch (error) {
             console.error('Error removing impact data from MongoDB:', error);

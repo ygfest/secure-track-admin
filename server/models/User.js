@@ -59,7 +59,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true // Allows for users with either Google ID or email, but not both
-  }
+  },
+  geofenceRadius: {
+    type: Number,
+    required: true,
+    default: 50,
+  },
 });
 
 const User = mongoose.model('User', userSchema);

@@ -129,6 +129,25 @@ const EditProfile = ({ userProfile }) => {
     }
   };
 
+  const handleSelectRadius = async (event) => {
+    event.preventDefault(); // Prevent form from submitting normally
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const selectedRadius = event.target.elements.geofenceRadius.value; // Get selected radius
+
+    try {
+      await Axios.put(
+        `${apiUrl}/auth/select-radius/${profileData.userID}`,
+        { radius: selectedRadius }, // Send radius in request body
+        { headers: { "Content-Type": "application/json" } }
+      );
+      toast.success("Updated the geofence range successfully");
+    } catch (error) {
+      console.error("Error changing geofence range:", error);
+      toast.error("Error changing geofence range");
+    }
+  };
+
   // Upload image using Axios
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -354,6 +373,44 @@ const EditProfile = ({ userProfile }) => {
             <MdOutlineDeleteOutline className="text-lg" />
             <span>Delete Account</span>
           </button>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center mt-6">
+          <form onSubmit={handleSelectRadius}>
+            <label className="text-lg mb-4 block">
+              Change Radius of the Geofence
+            </label>
+            <select
+              name="geofenceRadius"
+              className="mb-4 p-2 border rounded-md w-full"
+              required
+            >
+              <option value={20}>
+                20 meters (Baggage carousel or security checkpoint)
+              </option>
+              <option value={50}>
+                50 meters (Terminal gate area or lounge)
+              </option>
+              <option value={100}>100 meters (Airport terminal zone)</option>
+              <option value={300}>
+                300 meters (Parking area or drop-off zone)
+              </option>
+              <option value={500}>
+                500 meters (Entire airport terminal coverage)
+              </option>
+              <option value={1000}>
+                1000 meters (Large airport area or transport hubs)
+              </option>
+            </select>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="bg-secondary text-white py-2 px-4 rounded-md hover:bg-white hover:text-black"
+              >
+                Select this Range
+              </button>
+            </div>
+          </form>
         </div>
 
         {showDeleteConfirmation && (
