@@ -22,6 +22,7 @@ const EditProfile = ({ userProfile }) => {
     backgroundImage: "",
     userID: "",
     phone: "",
+    geofenceRadius: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -33,6 +34,9 @@ const EditProfile = ({ userProfile }) => {
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+  const [currentRadius, setCurrentRadius] = useState(
+    profileData.geofenceRadius
+  );
 
   useEffect(() => {
     Axios.defaults.withCredentials = true;
@@ -47,6 +51,7 @@ const EditProfile = ({ userProfile }) => {
         navigate("/sign-in");
       } else {
         setProfileData(response.data.user);
+        setCurrentRadius(response.data.user.geofenceRadius);
       }
     } catch (err) {
       console.log("Error verifying token:", err);
@@ -143,6 +148,7 @@ const EditProfile = ({ userProfile }) => {
         { headers: { "Content-Type": "application/json" } }
       );
       toast.success("Updated the geofence range successfully");
+      verifyToken();
     } catch (error) {
       console.error("Error changing geofence range:", error);
       toast.error("Error changing geofence range");
@@ -374,28 +380,45 @@ const EditProfile = ({ userProfile }) => {
               name="geofenceRadius"
               className="mb-4 p-2 border rounded-md w-full"
               required
+              defaultValue={currentRadius} // Initially selected value
             >
-              <option value={20}>
-                20 meters (Baggage carousel or security checkpoint)
+              <option value={currentRadius} disabled>
+                {`${currentRadius} meters (Currently selected)`}
               </option>
-              <option value={50}>
-                50 meters (Terminal gate area or lounge)
-              </option>
-              <option value={100}>100 meters (Airport terminal zone)</option>
-              <option value={300}>
-                300 meters (Parking area or drop-off zone)
-              </option>
-              <option value={500}>
-                500 meters (Entire airport terminal coverage)
-              </option>
-              <option value={1000}>
-                1000 meters (Large airport area or transport hubs)
-              </option>
+              {[
+                {
+                  value: 20,
+                  label: "20 meters (Baggage carousel or security checkpoint)",
+                },
+                {
+                  value: 50,
+                  label: "50 meters (Terminal gate area or lounge)",
+                },
+                { value: 100, label: "100 meters (Airport terminal zone)" },
+                {
+                  value: 300,
+                  label: "300 meters (Parking area or drop-off zone)",
+                },
+                {
+                  value: 500,
+                  label: "500 meters (Entire airport terminal coverage)",
+                },
+                {
+                  value: 1000,
+                  label: "1000 meters (Large airport area or transport hubs)",
+                },
+              ]
+                .filter((option) => option.value !== profileData.geofenceRadius)
+                .map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
             </select>
+
             <div className="flex justify-center">
               <button
                 type="submit"
-                onClick={() => handleSelectRadius}
                 className="flex items-center gap-2 text-primary bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
               >
                 <MdOutlineShareLocation />
