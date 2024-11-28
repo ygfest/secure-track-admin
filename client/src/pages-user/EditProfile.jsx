@@ -8,6 +8,7 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { FiSettings } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import { MdOutlineShareLocation } from "react-icons/md";
 
 const EditProfile = ({ userProfile }) => {
   const navigate = useNavigate();
@@ -365,17 +366,6 @@ const EditProfile = ({ userProfile }) => {
         )}
 
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center mt-6">
-          <button
-            type="button"
-            onClick={() => setShowDeleteConfirmation(true)}
-            className="flex items-center gap-2 text-red-500 bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
-          >
-            <MdOutlineDeleteOutline className="text-lg" />
-            <span>Delete Account</span>
-          </button>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center mt-6">
           <form onSubmit={handleSelectRadius}>
             <label className="text-lg mb-4 block">
               Change Radius of the Geofence
@@ -405,12 +395,25 @@ const EditProfile = ({ userProfile }) => {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="bg-secondary text-white py-2 px-4 rounded-md hover:bg-white hover:text-black"
+                onClick={() => handleSelectRadius}
+                className="flex items-center gap-2 text-primary bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
               >
+                <MdOutlineShareLocation />
                 Select this Range
               </button>
             </div>
           </form>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg flex items-center justify-center mt-6">
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirmation(true)}
+            className="flex items-center gap-2 text-red-500 bg-gray-100 py-2 px-4 rounded-md hover:bg-gray-200 transition-all"
+          >
+            <MdOutlineDeleteOutline className="text-lg" />
+            <span>Delete Account</span>
+          </button>
         </div>
 
         {showDeleteConfirmation && (
