@@ -11,10 +11,18 @@ export const UserNotifProvider = ({ children }) => {
   const [tamperData, setTamperData] = useState([]);
   const [tempData, setTempData] = useState([]);
   const [isSeenNotifications, setIsSeenNotifications] = useState(true);
-  const [currentLink, setCurrentLink] = useState("/user/");
+  const [currentLink, setCurrentLink] = useState(() => {
+    // Retrieve the link from localStorage or default to "/user/"
+    return localStorage.getItem("currentLink") || "/user/";
+  });
   const [openNotif, setOpenNotif] = useState(false);
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
+
+  useEffect(() => {
+    // Update localStorage whenever currentLink changes
+    localStorage.setItem("currentLink", currentLink);
+  }, [currentLink]);
 
   useEffect(() => {
     async function fetchFallData() {
