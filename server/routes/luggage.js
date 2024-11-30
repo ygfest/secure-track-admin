@@ -5,6 +5,7 @@ const FallDetectionLog = require('../models/FallDetectionLog');
 const TamperDetectionLog = require('../models/TamperDetectionLog');
 const TempLog = require('../models/TempLog')
 const jwt = require('jsonwebtoken');
+const admin = require('firebase-admin');
 
 const router = express.Router();
 
@@ -272,6 +273,10 @@ router.delete('/deleteluggage/:id', verifyUser, async (req, res) => {
 router.delete('/delete-tracking-data/:tagNumber', verifyUser, async (req, res) => {
   const luggageTagNumber = req.params.tagNumber;
 
+  const refTamper = admin.database().ref('tamperData');
+  const refTemp = admin.database().ref('Temperature');
+  const refFall = admin.database().ref('movementData');
+
   try {
     const deletedFallData = await FallDetectionLog.deleteMany({ luggage_tag_number: luggageTagNumber });
     const deletedTamperData = await TamperDetectionLog.deleteMany({ luggage_tag_number: luggageTagNumber });
@@ -285,6 +290,14 @@ router.delete('/delete-tracking-data/:tagNumber', verifyUser, async (req, res) =
     ) {
       return res.status(404).json({ status: false, message: "Luggage not found" });
     }
+
+    // Remove all data from each reference
+    await Promise.all([
+      refTamper.remove(),
+      refTemp.remove(),
+      refFall.remove()
+    ]);
+
 
     return res.status(200).json({ status: true, message: "Data deleted successfully" });
   } catch (error) {
