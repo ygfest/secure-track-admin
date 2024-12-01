@@ -81,40 +81,56 @@ const DashBoard = () => {
 
   const totalFall =
     selectedLuggage === "All"
-      ? fallDetectData.length
+      ? fallDetectData.length === 0
+        ? "-"
+        : fallDetectData.length
+      : fallDetectData.filter(
+          (fall) => fall.luggage_custom_name === selectedLuggage
+        ).length === 0
+      ? "-"
       : fallDetectData.filter(
           (fall) => fall.luggage_custom_name === selectedLuggage
         ).length;
 
   const totalTamper =
     selectedLuggage === "All"
-      ? tamperData.length
+      ? tamperData.length === 0
+        ? "-"
+        : tamperData.length
+      : tamperData.filter(
+          (tamper) => tamper.luggage_custom_name === selectedLuggage
+        ).length === 0
+      ? "-"
       : tamperData.filter(
           (tamper) => tamper.luggage_custom_name === selectedLuggage
         ).length;
 
   const sumTemp = tempData.reduce((sum, data) => sum + data.temperature, 0);
   const avgTemp =
-    tempData.length > 0 ? (sumTemp / tempData.length).toFixed(1) : 0;
+    tempData.length > 0 ? (sumTemp / tempData.length).toFixed(1) : "-";
 
   // Find the latest temperature log for the selected luggage
-  const latestTempLog =
+  const filteredLogs =
     selectedLuggage === "All"
-      ? null
-      : tempData
-          .filter((log) => log.luggage_custom_name === selectedLuggage)
-          .reduce((latest, log) => {
-            return moment(log.timeStamp).isAfter(moment(latest.timeStamp))
-              ? log
-              : latest;
-          }, tempData[0]);
+      ? []
+      : tempData.filter((log) => log.luggage_custom_name === selectedLuggage);
+
+  const latestTempLog =
+    filteredLogs.length > 0
+      ? filteredLogs.reduce((latest, log) => {
+          return moment(log.timeStamp).isAfter(moment(latest.timeStamp))
+            ? log
+            : latest;
+        })
+      : null;
 
   const displayTemp =
     selectedLuggage === "All"
       ? avgTemp
-      : latestTempLog
+      : latestTempLog && latestTempLog.temperature !== undefined
       ? latestTempLog.temperature
-      : 0;
+      : "-";
+
   const displayTempTime =
     selectedLuggage === "All"
       ? ""
