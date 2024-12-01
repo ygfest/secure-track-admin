@@ -412,7 +412,7 @@ export default function Home() {
       <footer className="w-full min-w-[400px] py-8 text-left bg-secondary text-white">
         <div className="flex flex-wrap justify-between gap-8 h-auto px-4">
           {/* Logos Section */}
-          <div className="flex flex-col items-start gap-6">
+          <div className="flex flex-row justify-center w-full md:w-auto  gap-6">
             <div className="flex flex-wrap items-center justify-start gap-6">
               <img
                 src="/PhilSCA-Official-Logo.png"
@@ -479,10 +479,10 @@ export default function Home() {
             <div>
               <p>PANEL</p>
               <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Mr. Alvin J. Paz
+                Mr. Alvin John M. Paz
               </p>
               <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Mr. Darwin Catalan
+                Asst. Prof. Darwin M. Catalan
               </p>
               <p className="text-gray-400 font-light hover:text-primary transition-colors">
                 Mr. Erickson Antonio
