@@ -382,7 +382,9 @@ export default function Home() {
             <div className="flex justify-between items-center mt-4">
               <button
                 onClick={() => setCurrentSlide(currentSlide - 1)}
-                className="flex items-center text-primary"
+                className={`flex items-center ${
+                  currentSlide === 0 ? "text-gray-300" : "text-primary"
+                }`}
                 disabled={currentSlide === 0}
               >
                 <span className="mr-1">
@@ -393,7 +395,9 @@ export default function Home() {
 
               <button
                 onClick={() => setCurrentSlide(currentSlide + 1)}
-                className="flex items-center text-primary"
+                className={`flex items-center ${
+                  currentSlide === 3 ? "text-gray-300" : "text-primary"
+                }`}
                 disabled={currentSlide === 3}
               >
                 Next{" "}
@@ -414,21 +418,39 @@ export default function Home() {
           {/* Logos Section */}
           <div className="flex flex-row justify-center w-full md:w-auto  gap-6">
             <div className="flex flex-wrap items-center justify-start gap-6">
-              <img
-                src="/PhilSCA-Official-Logo.png"
-                className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-                alt="PhilSCA Logo"
-              />
-              <img
-                src="/ics.svg"
-                className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-                alt="ICS Logo"
-              />
-              <img
-                src="/ST-with-name.svg"
-                className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-                alt="SecureTrack Logo"
-              />
+              <a
+                href="https://www.philsca.edu.ph/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/PhilSCA-Official-Logo.png"
+                  className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                  alt="PhilSCA Logo"
+                />
+              </a>
+              <a
+                href="https://www.philsca.edu.ph/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/ics.svg"
+                  className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                  alt="ICS Logo"
+                />
+              </a>
+              <a
+                href="https://secure-track-est.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/ST-with-name.svg"
+                  className="h-24 w-24 object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                  alt="SecureTrack Logo"
+                />
+              </a>
             </div>
           </div>
 
@@ -436,17 +458,11 @@ export default function Home() {
           <div className="text-sm md:text-base flex flex-col items-start gap-4">
             <p className="font-normal">
               RESEARCHERS <br />
-              <a
-                href="https://www.instagram.com/__sstefano/"
-                className="text-gray-400 font-light hover:text-primary transition-colors"
-              >
+              <a className="text-gray-400 font-light hover:text-primary transition-colors">
                 Blanquisco, John Christopher
               </a>
               <br />
-              <a
-                href="https://www.instagram.com/__sstefano/"
-                className="text-gray-400 font-light hover:text-primary transition-colors"
-              >
+              <a className="text-gray-400 font-light hover:text-primary transition-colors">
                 dela Pena, Scavenger
               </a>
               <br />
@@ -460,7 +476,7 @@ export default function Home() {
             <div>
               <p>ADVISER</p>
               <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Dr. Glen Arwin Bristol
+                Dr. Glenn Arwin Bristol
               </p>
             </div>
           </div>
