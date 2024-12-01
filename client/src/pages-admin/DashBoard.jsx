@@ -68,14 +68,19 @@ const DashBoard = () => {
   }, []);
 
   // Sample Data Aggregation
-  const numOfUsers = userData.length;
-  const numOfLuggage = luggageInfo.length;
-  const deviceReports = reportsData.filter(
-    (report) => report.type === "device-anomaly"
-  ).length;
-  const softwareReports = reportsData.filter(
-    (report) => report.type === "software-anomaly"
-  ).length;
+  const numOfUsers = userData.length === 0 ? "-" : userData.length;
+  const numOfLuggage = luggageInfo.length === 0 ? "-" : luggageInfo.length;
+  const deviceReports =
+    reportsData.filter((report) => report.type === "device-anomaly").length ===
+    0
+      ? "-"
+      : reportsData.filter((report) => report.type === "device-anomaly").length;
+  const softwareReports =
+    reportsData.filter((report) => report.type === "software-anomaly")
+      .length === 0
+      ? "-"
+      : reportsData.filter((report) => report.type === "software-anomaly")
+          .length;
 
   // User Activity Bar Chart
   const activeUsers = userData.filter(
