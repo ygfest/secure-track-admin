@@ -204,10 +204,9 @@ export const UserNotifProvider = ({ children }) => {
     if (newAlerts.length > alerts.length || statusesChanged) {
       setAlerts(newAlerts);
       setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
-      setHasNewNotifs(true);
     } else {
       //setAlerts(newAlerts); // Just update alerts
-      setHasNewAlerts(false); // No new alerts
+      //setHasNewAlerts(false); // No new alerts
     }
 
     // Update the ref with current statuses
