@@ -28,8 +28,7 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
-  const [alerts, setAlerts] = useState([]);
-  const [hasNewAlerts, setHasNewAlerts] = useState(false);
+
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
@@ -41,8 +40,12 @@ const NavBar = () => {
     tamperData,
     fallDetectData,
     tempData,
-    isSeenNotifications,
-    setIsSeenNotifications,
+    alerts,
+    setAlerts,
+    hasNewNotifs,
+    setHasNewNotifs,
+    hasNewAlerts,
+    setHasNewAlerts,
     currentLink,
     setCurrentLink,
     luggageInfo,
@@ -109,104 +112,6 @@ const NavBar = () => {
     }
   };
 
-  const updateAlerts = () => {
-    const newAlerts = [];
-
-    // Default empty arrays if props are undefined
-    const tempArray = tempData || [];
-    const tamperArray = tamperData || [];
-    const fallArray = fallDetectData || [];
-    const geofenceArray = luggageInfo || [];
-    const userReportsStatus = userReports || [];
-
-    userReportsStatus.forEach((report) => {
-      if (report.status === "In Progress") {
-        newAlerts.push({
-          type: "Report Update",
-          criticality: "In Progress",
-          description: `Your report regarding ${report.title} has been received by Developers`,
-          timestamp: new Date(report.updatedAt),
-        });
-      } else if (report.status === "Resolved") {
-        newAlerts.push({
-          type: "Report Update",
-          criticality: "Resolved",
-          description: `Your report regarding ${report.title} has been Resolved`,
-          timestamp: new Date(report.updatedAt),
-        });
-      }
-    });
-
-    geofenceArray.forEach((luggage) => {
-      if (luggage.status === "Out of Range") {
-        newAlerts.push({
-          type: "Out of Range",
-          criticality: "Critical",
-          description: `${luggage.luggage_custom_name} is outside the Geofence range `,
-          timestamp: new Date(luggage.updatedAt),
-        });
-      }
-    });
-
-    tempArray.forEach((temp) => {
-      if (temp.temperature > 30) {
-        newAlerts.push({
-          type: "High Temperature",
-          criticality: "Critical",
-          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: new Date(temp.timeStamp),
-        });
-      } else if (temp.temperature < 10) {
-        newAlerts.push({
-          type: "Low Temperature",
-          criticality: "Warning",
-          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
-          timestamp: new Date(temp.timeStamp),
-        });
-      }
-    });
-
-    tamperArray.forEach((tamper) => {
-      newAlerts.push({
-        type: "Tamper Detected",
-        criticality: "Critical",
-        description: `Tamper detected in ${tamper.luggage_custom_name}`,
-        timestamp: new Date(tamper.impactTime),
-      });
-    });
-
-    fallArray.forEach((fall) => {
-      newAlerts.push({
-        type: "Fall Detected",
-        criticality: "Warning",
-        description: `Fall detected in ${fall.luggage_custom_name}`,
-        timestamp: new Date(fall.fall_time),
-      });
-    });
-
-    return newAlerts;
-  };
-
-  useEffect(() => {
-    const newAlerts = updateAlerts();
-
-    // Check if there are new alerts or if statuses have changed
-    const statusesChanged =
-      JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
-
-    if (newAlerts.length > alerts.length || statusesChanged) {
-      setAlerts(newAlerts);
-      setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
-      setIsSeenNotifications(false);
-    } else {
-      setAlerts(newAlerts); // Just update alerts
-      setHasNewAlerts(false); // No new alerts
-    }
-
-    // Update the ref with current statuses
-    prevStatusesRef.current = statuses;
-  }, [tempData, tamperData, fallDetectData, statuses]);
-
   const renderNotifications = () =>
     alerts.length > 0 ? (
       alerts
@@ -271,7 +176,8 @@ const NavBar = () => {
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
-    setIsSeenNotifications(true);
+    setHasNewAlerts(false);
+    setHasNewNotifs(false);
   };
 
   return (
@@ -407,7 +313,7 @@ const NavBar = () => {
                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-2.486-1.176-4.675-3-6.32V4a3 3 0 00-6 0v.68C7.176 6.325 6 8.514 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m0 0v1a3 3 0 006 0v-1m-6 0h6"
               />
             </svg>
-            {(!isSeenNotifications || hasNewAlerts) && (
+            {(hasNewNotifs || hasNewAlerts) && (
               <span className="badge badge-xs badge-primary indicator-item"></span>
             )}
           </div>

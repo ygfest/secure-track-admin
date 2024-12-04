@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import axios from "axios";
 
 const UserNotifContext = createContext();
@@ -6,11 +12,16 @@ const UserNotifContext = createContext();
 export const useUserNotif = () => useContext(UserNotifContext);
 
 export const UserNotifProvider = ({ children }) => {
+  const prevStatusesRef = useRef([]);
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [fallDetectData, setFallDetectData] = useState([]);
   const [tamperData, setTamperData] = useState([]);
   const [tempData, setTempData] = useState([]);
-  const [isSeenNotifications, setIsSeenNotifications] = useState(true);
+  const [hasNewNotifs, setHasNewNotifs] = useState(false);
+  const [hasNewAlerts, setHasNewAlerts] = useState(false);
+  const [alerts, setAlerts] = useState(() => {
+    return localStorage.getItem("alerts");
+  });
   const [currentLink, setCurrentLink] = useState(() => {
     // Retrieve the link from localStorage or default to "/user/"
     return localStorage.getItem("currentLink") || "/user/";
@@ -20,10 +31,16 @@ export const UserNotifProvider = ({ children }) => {
   const [statuses, setStatuses] = useState(null);
 
   useEffect(() => {
+    localStorage.setItem("alerts", alerts);
+  }, [alerts]);
+
+  useEffect(() => {
     // Update localStorage whenever currentLink changes
     localStorage.setItem("currentLink", currentLink);
   }, [currentLink]);
 
+  console.log("HASNEWNotifs:", hasNewNotifs);
+  console.log("HASNEW:", hasNewAlerts);
   useEffect(() => {
     async function fetchFallData() {
       try {
@@ -99,6 +116,104 @@ export const UserNotifProvider = ({ children }) => {
     fetchUserReports();
   }, [statuses]);
 
+  const updateAlerts = () => {
+    const newAlerts = [];
+
+    // Default empty arrays if props are undefined
+    const tempArray = tempData || [];
+    const tamperArray = tamperData || [];
+    const fallArray = fallDetectData || [];
+    const geofenceArray = luggageInfo || [];
+    const userReportsStatus = userReports || [];
+
+    userReportsStatus.forEach((report) => {
+      if (report.status === "In Progress") {
+        newAlerts.push({
+          type: "Report Update",
+          criticality: "In Progress",
+          description: `Your report regarding ${report.title} has been received by Developers`,
+          timestamp: new Date(report.updatedAt),
+        });
+      } else if (report.status === "Resolved") {
+        newAlerts.push({
+          type: "Report Update",
+          criticality: "Resolved",
+          description: `Your report regarding ${report.title} has been Resolved`,
+          timestamp: new Date(report.updatedAt),
+        });
+      }
+    });
+
+    geofenceArray.forEach((luggage) => {
+      if (luggage.status === "Out of Range") {
+        newAlerts.push({
+          type: "Out of Range",
+          criticality: "Critical",
+          description: `${luggage.luggage_custom_name} is outside the Geofence range `,
+          timestamp: new Date(luggage.updatedAt),
+        });
+      }
+    });
+
+    tempArray.forEach((temp) => {
+      if (temp.temperature > 30) {
+        newAlerts.push({
+          type: "High Temperature",
+          criticality: "Critical",
+          description: `High temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
+          timestamp: new Date(temp.timeStamp),
+        });
+      } else if (temp.temperature < 10) {
+        newAlerts.push({
+          type: "Low Temperature",
+          criticality: "Warning",
+          description: `Low temperature detected: ${temp.temperature}°C in ${temp.luggage_custom_name}`,
+          timestamp: new Date(temp.timeStamp),
+        });
+      }
+    });
+
+    tamperArray.forEach((tamper) => {
+      newAlerts.push({
+        type: "Tamper Detected",
+        criticality: "Critical",
+        description: `Tamper detected in ${tamper.luggage_custom_name}`,
+        timestamp: new Date(tamper.tamperTime),
+      });
+    });
+
+    fallArray.forEach((fall) => {
+      newAlerts.push({
+        type: "Fall Detected",
+        criticality: "Warning",
+        description: `Fall detected in ${fall.luggage_custom_name}`,
+        timestamp: new Date(fall.fall_time),
+      });
+    });
+
+    return newAlerts;
+  };
+
+  useEffect(() => {
+    const newAlerts = updateAlerts();
+
+    // Check if there are new alerts or if statuses have changed
+    const statusesChanged =
+      JSON.stringify(prevStatusesRef.current) !== JSON.stringify(statuses);
+
+    if (newAlerts.length > alerts.length || statusesChanged) {
+      setAlerts(newAlerts);
+      setHasNewAlerts(true); // Set to true when there are new alerts or statuses change
+      setHasNewNotifs(true);
+    } else {
+      //setAlerts(newAlerts); // Just update alerts
+      setHasNewAlerts(false); // No new alerts
+    }
+
+    // Update the ref with current statuses
+    prevStatusesRef.current = statuses;
+  }, [tempData, tamperData, fallDetectData, statuses]);
+
   return (
     <UserNotifContext.Provider
       value={{
@@ -108,8 +223,12 @@ export const UserNotifProvider = ({ children }) => {
         tempData,
         userReports,
         statuses,
-        isSeenNotifications,
-        setIsSeenNotifications,
+        alerts,
+        setAlerts,
+        hasNewNotifs,
+        setHasNewNotifs,
+        hasNewAlerts,
+        setHasNewAlerts,
         currentLink,
         setCurrentLink,
         openNotif,
