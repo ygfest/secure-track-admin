@@ -94,17 +94,17 @@ const NavBar = () => {
   const getAlertColor = (alertType) => {
     switch (alertType) {
       case "High Temperature":
-        return "badge-danger";
+        return "badge-danger bg-red-500 text-white";
       case "Low Temperature":
-        return "badge-warning";
+        return "badge-warning bg-yellow-500 text-black";
       case "Fall Detected":
-        return "badge-info";
+        return "badge-accent";
       case "Tamper Detected":
         return "badge-danger bg-red-500 text-white";
       case "Out of Range":
         return "badge-danger bg-red-500 text-white";
       case "In Progress":
-        return "badge-accent";
+        return "badge-info";
       case "Resolved":
         return "badge-primary text-white";
       default:
