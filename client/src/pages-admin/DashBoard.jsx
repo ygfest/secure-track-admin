@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -248,34 +249,43 @@ const DashBoard = () => {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <LuUsers className="text-primary text-4xl mb-2" />
-            <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{numOfUsers}</h2>
-              <p className="text-gray-600">Registered Users</p>
+          <Link to="/admin/user-management">
+            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+              <LuUsers className="text-primary text-4xl mb-2" />
+              <div className="card-body text-center">
+                <h2 className="text-3xl font-bold">{numOfUsers}</h2>
+                <p className="text-gray-600">Registered Users</p>
+              </div>
             </div>
-          </div>
-          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <BsLuggage className="text-primary text-4xl mb-2" />
-            <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
-              <p className="text-gray-600">Luggage Registered</p>
+          </Link>
+          <Link to="/admin/luggage">
+            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+              <BsLuggage className="text-primary text-4xl mb-2" />
+              <div className="card-body text-center">
+                <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
+                <p className="text-gray-600">Luggage Registered</p>
+              </div>
             </div>
-          </div>
-          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <TbDeviceSpeakerOff className="text-primary text-4xl mb-2" />
-            <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{deviceReports}</h2>
-              <p className="text-gray-600">Device Anomalies</p>
+          </Link>
+
+          <Link to="/admin/reports">
+            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+              <TbDeviceSpeakerOff className="text-primary text-4xl mb-2" />
+              <div className="card-body text-center">
+                <h2 className="text-3xl font-bold">{deviceReports}</h2>
+                <p className="text-gray-600">Device Anomalies</p>
+              </div>
             </div>
-          </div>
-          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-            <TbDevicesX className="text-primary text-4xl mb-2" />
-            <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{softwareReports}</h2>
-              <p className="text-gray-600">Software Reports</p>
+          </Link>
+          <Link to="/admin/reports">
+            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+              <TbDevicesX className="text-primary text-4xl mb-2" />
+              <div className="card-body text-center">
+                <h2 className="text-3xl font-bold">{softwareReports}</h2>
+                <p className="text-gray-600">Software Reports</p>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
