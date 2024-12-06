@@ -417,7 +417,7 @@ const DashBoard = () => {
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <FaMapMarkerAlt className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
-              <h2 className="text-3xl font-bold">{displayStat}</h2>
+              <h2 className=" text-xl md:text-3xl font-bold">{displayStat}</h2>
               <p className="text-gray-600">Geofence Status</p>
             </div>
           </div>
