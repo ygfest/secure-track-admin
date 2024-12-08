@@ -94,7 +94,7 @@ export const UserNotifProvider = ({ children }) => {
       }
     }
     fetchLuggageInfo();
-  }, []);
+  }, [luggageInfo]);
 
   useEffect(() => {
     async function fetchUserReports() {
