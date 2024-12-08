@@ -152,6 +152,13 @@ export const UserNotifProvider = ({ children }) => {
           description: `${luggage.luggage_custom_name} is outside the Geofence range `,
           timestamp: new Date(luggage.updatedAt),
         });
+      } else if (luggage.status === "Out of Coverage") {
+        newAlerts.push({
+          type: "Out of Coverage",
+          criticality: "Critical",
+          description: `${luggage.luggage_custom_name} is Out of Coverage `,
+          timestamp: new Date(luggage.updatedAt),
+        });
       }
     });
 

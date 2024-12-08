@@ -202,6 +202,7 @@ const AssocLuggage = () => {
       } else {
         toast.success("Successfully deleted data");
         setShowUpdateModal(false);
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error deleting data:", error);
