@@ -23,7 +23,7 @@ import { useUserNotif } from "../context/UserNotifContext";
 import { IoNotificationsOutline } from "react-icons/io5";
 
 const formatDate = (dateObj) => {
-  return format(dateObj, "hh:mm aa");
+  return format(dateObj, "MM/dd, hh:mm aa");
 };
 
 const NavigationBar = () => {
