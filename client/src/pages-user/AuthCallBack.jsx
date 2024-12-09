@@ -21,8 +21,6 @@ export default function AuthCallback() {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then(async (response) => {
-          console.log("User Info:", response.data);
-
           try {
             const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -50,7 +48,6 @@ export default function AuthCallback() {
               );
 
               const userRole = userRoleResponse.data.user.role;
-              console.log(userRole);
 
               if (userRole === "admin") {
                 navigate("/admin");

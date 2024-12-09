@@ -60,7 +60,7 @@ export const UserLocationProvider = ({ children }) => {
               setCurrentUserLat(latitude);
               setCurrentUserLong(longitude);
               setLocationUpdatedAt(Date.now());
-              console.log("Location updated for USER:", latitude, longitude);
+              //console.log("Location updated for USER:", latitude, longitude);
             } else if (
               userRole === "admin" &&
               userId === "66f7dedffe3d65c0c8ce7b4a"
@@ -73,7 +73,7 @@ export const UserLocationProvider = ({ children }) => {
               setCurrentLuggageLat(latitude);
               setCurrentLuggageLong(longitude);
               setLocationUpdatedAt(Date.now());
-              console.log("Location updated for LUGGAGE:", latitude, longitude);
+              //console.log("Location updated for LUGGAGE:", latitude, longitude);
             }
           } catch (err) {
             console.error("Error updating location:", err);

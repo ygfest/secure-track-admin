@@ -161,7 +161,6 @@ const LuggageTracking = () => {
               if (data && data.features && data.features.length > 0) {
                 const properties = data.features[0].properties;
                 const locationName = `${properties.name}, ${properties.city}, ${properties.state}, ${properties.country}`;
-                console.log("LUGGAGE FETCH LOCATION CALLED");
 
                 // Update the current location in the database
                 // Check if location has changed
@@ -245,7 +244,7 @@ const LuggageTracking = () => {
       const apiUrl = import.meta.env.VITE_API_URL;
       const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
       setLuggageDeets(datas.data);
-      console.log("CURRENT ADDRESS FETCHED AGAIN");
+      //console.log("CURRENT ADDRESS FETCHED AGAIN");
     } catch (error) {
       console.error("Error fetching luggage data:", error);
     }

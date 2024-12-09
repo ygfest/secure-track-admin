@@ -23,8 +23,6 @@ const AssocLuggage = () => {
     Axios.defaults.withCredentials = true;
   }, []);
 
-  console.log(userId);
-
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -33,7 +31,7 @@ const AssocLuggage = () => {
           withCredentials: true,
         });
 
-        console.log("Verify token response:", response.data);
+        //console.log("Verify token response:", response.data);
 
         if (!response.data.status || response.data.user.role !== "user") {
           navigate("/sign-in");

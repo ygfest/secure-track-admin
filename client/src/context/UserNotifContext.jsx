@@ -39,8 +39,6 @@ export const UserNotifProvider = ({ children }) => {
     localStorage.setItem("currentLink", currentLink);
   }, [currentLink]);
 
-  console.log("HASNEWNotifs:", hasNewNotifs);
-  console.log("HASNEW:", hasNewAlerts);
   useEffect(() => {
     async function fetchFallData() {
       try {
