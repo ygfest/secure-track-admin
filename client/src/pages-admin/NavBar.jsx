@@ -157,7 +157,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                       currentLink === "/admin" ? "text-primary" : ""
                     }`}
                     onClick={() => {
-                      toggleSideBar();
                       setCurrentLink("/admin/");
                     }}
                   >
@@ -171,7 +170,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                       currentLink === "/admin/tracking" ? "text-primary" : ""
                     }`}
                     onClick={() => {
-                      toggleSideBar();
                       setCurrentLink("/admin/tracking");
                     }}
                   >
@@ -183,7 +181,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                     to="/admin/luggage"
                     className="link no-underline"
                     onClick={() => {
-                      toggleSideBar();
                       setCurrentLink("/admin/luggage");
                     }}
                   >
@@ -195,7 +192,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                     to="/admin/user-management"
                     className="link no-underline"
                     onClick={() => {
-                      toggleSideBar();
                       setCurrentLink("/admin/user-management");
                     }}
                   >
@@ -207,7 +203,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                     to="/admin/reports"
                     className="link no-underline"
                     onClick={() => {
-                      toggleSideBar();
                       setCurrentLink("/admin/reports");
                     }}
                   >
@@ -219,7 +214,6 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
                     to="/admin/profile"
                     className="link no-underline"
                     onClick={() => {
-                      toggleSideBar();
                       setCurrentLink("/admin/profile");
                     }}
                   >

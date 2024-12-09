@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "../context/UserLocationContext";
+import { BarLoader } from "react-spinners";
 
 const hazardIcon = new Icon({
   iconUrl: hazardPinIcon,
@@ -415,8 +416,18 @@ const AdminLuggageTracking = () => {
     iconSize: [30, 30],
   });
 
-  console.log(`ISONLOCATION DEBUG: ${isLocationOn}`);
-  console.log(currentUserLat);
+  if (
+    currentUserLat === null ||
+    currentUserLong === null ||
+    profileName === null
+  ) {
+    return (
+      <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">
+        <img src="/ST-without-name.svg" className="h-24 mb-8" />
+        <BarLoader color="white" size={40} data-testid="loader" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -511,8 +522,8 @@ const AdminLuggageTracking = () => {
           </div>
         </div>
         <MapContainer
-          center={[14.5092, 121.0144]}
-          zoom={13}
+          center={[currentUserLat, currentUserLong]}
+          zoom={14}
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
         >
