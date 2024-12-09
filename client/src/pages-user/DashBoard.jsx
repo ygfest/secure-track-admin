@@ -285,10 +285,10 @@ const DashBoard = () => {
       .startOf("minute")
       .minute(Math.floor(moment(log.timestamp).minute() / 10) * 10);
 
-    // Create a unique interval label that includes both date and the 10-minute interval
+    // Format the interval label to include date and time for the 10-minute block
     const intervalLabel = tenMinuteInterval.format("MMM DD, YYYY HH:mm");
 
-    // Ensure each 10-minute interval gets counted individually
+    // Ensure each 10-minute interval is counted individually, not stacked
     counts[intervalLabel] = (counts[intervalLabel] || 0) + 1;
 
     return counts;
