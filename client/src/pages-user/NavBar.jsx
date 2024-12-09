@@ -103,6 +103,8 @@ const NavBar = () => {
         return "badge-danger bg-red-500 text-white";
       case "Out of Range":
         return "badge-danger bg-red-500 text-white";
+      case "Out of Coverage":
+        return "badge-danger bg-red-500 text-white";
       case "In Progress":
         return "badge-info";
       case "Resolved":
