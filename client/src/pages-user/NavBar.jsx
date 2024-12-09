@@ -215,7 +215,7 @@ const NavBar = () => {
             </svg>
           </div>
           {isOpen && (
-            <ul className="menu dropdown-content mt-3 absolute z-30 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
+            <ul className=" fixed inset-0 flex menu dropdown-content mt-3 z-30 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
               <li>
                 <Link
                   to="/user/"
