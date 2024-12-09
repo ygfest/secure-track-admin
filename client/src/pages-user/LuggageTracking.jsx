@@ -303,8 +303,8 @@ const LuggageTracking = () => {
     centerLong,
     radius
   ) => {
-    console.log("Luggage Coordinates:", { luggageLat, luggageLong });
-    console.log("Center Coordinates:", { centerLat, centerLong });
+    //console.log("Luggage Coordinates:", { luggageLat, luggageLong });
+    //console.log("Center Coordinates:", { centerLat, centerLong });
 
     if (!luggageLat || !luggageLong || !centerLat || !centerLong) {
       return null;

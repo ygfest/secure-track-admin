@@ -229,7 +229,7 @@ const DashBoard = () => {
           unit: "minute", // Set unit to minute
           stepSize: 10, // Set step size to 10 minutes
           displayFormats: {
-            minute: "MMM DD, YYYY HH:mm", // Format for 10-minute intervals
+            minute: "hh:mm", // Format for 10-minute intervals
           },
         },
         title: {
@@ -322,7 +322,7 @@ const DashBoard = () => {
           unit: "minute", // Set to minute
           stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            minute: "HH:mm, MMM DD,", // Format for 10-minute intervals
+            minute: "hh:mm, MMM DD,", // Format for 10-minute intervals
           },
         },
         title: {
@@ -382,7 +382,7 @@ const DashBoard = () => {
           unit: "minute", // Set to minute
           stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            minute: "HH:mm, MMM DD", // Format for 10-minute intervals
+            minute: "hh:mm, MMM DD", // Format for 10-minute intervals
           },
         },
         title: {
