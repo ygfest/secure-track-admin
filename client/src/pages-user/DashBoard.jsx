@@ -286,7 +286,7 @@ const DashBoard = () => {
       .minute(Math.floor(moment(log.timestamp).minute() / 10) * 10);
 
     // Format the interval label to include date and time for the 10-minute block
-    const intervalLabel = tenMinuteInterval.format("MMM DD, YYYY HH:mm");
+    const intervalLabel = tenMinuteInterval.format("YYYY-MM-DD HH:mm"); // Ensure proper time format for distinctness
 
     // Ensure each 10-minute interval is counted individually, not stacked
     counts[intervalLabel] = (counts[intervalLabel] || 0) + 1;
@@ -294,8 +294,9 @@ const DashBoard = () => {
     return counts;
   }, {});
 
+  // Now, let's format the data for the chart:
   const intrusionChartData = {
-    labels: Object.keys(intrusionCounts),
+    labels: Object.keys(intrusionCounts).map((timeLabel) => moment(timeLabel)), // Convert to time objects
     datasets: [
       {
         label: "Intrusions",
@@ -325,7 +326,7 @@ const DashBoard = () => {
           unit: "minute", // Set to minute
           stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            minute: "hh:mm A, MMM DD ", // Format for 10-minute intervals
+            minute: "hh:mm A", // Format for 10-minute intervals
           },
         },
         title: {
