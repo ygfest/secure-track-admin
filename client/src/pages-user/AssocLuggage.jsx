@@ -123,7 +123,8 @@ const AssocLuggage = () => {
         (user && user.lastname.toLowerCase().includes(searchTerm)) ||
         luggage.luggage_custom_name.toLowerCase().includes(searchTerm) ||
         luggage.luggage_tag_number.toLowerCase().includes(searchTerm) ||
-        luggage.status.toLowerCase().includes(searchTerm)
+        luggage.status.toLowerCase().includes(searchTerm) ||
+        luggage.currentLocation.toLowerCase().includes(searchTerm)
       );
     });
 
