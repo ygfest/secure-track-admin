@@ -386,7 +386,7 @@ const DashBoard = () => {
           unit: "minute", // Set to minute
           stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            minute: "hh:mm A, MMM DD", // Format for 10-minute intervals
+            minute: "hh:mm A", // Format for 10-minute intervals
           },
         },
         title: {
