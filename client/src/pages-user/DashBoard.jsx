@@ -219,7 +219,7 @@ const DashBoard = () => {
       },
       title: {
         display: true,
-        text: "Temperature Over Time (10-Minute Intervals)",
+        text: "Temperature Over Time",
       },
     },
     scales: {
@@ -234,7 +234,6 @@ const DashBoard = () => {
         },
         title: {
           display: true,
-          text: "Date and Time (10-Minute Intervals)",
         },
       },
       y: {
@@ -281,9 +280,9 @@ const DashBoard = () => {
 
   const intrusionCounts = tamperData.reduce((counts, log) => {
     // Round down to the nearest 10 minutes
-    const tenMinuteInterval = moment(log.timestamp)
+    const tenMinuteInterval = moment(log.tamperTime)
       .startOf("minute")
-      .minute(Math.floor(moment(log.timestamp).minute() / 10) * 10);
+      .minute(Math.floor(moment(log.tamperTime).minute() / 10) * 10);
 
     // Format the interval label to include date and time for the 10-minute block
     const intervalLabel = tenMinuteInterval.format("YYYY-MM-DD HH:mm"); // Ensure proper time format for distinctness
@@ -331,7 +330,6 @@ const DashBoard = () => {
         },
         title: {
           display: true,
-          text: "Date and Time (10-Minute Intervals)",
         },
       },
       y: {
@@ -391,7 +389,6 @@ const DashBoard = () => {
         },
         title: {
           display: true,
-          text: "Date and Time (10-Minute Intervals)",
         },
       },
       y: {
