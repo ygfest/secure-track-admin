@@ -149,7 +149,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
               </svg>
             </div>
             {isOpen && (
-              <ul className="menu dropdown-content mt-3 p-2 shadow rounded-lg w-52 bg-[#020202a0]">
+              <ul className="menu dropdown-content mt-3 z-[999999] p-2 shadow rounded-lg w-52 bg-[#020202a0]">
                 <li>
                   <Link
                     to="/admin/"
