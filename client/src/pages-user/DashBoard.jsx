@@ -229,7 +229,7 @@ const DashBoard = () => {
           unit: "minute", // Set unit to minute
           stepSize: 10, // Set step size to 10 minutes
           displayFormats: {
-            minute: "hh:mm", // Format for 10-minute intervals
+            minute: "hh:mm A", // Format for 10-minute intervals
           },
         },
         title: {
@@ -279,15 +279,18 @@ const DashBoard = () => {
     },
   };
 
-  // Stack the intrusion data by counting occurrences within the same day
   const intrusionCounts = tamperData.reduce((counts, log) => {
     // Round down to the nearest 10 minutes
     const tenMinuteInterval = moment(log.timestamp)
       .startOf("minute")
       .minute(Math.floor(moment(log.timestamp).minute() / 10) * 10);
+
+    // Create a unique interval label that includes both date and the 10-minute interval
     const intervalLabel = tenMinuteInterval.format("MMM DD, YYYY HH:mm");
 
+    // Ensure each 10-minute interval gets counted individually
     counts[intervalLabel] = (counts[intervalLabel] || 0) + 1;
+
     return counts;
   }, {});
 
@@ -322,7 +325,7 @@ const DashBoard = () => {
           unit: "minute", // Set to minute
           stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            minute: "hh:mm, MMM DD,", // Format for 10-minute intervals
+            minute: "hh:mm A, MMM DD ", // Format for 10-minute intervals
           },
         },
         title: {
@@ -382,7 +385,7 @@ const DashBoard = () => {
           unit: "minute", // Set to minute
           stepSize: 10, // Set step to 10 minutes
           displayFormats: {
-            minute: "hh:mm, MMM DD", // Format for 10-minute intervals
+            minute: "hh:mm A, MMM DD", // Format for 10-minute intervals
           },
         },
         title: {
