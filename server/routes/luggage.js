@@ -335,7 +335,7 @@ router.post('/luggage/:id/updateStatus', verifyUser, async (req, res) => {
 });
 
 
-router.put('/update-location', verifyUser, async (req, res) => {
+router.put('/update-location', async (req, res) => {
   const { latitude, longitude, locationUpdatedAt } = req.body;
   const luggage_tag_number = "ST123456789";
 
