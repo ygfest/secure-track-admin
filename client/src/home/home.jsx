@@ -7,9 +7,8 @@ export default function Home() {
   const [currentLuggageLong, setCurrentLuggageLong] = useState(null);
   const [locationUpdatedAt, setLocationUpdatedAt] = useState(null);
 
-  const apiUrl = import.meta.env.VITE_API_URL; // assuming you have this in your .env file
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  // Function to update location on the server
   const updateLocation = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -17,7 +16,6 @@ export default function Home() {
           const { latitude, longitude } = position.coords;
 
           try {
-            // Send the updated location to the server
             await axios.put(`${apiUrl}/luggage-router/update-location`, {
               latitude,
               longitude,
@@ -40,7 +38,6 @@ export default function Home() {
     }
   };
 
-  // Set an interval to update the location if isLocationOn is true
   useEffect(() => {
     let locationInterval = null;
     if (isLocationOn) {
@@ -56,10 +53,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50 p-6">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">
-        Luggage Location Tracker
-      </h1>
-
       <div className="text-center mb-6">
         <p className="text-gray-700">
           {currentLuggageLat && currentLuggageLong
