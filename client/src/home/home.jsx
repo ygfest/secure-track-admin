@@ -256,6 +256,7 @@ export default function Home() {
               <a className="text-gray-400 font-light hover:text-primary transition-colors">
                 Soriano, Joshua
               </a>
+              <br />
               <a className="text-gray-400 font-light hover:text-primary transition-colors">
                 Monteverde, Regie Keano
               </a>
