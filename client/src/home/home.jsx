@@ -54,10 +54,10 @@ export default function Home() {
             <div className="flex gap-1 md:gap-4 items-center">
               <a href="https://miaa-1-wayfinder.web.app/index.html">
                 <button className="hidden md:inline p-2 text-sm md:text-base font-medium text-white bg-primary hover:bg-zinc-600 rounded-lg min-w-[150px] md:min-w-[120px] flex-nowrap">
-                  Find My Way
+                  Try the Map
                 </button>
-                <button className="md:hidden p-2 text-sm md:text-base font-medium text-white bg-secondary hover:bg-zinc-600 rounded-lg min-w-[120px] md:min-w-[120px] flex-nowrap">
-                  Create account
+                <button className="md:hidden p-2 text-sm md:text-base font-medium text-white bg-primary hover:bg-zinc-600 rounded-lg min-w-[120px] md:min-w-[120px] flex-nowrap">
+                  Try the Map
                 </button>
               </a>
             </div>
@@ -185,14 +185,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Help Button */}
-      <button
-        onClick={toggleHelpModal}
-        className="fixed bottom-4 right-4 bg-gray-100 bg-opacity-50 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-gray-200 transition-all"
-      >
-        <FiHelpCircle className="text-secondary text-2xl" />
-      </button>
 
       {/* Other Sections */}
       <section className="h-[500px] min-w-[400px]"></section>
