@@ -35,8 +35,8 @@ export default {
   daisyui: {
     themes: [{
       mytheme: {
-        //"primary": "#5CC90C",
-        "primary": "#8f00ff",
+        "primary": "#5CC90C",
+        //"primary": "#8f00ff",
         "secondary": "#3B3F3F",
         "accent": "#FFD900",
         "neutral": "#5CC90C",
