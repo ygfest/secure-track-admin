@@ -13,7 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app", "https://secure-track-est.vercel.app"],
+    origin: ["http://localhost:5173", "https://secure-track-wa.vercel.app", "https://secure-track-est.vercel.app","https://secure-track-sse.vercel.app", ],
     credentials: true,
 }));
 app.use(cookieParser());
