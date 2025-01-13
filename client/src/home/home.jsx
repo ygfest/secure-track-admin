@@ -492,18 +492,6 @@ export default function Home() {
                 Asst. Prof. Mary Ann Aballiar-Vista
               </a>
             </p>
-            <div>
-              <p>PANEL</p>
-              <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Mr. Alvin John M. Paz
-              </p>
-              <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Asst. Prof. Darwin M. Catalan
-              </p>
-              <p className="text-gray-400 font-light hover:text-primary transition-colors">
-                Mr. Erickson Antonio
-              </p>
-            </div>
           </div>
 
           {/* Built By and Powered By Section */}
