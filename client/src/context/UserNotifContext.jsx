@@ -23,7 +23,6 @@ export const UserNotifProvider = ({ children }) => {
     return localStorage.getItem("alerts");
   });
   const [currentLink, setCurrentLink] = useState(() => {
-    // Retrieve the link from localStorage or default to "/user/"
     return localStorage.getItem("currentLink") || "/user/";
   });
   const [openNotif, setOpenNotif] = useState(false);
@@ -39,6 +38,8 @@ export const UserNotifProvider = ({ children }) => {
     localStorage.setItem("currentLink", currentLink);
   }, [currentLink]);
 
+  {
+    /*
   useEffect(() => {
     async function fetchFallData() {
       try {
@@ -92,7 +93,37 @@ export const UserNotifProvider = ({ children }) => {
       }
     }
     fetchLuggageInfo();
-  }, [luggageInfo]);
+  }, [luggageInfo]);*/
+  }
+
+  useEffect(() => {
+    // Create the EventSource connection with credentials
+    const eventSource = new EventSource(
+      "http://localhost:3000/luggage-router/notifications",
+      {
+        withCredentials: true, // Send cookies with the request
+      }
+    );
+
+    eventSource.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+
+      // Update the state with the real-time data from SSE
+      setTempData(data.tempLogs);
+      setTamperData(data.tamperLogs);
+      setFallDetectData(data.fallLogs);
+      setLuggageInfo(data.luggageData);
+    };
+
+    eventSource.onerror = function (error) {
+      console.error("SSE error: ", error); // Handle any SSE errors
+    };
+
+    // Cleanup the EventSource when the component is unmounted
+    return () => {
+      eventSource.close(); // Close the EventSource connection
+    };
+  }, []); // Empty dependency array ensures this effect runs once on mount
 
   useEffect(() => {
     async function fetchUserReports() {

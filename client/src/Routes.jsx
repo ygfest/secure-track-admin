@@ -21,7 +21,7 @@ import SignUpForm from "./components/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import AuthCallback from "./auth/AuthCallBack";
-import Home from "./home/home";
+import Home from "./home/home-page";
 import EditProfile from "./pages-user/EditProfile";
 
 //Layouts for both user and admin side
