@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../assets/st_logo.svg";
+import Logo from "../../assets/st_logo.svg";
 import { FaThermometerHalf } from "react-icons/fa";
 import {
   AiOutlineHome,
@@ -13,7 +13,7 @@ import { GoAlert } from "react-icons/go";
 import { GoShield } from "react-icons/go";
 import { TbLocationExclamation } from "react-icons/tb";
 import { format } from "date-fns";
-import { useUserNotif } from "../context/UserNotifContext";
+import { useUserNotif } from "../../context/UserNotifContext";
 import { IoNotificationsOutline } from "react-icons/io5";
 
 const formatDate = (dateObj) => {

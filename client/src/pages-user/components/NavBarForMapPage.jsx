@@ -1,15 +1,15 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../assets/st_logo.svg";
+import Logo from "../../assets/st_logo.svg";
 import { FaThermometerHalf } from "react-icons/fa";
 import { GoAlert } from "react-icons/go";
 import { GoShield } from "react-icons/go";
 import { TbLocationExclamation } from "react-icons/tb";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
-import { useUserNotif } from "../context/UserNotifContext";
-import { useLocation } from "../context/UserLocationContext";
+import { useUserNotif } from "../../context/UserNotifContext";
+import { useLocation } from "../../context/UserLocationContext";
 
 const formatDate = (dateObj) => {
   if (!dateObj || isNaN(new Date(dateObj))) {
@@ -18,7 +18,7 @@ const formatDate = (dateObj) => {
   return format(new Date(dateObj), "MM/dd, hh:mm aa");
 };
 
-const NavBar = () => {
+const NavBarForMap = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
@@ -377,4 +377,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarForMap;

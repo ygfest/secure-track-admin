@@ -9,7 +9,7 @@ import {
   FaExclamationTriangle,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import NavigationBar from "./NavigationBar";
+import NavigationBar from "./components/NavigationBar";
 import UserComboBox from "../components/ComboBox";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import {

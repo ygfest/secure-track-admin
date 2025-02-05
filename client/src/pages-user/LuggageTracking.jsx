@@ -15,7 +15,7 @@ import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import debounce from "lodash.debounce";
 import greenMarker from "../assets/green_marker.png";
-import NavBar from "./NavBarForMapPage";
+import NavBarForMap from "./components/NavBarForMapPage";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
@@ -298,9 +298,6 @@ const LuggageTracking = () => {
     centerLong,
     radius
   ) => {
-    //console.log("Luggage Coordinates:", { luggageLat, luggageLong });
-    //console.log("Center Coordinates:", { centerLat, centerLong });
-
     if (!luggageLat || !luggageLong || !centerLat || !centerLong) {
       return null;
     }
@@ -536,7 +533,7 @@ const LuggageTracking = () => {
   }
   return (
     <>
-      <NavBar />
+      <NavBarForMap />
       <Toaster
         position="top-right"
         toastOptions={{

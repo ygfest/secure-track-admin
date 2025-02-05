@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
-import NavigationBar from "./NavigationBar";
+import NavigationBar from "./components/NavigationBar";
 import { toast, Toaster } from "sonner";
 import { ImSpinner2 } from "react-icons/im";
 
