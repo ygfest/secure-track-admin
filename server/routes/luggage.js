@@ -17,14 +17,13 @@ const verifyUser = (req, res, next) => {
       return res.status(401).json({ status: false, message: "No token" });
     }
     const decoded = jwt.verify(token, process.env.KEY);
-    req.user = decoded; // Set req.user with decoded token
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ status: false, message: "Invalid token" });
   }
 };
 
-// Verify user route
 router.get("/verify", verifyUser, async (req, res) => {
   return res.json({ status: true, message: "Authorized" });
 });
@@ -178,7 +177,6 @@ router.get("/tamper-logs2", verifyUser, async (req, res) => {
   }
 });
 
-//fetch temp logs
 // Fetch temp logs
 router.get("/temp-logs", verifyUser, async (req, res) => {
   try {

@@ -42,7 +42,7 @@ export const UserLocationProvider = ({ children }) => {
     fetchLocationStatus();
   }, []); // Empty dependency array ensures it runs once on mount
 
-  // Function to update location periodically
+  // to update location periodically in the database
   const updateLocation = async (locationStatus) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -88,7 +88,7 @@ export const UserLocationProvider = ({ children }) => {
     }
   };
 
-  // Set an interval to update the location if isLocationOn is true
+  // This is to update the users location by every 10 seconds
   useEffect(() => {
     let locationInterval = null;
     if (isLocationOn) {
@@ -100,7 +100,7 @@ export const UserLocationProvider = ({ children }) => {
         clearInterval(locationInterval);
       }
     };
-  }, [isLocationOn]); // Run the effect whenever isLocationOn changes
+  }, [isLocationOn]);
 
   const toggleLocation = async () => {
     const newLocationStatus = !isLocationOn;
