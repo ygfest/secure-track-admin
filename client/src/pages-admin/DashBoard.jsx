@@ -14,12 +14,6 @@ import {
   ArcElement,
   BarElement,
 } from "chart.js";
-import {
-  FaMapMarkerAlt,
-  FaThermometerHalf,
-  FaShieldAlt,
-  FaExclamationTriangle,
-} from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import { BsLuggage } from "react-icons/bs";
 import { TbDeviceSpeakerOff } from "react-icons/tb";

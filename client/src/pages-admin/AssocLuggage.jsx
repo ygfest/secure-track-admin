@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";

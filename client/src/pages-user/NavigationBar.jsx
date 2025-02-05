@@ -1,14 +1,8 @@
 import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
-import Profile from "../assets/sample_profile.jpg";
-import {
-  FaThermometerHalf,
-  FaLock,
-  FaShieldAlt,
-  FaExclamationTriangle,
-} from "react-icons/fa";
+import { FaThermometerHalf } from "react-icons/fa";
 import {
   AiOutlineHome,
   AiOutlineCompass,
@@ -18,7 +12,7 @@ import {
 import { GoAlert } from "react-icons/go";
 import { GoShield } from "react-icons/go";
 import { TbLocationExclamation } from "react-icons/tb";
-import { parse, format } from "date-fns";
+import { format } from "date-fns";
 import { useUserNotif } from "../context/UserNotifContext";
 import { IoNotificationsOutline } from "react-icons/io5";
 
@@ -37,20 +31,13 @@ const NavigationBar = () => {
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   const {
-    tamperData,
-    tempData,
-    fallDetectData,
     alerts,
-    setAlerts,
     hasNewNotifs,
     setHasNewNotifs,
     hasNewAlerts,
     setHasNewAlerts,
     currentLink,
     setCurrentLink,
-    luggageInfo,
-    userReports,
-    statuses,
   } = useUserNotif();
   const navigate = useNavigate();
 
@@ -66,7 +53,7 @@ const NavigationBar = () => {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await fetch(`${apiUrl}/auth/verify`, {
           method: "GET",
-          credentials: "include", // Equivalent to axios withCredentials: true
+          credentials: "include",
         });
 
         const data = await response.json();

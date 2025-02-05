@@ -1,19 +1,12 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../assets/st_logo.svg";
-import Profile from "../assets/sample_profile.jpg";
-import {
-  FaThermometerHalf,
-  FaLock,
-  FaShieldAlt,
-  FaExclamationTriangle,
-} from "react-icons/fa";
+import Logo from "../../assets/st_logo.svg";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { useLocation } from "../context/UserLocationContext";
-import { useAdminNavBarContext } from "../context/AdminNavBarContext";
+import { useLocation } from "../../context/UserLocationContext";
+import { useAdminNavBarContext } from "../../context/AdminNavBarContext";
 
-const NavBar = ({ tempData, tamperData, fallDetectData }) => {
+const NavBarForMap = ({ tempData, tamperData, fallDetectData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
@@ -23,12 +16,7 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   const [adminLastName, setAdminLastName] = useState("");
   const [alerts, setAlerts] = useState([]);
 
-  const {
-    isSeenNotifications,
-    setIsSeenNotifications,
-    currentLink,
-    setCurrentLink,
-  } = useAdminNavBarContext();
+  const { currentLink, setCurrentLink } = useAdminNavBarContext();
 
   const navigate = useNavigate();
 
@@ -329,4 +317,4 @@ const NavBar = ({ tempData, tamperData, fallDetectData }) => {
   );
 };
 
-export default NavBar;
+export default NavBarForMap;

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaGithub, FaFacebook } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
-import NavigationBar from "./NavigationBar";
 import { toast, Toaster } from "sonner";
 
 const AdminProfile = () => {

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import NavigationBar from "./NavigationBar";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import LuggageIcon from "../assets/green_marker.png";
 import hardwareIcon from "../assets/hardware.png";
 import softwareIcon from "../assets/software.png";
 import { toast, Toaster } from "sonner";

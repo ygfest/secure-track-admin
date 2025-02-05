@@ -2,13 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/st_logo.svg";
-import Profile from "../assets/sample_profile.jpg";
-import {
-  FaThermometerHalf,
-  FaLock,
-  FaShieldAlt,
-  FaExclamationTriangle,
-} from "react-icons/fa";
+import { FaThermometerHalf } from "react-icons/fa";
 import { GoAlert } from "react-icons/go";
 import { GoShield } from "react-icons/go";
 import { TbLocationExclamation } from "react-icons/tb";
@@ -34,23 +28,14 @@ const NavBar = () => {
   const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, toggleLocation } = useLocation();
 
-  const prevStatusesRef = useRef([]);
-
   const {
-    tamperData,
-    fallDetectData,
-    tempData,
     alerts,
-    setAlerts,
     hasNewNotifs,
     setHasNewNotifs,
     hasNewAlerts,
     setHasNewAlerts,
     currentLink,
     setCurrentLink,
-    luggageInfo,
-    userReports,
-    statuses,
   } = useUserNotif();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;

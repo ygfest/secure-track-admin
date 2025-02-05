@@ -14,27 +14,13 @@ import { Icon, divIcon } from "leaflet";
 import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import debounce from "lodash.debounce";
-
-import hazardPinIcon from "../assets/aler-hazard.svg";
-import cargoIcon from "../assets/cargo.png";
-import luggagePngIcon from "../assets/luggage.png";
 import greenMarker from "../assets/green_marker.png";
-import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "../context/UserLocationContext";
 import { BarLoader } from "react-spinners";
-
-const hazardIcon = new Icon({
-  iconUrl: hazardPinIcon,
-  iconSize: [40, 40],
-});
-
-const cargoMarker = new Icon({
-  iconUrl: cargoIcon,
-  iconSize: [40, 40],
-});
+import NavBarForMap from "./components/NavBarForMap";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -117,7 +103,6 @@ const AdminLuggageTracking = () => {
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
   const { isLocationOn } = useLocation();
-  const mapRef = useRef(null); // Ref to store the map instance
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -431,7 +416,7 @@ const AdminLuggageTracking = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBarForMap />
       <ToastContainer />
 
       <div className="fixed inset-0 w-screen h-screen z-0">

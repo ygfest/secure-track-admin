@@ -1,31 +1,38 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import MapComponent from "./pages-admin/MapComponent";
+
+//Admin Components
+import AdminDashBoard from "./pages-admin/DashBoard";
 import AdminLuggageTracking from "./pages-admin/LuggageTracking";
-import ADashBoard from "./pages-admin/DashBoard";
-import UserManagement from "./pages-admin/user-management";
-import ReportsAnalyticsPage from "./pages-admin/ReportsAnalyticsPage";
+import UserManagement from "./pages-admin/UserManagement";
 import AdminAssocLuggage from "./pages-admin/AssocLuggage";
 import AdminProfile from "./pages-admin/Profile";
 import AdminReports from "./pages-admin/Reports";
 
+//User Components
 import UserDashboard from "./pages-user/DashBoard";
 import LuggageTracking from "./pages-user/LuggageTracking";
 import Profile from "./pages-user/Profile";
 import AssocLuggage from "./pages-user/AssocLuggage";
+
+//Global Components
 import SignInForm from "./components/SignIn";
 import SignUpForm from "./components/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import AuthCallback from "./auth/AuthCallBack";
 import Home from "./home/home";
-import AuthCallback from "./pages-user/AuthCallBack";
 import EditProfile from "./pages-user/EditProfile";
+
+//Layouts for both user and admin side
 import AdminLayout from "./pages-admin/AdminLayout";
 import UserLayout from "./pages-user/UserLayout";
 
+//Providers
 import { AdminNavBarProvider } from "./context/AdminNavBarContext";
 import { UserNotifProvider } from "./context/UserNotifContext";
 import { UserLocationProvider } from "./context/UserLocationContext";
+
 const AppRoutes = ({ loadingBarRef }) => {
   const location = useLocation();
 
@@ -57,13 +64,9 @@ const AdminRoutes = () => {
       <UserLocationProvider>
         <Routes>
           <Route element={<AdminLayout />}>
-            <Route path="/" element={<ADashBoard />} />
+            <Route path="/" element={<AdminDashBoard />} />
             <Route path="/luggage" element={<AdminAssocLuggage />} />
             <Route path="/user-management" element={<UserManagement />} />
-            <Route
-              path="/reports-analytics"
-              element={<ReportsAnalyticsPage />}
-            />
             <Route path="/reports" element={<AdminReports />} />
             <Route path="/profile" element={<AdminProfile />} />
           </Route>

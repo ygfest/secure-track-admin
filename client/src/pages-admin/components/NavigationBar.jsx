@@ -1,8 +1,7 @@
 import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../assets/st_logo.svg";
-import Profile from "../assets/sample_profile.jpg";
+import Logo from "../../assets/st_logo.svg";
 
 import {
   MdDashboard,
@@ -13,10 +12,9 @@ import {
   MdAccountCircle,
   MdClose,
 } from "react-icons/md";
-import { FaCircleChevronLeft } from "react-icons/fa6";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { parse, format } from "date-fns";
-import { useAdminNavBarContext } from "../context/AdminNavBarContext";
+import { format } from "date-fns";
+import { useAdminNavBarContext } from "../../context/AdminNavBarContext";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
@@ -228,9 +226,6 @@ const NavigationBar = () => {
                         <span className="badge">New</span>
                       </a>
                     </Link>
-                  </li>
-                  <li>
-                    <a>Settings</a>
                   </li>
                   <li>
                     <a onClick={() => setIsShowLogoutConfirmation(true)}>

@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const handeAlert = () => {
-  alert("May sunog!");
-};
-
-const handleSearch = () => {
-  prompt("What are u looking for?");
-};
-let timeOfDay = 22;
-let greeting = "henlo";
-
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropProfile, setIsDropProfile] = useState(false);

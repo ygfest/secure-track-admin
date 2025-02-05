@@ -14,12 +14,8 @@ import { Icon, divIcon } from "leaflet";
 import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import debounce from "lodash.debounce";
-
-import hazardPinIcon from "../assets/aler-hazard.svg";
-import cargoIcon from "../assets/cargo.png";
-import luggagePngIcon from "../assets/luggage.png";
 import greenMarker from "../assets/green_marker.png";
-import NavBar from "./NavBar";
+import NavBar from "./NavBarForMapPage";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
@@ -110,7 +106,6 @@ const LuggageTracking = () => {
   const [profileLastName, setProfileLastName] = useState("");
   const { isLocationOn, currentUserLat, currentUserLong, locationUpdatedAt } =
     useLocation();
-  const mapRef = useRef(null); // Ref to store the map instance
   const [radius, setRadius] = useState(null);
   const center = [currentUserLat, currentUserLong];
   const defaultCenter = [15.973, 121.0868];
@@ -466,19 +461,26 @@ const LuggageTracking = () => {
   const handleAddNewLuggage = async (newLuggage) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
+
+      // Ensure newLuggage has a timestamp
+      const luggageWithTimestamp = {
+        ...newLuggage,
+        createdAt: new Date().toISOString(), // Add a valid timestamp
+      };
+
       const response = await axios.post(
         `${apiUrl}/luggage-router/addluggage`,
-        newLuggage
+        luggageWithTimestamp
       );
+
       if (response.status === 201) {
-        setLuggageDeets([...luggageDeets, newLuggage]);
-        console.log("New Luggage Details: ", newLuggage);
         await fetchLuggageData();
-        toast.success("Luggage added succesfully");
-        window.location.reload();
+
+        toast.success("Luggage added successfully");
       } else {
         toast.error("Luggage Tag already in use");
       }
+
       setShowAddModal(false);
     } catch (error) {
       console.log("error adding luggage", error);
@@ -731,6 +733,7 @@ const LuggageTracking = () => {
               </>
             )}
 
+          {/* Add Luggage Modal */}
           {showAddModal && (
             <div className="fixed inset-0 flex items-center justify-center z-[8000] bg-white bg-opacity-20">
               <div className="bg-[#020202a0] backdrop-blur-xl text-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">
@@ -745,7 +748,6 @@ const LuggageTracking = () => {
                       luggage_tag_number: e.target.luggage_tag_number.value,
                       user_id: userId,
                     });
-                    //window.location.reload();
                   }}
                 >
                   <div className="form-control mb-4">
