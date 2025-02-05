@@ -524,7 +524,7 @@ router.post("/user-report", verifyUser, async (req, res) => {
     res.status(500).json({ status: false, message: "Server error" });
   }
 });
-
+//get all reports
 router.get("/reports", async (req, res) => {
   try {
     const reports = await Report.find();
@@ -573,13 +573,11 @@ router.get("/user-reports", verifyUser, async (req, res) => {
       }
     };
 
-    // Send updates every 10 seconds (or adjust the interval)
-    const intervalId = setInterval(sendReportsUpdate, 10000); // You can adjust the interval as needed
+    const intervalId = setInterval(sendReportsUpdate, 10000);
 
     // Initial report update when client connects
     sendReportsUpdate();
 
-    // Handle client disconnect (cleanup)
     req.on("close", () => {
       clearInterval(intervalId);
       res.end();

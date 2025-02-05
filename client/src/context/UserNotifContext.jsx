@@ -32,6 +32,7 @@ export const UserNotifProvider = ({ children }) => {
   const [openNotif, setOpenNotif] = useState(false);
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     localStorage.setItem("alerts", alerts);
@@ -43,18 +44,15 @@ export const UserNotifProvider = ({ children }) => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      "http://localhost:3000/luggage-router/notifications",
+      `${apiUrl}/luggage-router/notifications`,
       {
         withCredentials: true,
       }
     );
 
-    const reportsSource = new EventSource(
-      "http://localhost:3000/auth/user-reports",
-      {
-        withCredentials: true,
-      }
-    );
+    const reportsSource = new EventSource(`${apiUrl}/auth/user-reports`, {
+      withCredentials: true,
+    });
 
     eventSource.onmessage = function (event) {
       const data = JSON.parse(event.data);
