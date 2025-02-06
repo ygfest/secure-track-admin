@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { Line, Doughnut, Bar } from "react-chartjs-2";
+import { Link } from "react-router-dom";
+import { Doughnut, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -62,7 +62,7 @@ const DashBoard = () => {
     fetchLuggageInfo();
   }, []);
 
-  // Sample Data Aggregation
+  //default or empty data
   const numOfUsers = userData.length === 0 ? "-" : userData.length;
   const numOfLuggage = luggageInfo.length === 0 ? "-" : luggageInfo.length;
   const deviceReports =
@@ -77,7 +77,7 @@ const DashBoard = () => {
       : reportsData.filter((report) => report.type === "software-anomaly")
           .length;
 
-  // User Activity Bar Chart
+  //Bar Chart for User status/activity
   const activeUsers = userData.filter(
     (user) => user.status === "Active"
   ).length;
@@ -95,9 +95,9 @@ const DashBoard = () => {
         label: "User Activity",
         data: [activeUsers, inactiveUsers, offlineUsers],
         backgroundColor: [
-          "#5CC90C", // Primary color for Active
-          "#3B3F3F", // Secondary color for Inactive
-          "#A9D18B", // Accent color for Offline
+          "#5CC90C", // Active
+          "#3B3F3F", // Inactive
+          "#A9D18B", // Offline
         ],
       },
     ],
@@ -145,7 +145,7 @@ const DashBoard = () => {
     datasets: [
       {
         data: [deviceAnomalies, softwareAnomalies],
-        backgroundColor: ["#5CC90C", "#3B3F3F"], // Using primary and accent colors
+        backgroundColor: ["#5CC90C", "#3B3F3F"],
       },
     ],
   };
@@ -235,99 +235,97 @@ const DashBoard = () => {
   };
 
   return (
-    <>
-      <div className="p-6 h-full bg-gray-100">
-        <div className="flex flex-row justify-between items-center text-center mb-4">
-          <h3 className="text-2xl font-medium">Overview</h3>
-          <div className="md:w-1/5 w-1/2 "></div>
+    <div className="p-6 h-full bg-gray-100">
+      <div className="flex flex-row justify-between items-center text-center mb-4">
+        <h3 className="text-2xl font-medium">Overview</h3>
+        <div className="md:w-1/5 w-1/2 "></div>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <Link to="/admin/user-management">
+          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+            <LuUsers className="text-primary text-4xl mb-2" />
+            <div className="card-body text-center">
+              <h2 className="text-3xl font-bold">{numOfUsers}</h2>
+              <p className="text-gray-600">Registered Users</p>
+            </div>
+          </div>
+        </Link>
+        <Link to="/admin/luggage">
+          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+            <BsLuggage className="text-primary text-4xl mb-2" />
+            <div className="card-body text-center">
+              <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
+              <p className="text-gray-600">Luggage Registered</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/admin/reports">
+          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+            <TbDeviceSpeakerOff className="text-primary text-4xl mb-2" />
+            <div className="card-body text-center">
+              <h2 className="text-3xl font-bold">{deviceReports}</h2>
+              <p className="text-gray-600">Device Anomalies</p>
+            </div>
+          </div>
+        </Link>
+        <Link to="/admin/reports">
+          <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
+            <TbDevicesX className="text-primary text-4xl mb-2" />
+            <div className="card-body text-center">
+              <h2 className="text-3xl font-bold">{softwareReports}</h2>
+              <p className="text-gray-600">Software Reports</p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        {/* User Activity Bar Chart */}
+        <div className="card bg-white shadow-md p-4 rounded-lg h-96">
+          <div className="card-body h-full">
+            <h2 className="text-xl font-bold">Users Activity</h2>
+            <div className="relative h-full w-full">
+              <Bar data={userActChartData} options={userActChartOptions} />
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link to="/admin/user-management">
-            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-              <LuUsers className="text-primary text-4xl mb-2" />
-              <div className="card-body text-center">
-                <h2 className="text-3xl font-bold">{numOfUsers}</h2>
-                <p className="text-gray-600">Registered Users</p>
-              </div>
+        <div className="card bg-white shadow-md p-4 rounded-lg h-96">
+          <div className="card-body h-full">
+            <h2 className="text-xl font-bold">Issues and Reports</h2>
+            <div className="h-full flex justify-center items-center">
+              <Doughnut
+                options={geofenceStatusOptions}
+                data={geofenceStatusData}
+              />
             </div>
-          </Link>
-          <Link to="/admin/luggage">
-            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-              <BsLuggage className="text-primary text-4xl mb-2" />
-              <div className="card-body text-center">
-                <h2 className="text-3xl font-bold">{numOfLuggage}</h2>
-                <p className="text-gray-600">Luggage Registered</p>
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/admin/reports">
-            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-              <TbDeviceSpeakerOff className="text-primary text-4xl mb-2" />
-              <div className="card-body text-center">
-                <h2 className="text-3xl font-bold">{deviceReports}</h2>
-                <p className="text-gray-600">Device Anomalies</p>
-              </div>
-            </div>
-          </Link>
-          <Link to="/admin/reports">
-            <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
-              <TbDevicesX className="text-primary text-4xl mb-2" />
-              <div className="card-body text-center">
-                <h2 className="text-3xl font-bold">{softwareReports}</h2>
-                <p className="text-gray-600">Software Reports</p>
-              </div>
-            </div>
-          </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          {/* User Activity Bar Chart */}
-          <div className="card bg-white shadow-md p-4 rounded-lg h-96">
-            <div className="card-body h-full">
-              <h2 className="text-xl font-bold">Users Activity</h2>
-              <div className="relative h-full w-full">
-                <Bar data={userActChartData} options={userActChartOptions} />
-              </div>
+        <div className="card bg-white shadow-md p-4 rounded-lg h-96">
+          <div className="card-body h-full">
+            <h2 className="text-xl font-bold">Device Anomalies Status</h2>
+            <div className="h-full flex justify-center items-center">
+              <Doughnut
+                options={intrusionChartOptions}
+                data={intrusionChartData}
+              />
             </div>
           </div>
+        </div>
 
-          <div className="card bg-white shadow-md p-4 rounded-lg h-96">
-            <div className="card-body h-full">
-              <h2 className="text-xl font-bold">Issues and Reports</h2>
-              <div className="h-full flex justify-center items-center">
-                <Doughnut
-                  options={geofenceStatusOptions}
-                  data={geofenceStatusData}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="card bg-white shadow-md p-4 rounded-lg h-96">
-            <div className="card-body h-full">
-              <h2 className="text-xl font-bold">Device Anomalies Status</h2>
-              <div className="h-full flex justify-center items-center">
-                <Doughnut
-                  options={intrusionChartOptions}
-                  data={intrusionChartData}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="card bg-white shadow-md p-4 rounded-lg h-96">
-            <div className="card-body h-full">
-              <h2 className="text-xl font-bold">Software Anomalies Status</h2>
-              <div className="h-full flex justify-center items-center">
-                <Doughnut options={fallChartOptions} data={fallChartData} />
-              </div>
+        <div className="card bg-white shadow-md p-4 rounded-lg h-96">
+          <div className="card-body h-full">
+            <h2 className="text-xl font-bold">Software Anomalies Status</h2>
+            <div className="h-full flex justify-center items-center">
+              <Doughnut options={fallChartOptions} data={fallChartData} />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

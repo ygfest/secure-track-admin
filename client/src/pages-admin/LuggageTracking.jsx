@@ -17,10 +17,10 @@ import debounce from "lodash.debounce";
 import greenMarker from "../assets/green_marker.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import { useLocation } from "../context/UserLocationContext";
+import { toast } from "sonner";
 import { BarLoader } from "react-spinners";
 import NavBarForMap from "./components/NavBarForMap";
+import { useUserData } from "../context/UserContext";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -102,7 +102,7 @@ const AdminLuggageTracking = () => {
   const [shouldFly, setShouldFly] = useState(false);
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
-  const { isLocationOn } = useLocation();
+  const { isLocationOn } = useUserData();
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -209,16 +209,12 @@ const AdminLuggageTracking = () => {
       }
     };
 
-    //fetchCurrentLocations();
-
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
       10000
     );
     debouncedFetchCurrentLocations();
-
-    // Cleanup debounce on unmount
     return () => {
       debouncedFetchCurrentLocations.cancel();
     };
@@ -356,7 +352,6 @@ const AdminLuggageTracking = () => {
         setLuggageDeets([...luggageDeets, newLuggage]);
         console.log("New Luggage Details: ", newLuggage);
         toast.success("Luggage added succesfully");
-        window.location.reload();
       } else {
         toast.error("Error adding Luggage");
       }
@@ -417,8 +412,6 @@ const AdminLuggageTracking = () => {
   return (
     <>
       <NavBarForMap />
-      <ToastContainer />
-
       <div className="fixed inset-0 w-screen h-screen z-0">
         <div
           onClick={() => setClicked((prevClick) => !prevClick)}

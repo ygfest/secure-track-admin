@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 const AdminAssocLuggage = () => {
   const navigate = useNavigate();
@@ -29,8 +29,6 @@ const AdminAssocLuggage = () => {
         const response = await Axios.get(`${apiUrl}/auth/verify`, {
           withCredentials: true,
         });
-
-        console.log("Verify token response:", response.data);
 
         if (!response.data.status || response.data.user.role !== "admin") {
           navigate("/sign-in");

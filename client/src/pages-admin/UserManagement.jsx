@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -362,15 +362,6 @@ const UserManagement = () => {
 
   return (
     <div className="h-full">
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            margin: "5px 0",
-          },
-        }}
-      />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-between mb-5 gap-4">
           <button

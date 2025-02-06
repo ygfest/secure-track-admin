@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 const AdminProfile = () => {
   const navigate = useNavigate();
@@ -102,69 +102,58 @@ const AdminProfile = () => {
     new URL(url).pathname.split("").slice(1).join("");
 
   return (
-    <>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            margin: "5px 0",
-          },
-        }}
-      />
-      <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-          <div className="relative">
-            {userProfile.backgroundImage && (
+    <div className="min-h-screen flex flex-col items-center py-12 bg-gray-100">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
+        <div className="relative">
+          {userProfile.backgroundImage && (
+            <img
+              src={userProfile.backgroundImage}
+              alt="Cover"
+              className="w-full h-40 object-cover rounded-lg"
+            />
+          )}
+          <div className="relative z-9 -mt-12 flex items-center justify-between px-4">
+            {userProfile.profile_dp ? (
               <img
-                src={userProfile.backgroundImage}
-                alt="Cover"
-                className="w-full h-40 object-cover rounded-lg"
+                src={userProfile.profile_dp}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-4 border-white"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
+                {userProfile.firstname.charAt(0).toUpperCase()}
+              </div>
+            )}
+            {editMode && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="mb-4"
               />
             )}
-            <div className="relative z-9 -mt-12 flex items-center justify-between px-4">
-              {userProfile.profile_dp ? (
-                <img
-                  src={userProfile.profile_dp}
-                  alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-white"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl border-4 border-white">
-                  {userProfile.firstname.charAt(0).toUpperCase()}
-                </div>
-              )}
-              {editMode && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="mb-4"
-                />
-              )}
-              {editMode && (
-                <button
-                  onClick={() => setEditMode(!editMode)}
-                  className="rounded-full p-2 bg-gray-300"
-                >
-                  <FiSettings className="text-lg" />
-                </button>
-              )}
-            </div>
+            {editMode && (
+              <button
+                onClick={() => setEditMode(!editMode)}
+                className="rounded-full p-2 bg-gray-300"
+              >
+                <FiSettings className="text-lg" />
+              </button>
+            )}
           </div>
-          <div className="flex flex-col gap-4 mt-4">
-            <h2 className="text-2xl font-bold text-start">
-              {userProfile.firstname} {userProfile.lastname} (Admin/Developer)
-            </h2>
-            <p className="text-sm text-start">
-              {userProfile.email} • Joined{" "}
-              {new Date(userProfile.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-          <hr className="border-t-2 border-primary my-6" />
         </div>
+        <div className="flex flex-col gap-4 mt-4">
+          <h2 className="text-2xl font-bold text-start">
+            {userProfile.firstname} {userProfile.lastname} (Admin/Developer)
+          </h2>
+          <p className="text-sm text-start">
+            {userProfile.email} • Joined{" "}
+            {new Date(userProfile.createdAt).toLocaleDateString()}
+          </p>
+        </div>
+        <hr className="border-t-2 border-primary my-6" />
       </div>
-    </>
+    </div>
   );
 };
 

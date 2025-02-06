@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import hardwareIcon from "../assets/hardware.png";
 import softwareIcon from "../assets/software.png";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 const AdminReports = () => {
   const navigate = useNavigate();
@@ -245,7 +245,6 @@ const AdminReports = () => {
 
   return (
     <div className="h-full">
-      <Toaster position="top-right" />
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-end mb-5 gap-4">
           <div className="search-bar relative w-56">

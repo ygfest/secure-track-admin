@@ -56,10 +56,10 @@ export const UserNotifProvider = ({ children }) => {
 
     eventSource.onmessage = function (event) {
       const data = JSON.parse(event.data);
-      setTempData(data.tempLogs);
-      setTamperData(data.tamperLogs);
-      setFallDetectData(data.fallLogs);
-      setLuggageInfo(data.luggageData);
+      setTempData(data.tempLogs ?? []);
+      setTamperData(data.tamperLogs ?? []);
+      setFallDetectData(data.fallLogs ?? []);
+      setLuggageInfo(data.luggageData ?? []);
     };
 
     reportsSource.onmessage = function (event) {
@@ -191,6 +191,7 @@ export const UserNotifProvider = ({ children }) => {
     <UserNotifContext.Provider
       value={{
         luggageInfo,
+        setLuggageInfo,
         fallDetectData,
         tamperData,
         tempData,

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 //Admin Components
@@ -31,7 +31,7 @@ import UserLayout from "./pages-user/UserLayout";
 //Providers
 import { AdminNavBarProvider } from "./context/AdminNavBarContext";
 import { UserNotifProvider } from "./context/UserNotifContext";
-import { UserLocationProvider } from "./context/UserLocationContext";
+import { UserProvider } from "./context/UserContext";
 
 const AppRoutes = ({ loadingBarRef }) => {
   const location = useLocation();
@@ -61,7 +61,7 @@ const AppRoutes = ({ loadingBarRef }) => {
 const AdminRoutes = () => {
   return (
     <AdminNavBarProvider>
-      <UserLocationProvider>
+      <UserProvider>
         <Routes>
           <Route element={<AdminLayout />}>
             <Route path="/" element={<AdminDashBoard />} />
@@ -72,7 +72,7 @@ const AdminRoutes = () => {
           </Route>
           <Route path="/tracking" element={<AdminLuggageTracking />} />
         </Routes>
-      </UserLocationProvider>
+      </UserProvider>
     </AdminNavBarProvider>
   );
 };
@@ -80,7 +80,7 @@ const AdminRoutes = () => {
 const UserRoutes = () => {
   return (
     <UserNotifProvider>
-      <UserLocationProvider>
+      <UserProvider>
         <Routes>
           <Route element={<UserLayout />}>
             <Route path="/" element={<UserDashboard />} />
@@ -90,7 +90,7 @@ const UserRoutes = () => {
           </Route>
           <Route path="/tracking" element={<LuggageTracking />} />
         </Routes>
-      </UserLocationProvider>
+      </UserProvider>
     </UserNotifProvider>
   );
 };

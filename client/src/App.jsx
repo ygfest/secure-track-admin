@@ -5,6 +5,7 @@ import "./App.css";
 import { AuthContextProvider } from "./context/AuthContext";
 
 import LoadingBar from "react-top-loading-bar";
+import { Toaster } from "sonner";
 
 function App() {
   const loadingBarRef = useRef(null);
@@ -12,6 +13,15 @@ function App() {
   return (
     <AuthContextProvider>
       <Router>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              margin: "5px 0",
+            },
+          }}
+        />
         <LoadingBar
           color="#5CC90C"
           ref={loadingBarRef}

@@ -9,7 +9,8 @@ import { TbLocationExclamation } from "react-icons/tb";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
 import { useUserNotif } from "../../context/UserNotifContext";
-import { useLocation } from "../../context/UserLocationContext";
+
+import { useUserData } from "../../context/UserContext";
 
 const formatDate = (dateObj) => {
   if (!dateObj || isNaN(new Date(dateObj))) {
@@ -26,7 +27,7 @@ const NavBarForMap = () => {
   const [profileDp, setProfileDp] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, toggleLocation } = useLocation();
+  const { isLocationOn, toggleLocation } = useUserData();
 
   const {
     alerts,

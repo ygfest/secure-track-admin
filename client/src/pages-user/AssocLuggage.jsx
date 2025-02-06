@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../assets/green_marker.png";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { LuGhost } from "react-icons/lu";
 
 const AssocLuggage = () => {
@@ -239,7 +239,6 @@ const AssocLuggage = () => {
   return (
     <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
-        <Toaster position="top-right" />
         <div className="flex justify-between mb-5 gap-4">
           <button
             className="btn bg-[#5CC90C] text-white rounded-3xl"

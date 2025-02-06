@@ -20,9 +20,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
 import { BarLoader } from "react-spinners";
-
 import L from "leaflet";
-import { useLocation } from "../context/UserLocationContext";
+import { useUserData } from "../context/UserContext";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -94,19 +93,26 @@ const LuggageTracking = () => {
   const [clicked, setClicked] = useState(false);
   const [luggageDeets, setLuggageDeets] = useState([]);
   const [usersData, setUsersData] = useState([]);
-  const [userId, setUserId] = useState();
+
   const [showAddModal, setShowAddModal] = useState(false);
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
   const navigate = useNavigate();
   const [shouldFly, setShouldFly] = useState(false);
 
-  const [profileDp, setProfileDp] = useState("");
-  const [profileName, setProfileName] = useState("");
-  const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, currentUserLat, currentUserLong, locationUpdatedAt } =
-    useLocation();
-  const [radius, setRadius] = useState(null);
+  //Context Providers
+  const {
+    userId,
+    profileFirstName,
+    profileDp,
+    isLocationOn,
+    radius,
+    currentUserLat,
+    currentUserLong,
+    locationUpdatedAt,
+  } = useUserData();
+
+  //Geofencing states/props
   const center = [currentUserLat, currentUserLong];
   const defaultCenter = [15.973, 121.0868];
   const defaultZoom = 8;
@@ -127,11 +133,6 @@ const LuggageTracking = () => {
         if (!response.data.status || response.data.user.role !== "user") {
           navigate("/sign-in");
         } else {
-          setUserId(response.data.user.userID);
-          setProfileDp(response.data.user.profile_dp);
-          setProfileName(response.data.user.firstname);
-          setProfileLastName(response.data.user.lastname);
-          setRadius(response.data.user.geofenceRadius);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
@@ -228,7 +229,6 @@ const LuggageTracking = () => {
     );
     debouncedFetchCurrentLocations();
 
-    // Cleanup debounce on unmount
     return () => {
       debouncedFetchCurrentLocations.cancel();
     };
@@ -239,7 +239,6 @@ const LuggageTracking = () => {
       const apiUrl = import.meta.env.VITE_API_URL;
       const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
       setLuggageDeets(datas.data);
-      //console.log("CURRENT ADDRESS FETCHED AGAIN");
     } catch (error) {
       console.error("Error fetching luggage data:", error);
     }
@@ -248,12 +247,6 @@ const LuggageTracking = () => {
   useEffect(() => {
     fetchLuggageData();
   }, []);
-
-  const handleLocateUser = (map) => {
-    setTrackLocation(true);
-    map.locate();
-    console.log("button was clicked");
-  };
 
   const LocationMarker = ({ trackLocation }) => {
     const [position, setPosition] = useState(null);
@@ -510,7 +503,11 @@ const LuggageTracking = () => {
                  <img alt="Profile" src="${profileDp}" />
                </div>`
             : `<div class="w-[38px] h-[38px] pt-1 rounded-full flex justify-center items-center border-gray-300 border-3 bg-white text-gray-500 font-poppins text-xl">
-                 ${profileName ? profileName.charAt(0).toUpperCase() : ""}
+                 ${
+                   profileFirstName
+                     ? profileFirstName.charAt(0).toUpperCase()
+                     : ""
+                 }
                </div>`
         }
         <div class="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-gray-300"></div>
@@ -522,7 +519,7 @@ const LuggageTracking = () => {
   if (
     currentUserLat === null ||
     currentUserLong === null ||
-    profileName === null
+    profileFirstName === null
   ) {
     return (
       <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">
@@ -534,16 +531,6 @@ const LuggageTracking = () => {
   return (
     <>
       <NavBarForMap />
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            margin: "5px 0",
-          },
-        }}
-      />
-
       <div className="fixed inset-0 w-screen h-screen flex flex-col z-0">
         <div
           onClick={() => {

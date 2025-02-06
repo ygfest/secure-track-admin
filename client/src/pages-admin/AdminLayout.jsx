@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   return (
-    <div className="admin-layout h-screen bg-ingerit">
+    <div className="h-screen bg-inherit">
       <NavigationBar />
       <div className="content">
         <Outlet />

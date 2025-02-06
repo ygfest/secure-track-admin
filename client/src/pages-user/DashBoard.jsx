@@ -9,7 +9,6 @@ import {
   FaExclamationTriangle,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import NavigationBar from "./components/NavigationBar";
 import UserComboBox from "../components/ComboBox";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import {
@@ -43,11 +42,11 @@ ChartJS.register(
 
 const DashBoard = () => {
   const navigate = useNavigate();
-  const [luggageInfo, setLuggageInfo] = useState([]);
+
   const [selectedLuggage, setSelectedLuggage] = useState("All");
   const [userFirstName, setUserFirstName] = useState("");
 
-  const { tamperData, tempData, fallDetectData } = useUserNotif();
+  const { luggageInfo, tamperData, tempData, fallDetectData } = useUserNotif();
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -79,6 +78,12 @@ const DashBoard = () => {
     verifyToken();
   }, [navigate]);
 
+  // Ensure luggageInfo is always an array
+  const modifiedLuggageInfo = [
+    { luggage_custom_name: "All", luggage_name: "All" },
+    ...(Array.isArray(luggageInfo) ? luggageInfo : []),
+  ];
+
   const totalFall =
     selectedLuggage === "All"
       ? fallDetectData.length === 0
@@ -109,7 +114,6 @@ const DashBoard = () => {
   const avgTemp =
     tempData.length > 0 ? (sumTemp / tempData.length).toFixed(1) : "-";
 
-  // Find the latest temperature log for the selected luggage
   const filteredLogs =
     selectedLuggage === "All"
       ? []
@@ -138,26 +142,10 @@ const DashBoard = () => {
       ? latestTempLog.timeStamp
       : "";
 
-  useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/luggage-router/luggage`);
-        setLuggageInfo([
-          { luggage_custom_name: "All", luggage_name: "All" },
-          ...response.data,
-        ]);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
-    fetchLuggageInfo();
-  }, []);
-
   const displayStat =
     selectedLuggage === "All"
       ? "-"
-      : luggageInfo.find(
+      : luggageInfo?.find(
           (luggage) => luggage.luggage_custom_name === selectedLuggage
         )?.status || "-";
 
@@ -168,7 +156,6 @@ const DashBoard = () => {
   const calculateAverageTempPerTimestamp = (data) => {
     const tempMap = {};
     data.forEach((log) => {
-      // Round down to the nearest 10-minute interval
       const timestamp = moment(log.timeStamp)
         .startOf("minute")
         .minute(Math.floor(moment(log.timeStamp).minute() / 10) * 10);
@@ -226,10 +213,10 @@ const DashBoard = () => {
       x: {
         type: "time",
         time: {
-          unit: "minute", // Set unit to minute
-          stepSize: 10, // Set step size to 10 minutes
+          unit: "minute",
+          stepSize: 10,
           displayFormats: {
-            minute: "hh:mm A", // Format for 10-minute intervals
+            minute: "hh:mm A",
           },
         },
         title: {
@@ -245,8 +232,8 @@ const DashBoard = () => {
     },
   };
 
-  // Create a map of status counts for the Doughnut chart, excluding "All"
-  const statusCounts = luggageInfo.reduce((counts, luggage) => {
+  // Doughnut chart for the Geofence Status
+  const statusCounts = luggageInfo?.reduce((counts, luggage) => {
     if (luggage.luggage_custom_name !== "All") {
       counts[luggage.status] = (counts[luggage.status] || 0) + 1;
     }
@@ -407,7 +394,7 @@ const DashBoard = () => {
           <h3 className="text-2xl font-medium">Overview</h3>
           <div className="md:w-1/5 w-1/2 ">
             <UserComboBox
-              options={luggageInfo}
+              options={modifiedLuggageInfo}
               value={selectedLuggage}
               onChange={setSelectedLuggage}
             />

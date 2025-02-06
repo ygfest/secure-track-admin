@@ -1,36 +1,52 @@
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-const UserLocationContext = createContext();
+const UserContext = createContext();
 
-export const useLocation = () => useContext(UserLocationContext);
+export const useUserData = () => useContext(UserContext);
 
-export const UserLocationProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
+  //user props
+  const [userId, setUserId] = useState("");
+  const [profileEmail, setProfileEmail] = useState("");
+  const [profileFirstName, setProfileFirstName] = useState("");
+  const [profileLastName, setProfileLastName] = useState("");
+  const [profileDp, setProfileDp] = useState("");
+  const [profilePhone, setProfilePhone] = useState("");
+  const [profileCreatedAt, setProfileCreatedAt] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [isLocationOn, setIsLocationOn] = useState(false);
+  const [radius, setRadius] = useState(null);
   const [currentUserLat, setCurrentUserLat] = useState(null);
   const [currentUserLong, setCurrentUserLong] = useState(null);
   const [locationUpdatedAt, setLocationUpdatedAt] = useState(null);
 
+  //luggage props
   const [currentLuggageLat, setCurrentLuggageLat] = useState(null);
   const [currentLuggageLong, setCurrentLuggageLong] = useState(null);
 
-  const [userRole, setUserRole] = useState(null);
-  const [userId, setUserId] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fetch initial location status on component mount
   useEffect(() => {
-    const fetchLocationStatus = async () => {
+    const fetchUserData = async () => {
       try {
         const response = await axios.get(`${apiUrl}/auth/verify`, {
           withCredentials: true,
         });
+        setUserId(response.data.user.userID);
+        setProfileDp(response.data.user.profile_dp);
+        setProfileEmail(response.data.user.email);
+        setProfileFirstName(response.data.user.firstname);
+        setProfileLastName(response.data.user.lastname);
+        setProfilePhone(response.data.user.phone);
+        setProfileCreatedAt(response.data.user.createdAt);
+        setRadius(response.data.user.geofenceRadius);
         setIsLocationOn(response.data.user.isLocationOn);
         setCurrentUserLat(Number(response.data.user.latitude));
         setCurrentUserLong(Number(response.data.user.longitude));
         setLocationUpdatedAt(response.data.user.locationUpdatedAt);
         setUserRole(response.data.user.role);
-        setUserId(response.data.user.userID);
         console.log(
           "Initial Location Status:",
           response.data.user.isLocationOn
@@ -39,7 +55,7 @@ export const UserLocationProvider = ({ children }) => {
         console.error("Error fetching location status:", error);
       }
     };
-    fetchLocationStatus();
+    fetchUserData();
   }, []); // Empty dependency array ensures it runs once on mount
 
   // to update location periodically in the database
@@ -114,9 +130,22 @@ export const UserLocationProvider = ({ children }) => {
   };
 
   return (
-    <UserLocationContext.Provider
+    <UserContext.Provider
       value={{
+        userId,
+        profileEmail,
+        profileFirstName,
+        setProfileFirstName,
+        profileLastName,
+        setProfileLastName,
+        profileDp,
+        setProfileDp,
+        profilePhone,
+        setProfilePhone,
+        userRole,
+        profileCreatedAt,
         isLocationOn,
+        radius,
         toggleLocation,
         currentUserLat,
         currentUserLong,
@@ -124,6 +153,6 @@ export const UserLocationProvider = ({ children }) => {
       }}
     >
       {children}
-    </UserLocationContext.Provider>
+    </UserContext.Provider>
   );
 };
