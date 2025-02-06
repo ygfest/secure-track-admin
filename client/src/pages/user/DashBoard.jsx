@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import {
   FaThermometerHalf,
-  FaLock,
   FaShieldAlt,
   FaExclamationTriangle,
   FaMapMarkerAlt,
@@ -41,44 +40,10 @@ ChartJS.register(
 );
 
 const DashBoard = () => {
-  const navigate = useNavigate();
-
   const [selectedLuggage, setSelectedLuggage] = useState("All");
-  const [userFirstName, setUserFirstName] = useState("");
-
   const { luggageInfo, tamperData, tempData, fallDetectData } = useUserNotif();
 
-  useEffect(() => {
-    axios.defaults.withCredentials = true;
-  }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${apiUrl}/auth/verify`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        const data = await response.json();
-        console.log("Verify token response:", data);
-
-        if (!data.status || data.user.role !== "user") {
-          navigate("/sign-in");
-        } else {
-          setUserFirstName(`${data.user.firstname} ${data.user.lastname}`);
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
-
-  // Ensure luggageInfo is always an array
+  // Makes the luggageInfo into array always
   const modifiedLuggageInfo = [
     { luggage_custom_name: "All", luggage_name: "All" },
     ...(Array.isArray(luggageInfo) ? luggageInfo : []),

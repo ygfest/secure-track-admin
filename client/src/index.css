@@ -1,24 +1,19 @@
-/* Import Poppins font */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-/* Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Override styles for Leaflet map container */
 .leaflet-container {
-  height: calc(
-    100vh - 4rem
-  ); /* Adjust as needed based on the height of the header */
+  height: calc(100vh - 4rem);
 }
 
-/* Ensure the root element fills the entire viewport */
 html,
 body,
 #root {
   //background-color: #f2f5f8;
-  font-family: "Poppins", sans-serif; /* Ensure correct font family name and quotes */
+  font-family: "Poppins", sans-serif;
   background-color: #f2f5f8;
 }
 

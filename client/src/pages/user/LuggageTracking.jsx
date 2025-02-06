@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -16,12 +16,13 @@ import { format } from "date-fns";
 import debounce from "lodash.debounce";
 import greenMarker from "../../assets/green_marker.png";
 import NavBarForMap from "./components/NavBarForMapPage";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { BarLoader } from "react-spinners";
 import L from "leaflet";
 import { useUserData } from "../../context/UserContext";
+import axiosInstance from "../../utils/axiosInstance";
+import RelativeTime from "../../components/RelativeTime";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -39,54 +40,6 @@ const createClusterCustomIcon = (cluster) => {
   });
 };
 
-const RelativeTime = ({ shipmentDate }) => {
-  const [relativeTime, setRelativeTime] = useState("");
-
-  useEffect(() => {
-    const calculateRelativeTime = () => {
-      const now = new Date();
-      const shipmentDateTime = new Date(shipmentDate);
-      const timeDifference = now - shipmentDateTime;
-      const secondsDifference = Math.floor(timeDifference / 1000);
-
-      if (secondsDifference < 60) {
-        setRelativeTime("Last updated Now");
-      } else if (secondsDifference < 3600) {
-        const minutes = Math.floor(secondsDifference / 60);
-        setRelativeTime(
-          `${
-            minutes === 1
-              ? "Last updated a minute"
-              : `Last updated ${minutes} minutes`
-          } ago`
-        );
-      } else if (secondsDifference < 86400) {
-        const hours = Math.floor(secondsDifference / 3600);
-        setRelativeTime(
-          `${
-            hours === 1 ? "Last updated an hour" : `Last updated ${hours} hours`
-          } ago`
-        );
-      } else if (secondsDifference < 2592000) {
-        const days = Math.floor(secondsDifference / 86400);
-        setRelativeTime(
-          `${
-            days === 1 ? "Last updated a day" : `Last updated ${days} days`
-          } ago`
-        );
-      } else {
-        setRelativeTime("Last updated a while ago");
-      }
-    };
-
-    calculateRelativeTime();
-    const interval = setInterval(calculateRelativeTime, 60000);
-    return () => clearInterval(interval);
-  }, [shipmentDate]);
-
-  return <span>{relativeTime}</span>;
-};
-
 const LuggageTracking = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
@@ -97,7 +50,6 @@ const LuggageTracking = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
-  const navigate = useNavigate();
   const [shouldFly, setShouldFly] = useState(false);
 
   //Context Providers
@@ -124,24 +76,6 @@ const LuggageTracking = () => {
   useEffect(() => {
     axios.defaults.withCredentials = true;
   }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/verify`);
-        if (!response.data.status || response.data.user.role !== "user") {
-          navigate("/sign-in");
-        } else {
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
 
   useEffect(() => {
     const fetchCurrentLocations = async () => {
@@ -269,8 +203,7 @@ const LuggageTracking = () => {
   useEffect(() => {
     const fetchUsersData = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const datas = await axios.get(`${apiUrl}/auth/users`);
+        const datas = await axiosInstance.get("/auth/users");
         setUsersData(datas.data);
       } catch (error) {
         console.error("Error fetching users data:", error);

@@ -14,7 +14,7 @@ import {
 } from "react-icons/md";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
-import { useAdminNavBarContext } from "../../../context/AdminNavBarContext";
+import { useAdminDataContext } from "../../../context/AdminDataContext";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
@@ -36,8 +36,7 @@ const NavigationBar = () => {
     setIsSeenNotifications,
     currentLink,
     setCurrentLink,
-    notifications,
-  } = useAdminNavBarContext();
+  } = useAdminDataContext();
 
   const toggleSideBar = () => setIsOpen(!isOpen);
   const toggleProfile = () => {

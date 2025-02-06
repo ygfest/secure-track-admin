@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import LuggageIcon from "../../assets/green_marker.png";
 import { toast } from "sonner";
+import axiosInstance from "../../utils/axiosInstance";
+import { useAdminDataContext } from "../../context/AdminDataContext";
 
 const AdminAssocLuggage = () => {
-  const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
-  const [usersData, setUsersData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,52 +16,13 @@ const AdminAssocLuggage = () => {
   const [currentLuggage, setCurrentLuggage] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState("");
 
-  useEffect(() => {
-    Axios.defaults.withCredentials = true;
-  }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-
-        if (!response.data.status || response.data.user.role !== "admin") {
-          navigate("/sign-in");
-        } else {
-          console.log("Authorized");
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
-
-  useEffect(() => {
-    async function fetchUsersData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const data = await Axios.get(`${apiUrl}/auth/users`);
-        setUsersData(data.data);
-      } catch (error) {
-        console.log("error fetching user data", error);
-      }
-    }
-
-    fetchUsersData();
-  }, []);
+  const { usersData } = useAdminDataContext();
 
   useEffect(() => {
     async function fetchLuggageInfo() {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(
-          `${apiUrl}/luggage-router/luggage-admin`
+        const response = await axiosInstance.get(
+          "/luggage-router/luggage-admin"
         );
         setLuggageInfo(response.data);
         setFilteredData(response.data);
@@ -138,16 +97,15 @@ const AdminAssocLuggage = () => {
 
   const handleAddNew = async (luggageData) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.post(
-        `${apiUrl}/luggage-router/addluggage`,
+      const response = await axiosInstance.post(
+        "/luggage-router/addluggage",
         luggageData
       );
       setLuggageInfo((prev) => [...prev, response.data]);
       setFilteredData((prev) => [...prev, response.data]);
       setTotalItems((prev) => prev + 1);
       setShowAddModal(false);
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.error("Error adding luggage", error);
     }
@@ -155,9 +113,8 @@ const AdminAssocLuggage = () => {
 
   const handleUpdateLuggage = async (luggageData) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.put(
-        `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
+      const response = await axiosInstance.put(
+        `/luggage-router/updateluggage/${luggageData._id}`,
         { ...luggageData, user_id: selectedUserId } // Include selected user
       );
       setLuggageInfo((prev) =>
@@ -171,7 +128,7 @@ const AdminAssocLuggage = () => {
         )
       );
       setShowUpdateModal(false);
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.error("Error updating luggage", error);
     }
@@ -179,9 +136,8 @@ const AdminAssocLuggage = () => {
 
   const handleDeleteData = async (luggageTagNumber) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.delete(
-        `${apiUrl}/luggage-router/delete-tracking-data/${luggageTagNumber}`
+      const response = await axiosInstance.delete(
+        `/luggage-router/delete-tracking-data/${luggageTagNumber}`
       );
       if (response.data.status === false) {
         console.error("Error deleting luggage data");
@@ -196,8 +152,7 @@ const AdminAssocLuggage = () => {
 
   const handleDeleteLuggage = async (luggageId) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${luggageId}`);
+      await axiosInstance.delete(`/luggage-router/deleteluggage/${luggageId}`);
       setLuggageInfo((prev) => prev.filter((item) => item._id !== luggageId));
       setFilteredData((prev) => prev.filter((item) => item._id !== luggageId));
       setTotalItems((prev) => prev - 1);

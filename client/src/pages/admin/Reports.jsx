@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import hardwareIcon from "../../assets/hardware.png";
 import softwareIcon from "../../assets/software.png";
 import { toast } from "sonner";
+import { useAdminDataContext } from "../../context/AdminDataContext";
+import axiosInstance from "../../utils/axiosInstance";
 
 const AdminReports = () => {
   const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [luggageInfos, setLuggageInfos] = useState([]);
-  const [usersData, setUsersData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,68 +21,12 @@ const AdminReports = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [reportsData, setReportsData] = useState([]);
 
-  useEffect(() => {
-    Axios.defaults.withCredentials = true;
-  }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-
-        console.log("Verify token response:", response.data);
-
-        if (!response.data.status || response.data.user.role !== "admin") {
-          navigate("/sign-in");
-        } else {
-          console.log("Authorized");
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
-
-  useEffect(() => {
-    async function fetchUsersData() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const data = await Axios.get(`${apiUrl}/auth/users`);
-        setUsersData(data.data);
-      } catch (error) {
-        console.log("error fetching user data", error);
-      }
-    }
-
-    fetchUsersData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(
-          `${apiUrl}/luggage-router/luggage-admin`
-        );
-        setLuggageInfos(response.data);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
-    fetchLuggageInfo();
-  }, []);
+  const { usersData } = useAdminDataContext();
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/reports`);
+        const response = await axiosInstance.get("/auth/reports");
         setReportsData(response.data);
         setFilteredData(response.data);
         setTotalItems(response.data.length);
@@ -92,36 +37,6 @@ const AdminReports = () => {
 
     fetchReports();
   }, []);
-
-  useEffect(() => {
-    const fetchCurrentLocations = async () => {
-      try {
-        const updatedLuggageDeets = await Promise.all(
-          luggageInfo.map(async (luggageLoc) => {
-            const response = await fetch(
-              `https://photon.komoot.io/reverse?lat=${luggageLoc.latitude}&lon=${luggageLoc.longitude}`
-            );
-            if (response.ok) {
-              const data = await response.json();
-              if (data.features.length > 0) {
-                const properties = data.features[0].properties;
-                const locationName = `${properties.name}, ${properties.city} City`;
-                return { ...luggageLoc, currentLocation: locationName };
-              }
-            }
-            return { ...luggageLoc, currentLocation: "Unknown Location" };
-          })
-        );
-        setLuggageInfo(updatedLuggageDeets);
-        setFilteredData(updatedLuggageDeets);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
-    };
-    if (luggageInfo.length > 0) {
-      fetchCurrentLocations();
-    }
-  }, [luggageInfo]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -154,8 +69,7 @@ const AdminReports = () => {
 
   const handleResolve = async (reportId) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.put(`${apiUrl}/auth/resolve-reports/${reportId}`, {
+      await axiosInstance.put(`/auth/resolve-reports/${reportId}`, {
         status: "Resolved",
       });
       const updatedReports = filteredData.map((report) =>
@@ -188,9 +102,8 @@ const AdminReports = () => {
 
   const handleDeleteReport = async (reportData) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.delete(
-        `${apiUrl}/auth/delete-report/${reportData._id}`
+      const response = await axiosInstance.delete(
+        `/auth/delete-report/${reportData._id}`
       );
 
       // Check if the deletion was successful based on the response

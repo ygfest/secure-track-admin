@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../../assets/st_logo.svg";
 import { FaThermometerHalf } from "react-icons/fa";
@@ -15,21 +14,15 @@ import { TbLocationExclamation } from "react-icons/tb";
 import { format } from "date-fns";
 import { useUserNotif } from "../../../context/UserNotifContext";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useUserData } from "../../../context/UserContext";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd, hh:mm aa");
 };
 
 const NavigationBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenProfile, setIsOpenProfile] = useState(false);
-  const [openNotif, setOpenNotif] = useState(false);
-
-  const [profileDp, setProfileDp] = useState("");
-  const [profileName, setProfileName] = useState("");
-  const [profileLastName, setProfileLastName] = useState("");
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
-
+  //context
   const {
     alerts,
     hasNewNotifs,
@@ -40,6 +33,12 @@ const NavigationBar = () => {
     setCurrentLink,
   } = useUserNotif();
   const navigate = useNavigate();
+  const { profileDp, profileFirstName, profileLastName } = useUserData();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenProfile, setIsOpenProfile] = useState(false);
+  const [openNotif, setOpenNotif] = useState(false);
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   const toggleSideBar = () => setIsOpen(!isOpen);
   const toggleProfile = () => {
@@ -47,38 +46,9 @@ const NavigationBar = () => {
     setOpenNotif(false);
   };
 
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${apiUrl}/auth/verify`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        const data = await response.json();
-        console.log("Verify token response:", data);
-
-        if (!data.status) {
-          navigate("/sign-in");
-        } else {
-          setProfileDp(data.user.profile_dp);
-          setProfileName(data.user.firstname);
-          setProfileLastName(data.user.lastname);
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
-
-  const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
-    axios
-      .get(`${apiUrl}/auth/logout`)
+    axiosInstance
+      .get("/auth/logout")
       .then((res) => {
         if (res.data.status) {
           navigate("/sign-in");
@@ -245,7 +215,8 @@ const NavigationBar = () => {
                   </div>
                 ) : (
                   <div className="w-[38px] pt-1 rounded-full flex justify-center items-center bg-gray-300 text-zinc-500 text-xl ring-zinc-300 ring-offset-base-100 ring ring-offset-2">
-                    {profileName && profileName.charAt(0).toUpperCase()}
+                    {profileFirstName &&
+                      profileFirstName.charAt(0).toUpperCase()}
                     {profileLastName && profileLastName.charAt(0)}
                   </div>
                 )}

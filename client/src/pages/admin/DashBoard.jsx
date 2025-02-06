@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { Doughnut, Bar } from "react-chartjs-2";
 import {
@@ -18,6 +16,7 @@ import { LuUsers } from "react-icons/lu";
 import { BsLuggage } from "react-icons/bs";
 import { TbDeviceSpeakerOff } from "react-icons/tb";
 import { TbDevicesX } from "react-icons/tb";
+import { useAdminDataContext } from "../../context/AdminDataContext";
 
 ChartJS.register(
   CategoryScale,
@@ -32,39 +31,12 @@ ChartJS.register(
 );
 
 const DashBoard = () => {
-  const [userData, setUserData] = useState([]);
-  const [reportsData, setReportsData] = useState([]);
-  const [luggageInfo, setLuggageInfo] = useState([]);
-
-  useEffect(() => {
-    // Fetch users data
-    const fetchUsersData = async () => {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const res = await axios.get(`${apiUrl}/auth/users`);
-      setUserData(res.data);
-    };
-    fetchUsersData();
-
-    // Fetch reports data
-    const fetchReportsData = async () => {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const res = await axios.get(`${apiUrl}/auth/reports`);
-      setReportsData(res.data);
-    };
-    fetchReportsData();
-
-    // Fetch luggage info (if needed)
-    const fetchLuggageInfo = async () => {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const res = await axios.get(`${apiUrl}/luggage-router/luggage-admin`);
-      setLuggageInfo(res.data);
-    };
-    fetchLuggageInfo();
-  }, []);
+  const { usersData, reportsData, luggageData, setCurrentLink } =
+    useAdminDataContext();
 
   //default or empty data
-  const numOfUsers = userData.length === 0 ? "-" : userData.length;
-  const numOfLuggage = luggageInfo.length === 0 ? "-" : luggageInfo.length;
+  const numOfUsers = usersData.length === 0 ? "-" : usersData.length;
+  const numOfLuggage = luggageData.length === 0 ? "-" : luggageData.length;
   const deviceReports =
     reportsData.filter((report) => report.type === "device-anomaly").length ===
     0
@@ -78,13 +50,13 @@ const DashBoard = () => {
           .length;
 
   //Bar Chart for User status/activity
-  const activeUsers = userData.filter(
+  const activeUsers = usersData.filter(
     (user) => user.status === "Active"
   ).length;
-  const inactiveUsers = userData.filter(
+  const inactiveUsers = usersData.filter(
     (user) => user.status === "Inactive"
   ).length;
-  const offlineUsers = userData.filter(
+  const offlineUsers = usersData.filter(
     (user) => user.status === "Offline"
   ).length;
 
@@ -242,7 +214,10 @@ const DashBoard = () => {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link to="/admin/user-management">
+        <Link
+          to="/admin/user-management "
+          onClick={() => setCurrentLink("/admin/user-management")}
+        >
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <LuUsers className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
@@ -251,7 +226,10 @@ const DashBoard = () => {
             </div>
           </div>
         </Link>
-        <Link to="/admin/luggage">
+        <Link
+          to="/admin/luggage"
+          onClick={() => setCurrentLink("/admin/luggage")}
+        >
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <BsLuggage className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
@@ -261,7 +239,10 @@ const DashBoard = () => {
           </div>
         </Link>
 
-        <Link to="/admin/reports">
+        <Link
+          to="/admin/reports"
+          onClick={() => setCurrentLink("/admin/reports")}
+        >
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <TbDeviceSpeakerOff className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">
@@ -270,7 +251,10 @@ const DashBoard = () => {
             </div>
           </div>
         </Link>
-        <Link to="/admin/reports">
+        <Link
+          to="/admin/reports"
+          onClick={() => setCurrentLink("/admin/reports")}
+        >
           <div className="card bg-white shadow-md p-4 rounded-lg flex flex-col items-center">
             <TbDevicesX className="text-primary text-4xl mb-2" />
             <div className="card-body text-center">

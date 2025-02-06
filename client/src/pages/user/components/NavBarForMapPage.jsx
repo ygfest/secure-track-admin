@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../../assets/st_logo.svg";
 import { FaThermometerHalf } from "react-icons/fa";
@@ -10,6 +9,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
 import { useUserData } from "../../../context/UserContext";
 import { useUserNotif } from "../../../context/UserNotifContext";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const formatDate = (dateObj) => {
   if (!dateObj || isNaN(new Date(dateObj))) {
@@ -23,11 +23,14 @@ const NavBarForMap = () => {
   const [isDropProfile, setIsDropProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
 
-  const [profileDp, setProfileDp] = useState("");
-  const [profileName, setProfileName] = useState("");
-  const [profileLastName, setProfileLastName] = useState("");
-  const { isLocationOn, toggleLocation } = useUserData();
-
+  //Context
+  const {
+    profileDp,
+    profileFirstName,
+    profileLastName,
+    isLocationOn,
+    toggleLocation,
+  } = useUserData();
   const {
     alerts,
     hasNewNotifs,
@@ -38,29 +41,6 @@ const NavBarForMap = () => {
     setCurrentLink,
   } = useUserNotif();
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_URL;
-  axios.defaults.withCredentials = true;
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-        if (!response.data.status) {
-          navigate("/sign-in");
-        } else {
-          setProfileDp(response.data.user.profile_dp);
-          setProfileName(response.data.user.firstname);
-          setProfileLastName(response.data.user.lastname);
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-      }
-    };
-
-    verifyToken();
-  }, [navigate, apiUrl]);
 
   const getAlertIcon = (alertType) => {
     switch (alertType) {
@@ -146,8 +126,8 @@ const NavBarForMap = () => {
     );
 
   const handleLogout = () => {
-    axios
-      .get(`${apiUrl}/auth/logout`)
+    axiosInstance
+      .get("/auth/logout")
       .then((res) => {
         if (res.data.status) {
           navigate("/sign-in");
@@ -335,7 +315,7 @@ const NavBarForMap = () => {
               </div>
             ) : (
               <div className="w-[38px] pt-1 rounded-full flex justify-center items-center bg-zinc-300 text-zinc-500 text-xl font-bold ring-zinc-300 ring-offset-zinc-50 ring ring-offset-2">
-                {profileName && profileName.charAt(0).toUpperCase()}
+                {profileFirstName && profileFirstName.charAt(0).toUpperCase()}
                 {profileLastName && profileLastName.charAt(0)}
               </div>
             )}

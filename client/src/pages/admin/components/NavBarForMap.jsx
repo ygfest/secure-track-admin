@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../../assets/st_logo.svg";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { useAdminNavBarContext } from "../../../context/AdminNavBarContext";
+import { useAdminDataContext } from "../../../context/AdminDataContext";
 import { useUserData } from "../../../context/UserContext";
 
 const NavBarForMap = ({ tempData, tamperData, fallDetectData }) => {
@@ -16,7 +16,7 @@ const NavBarForMap = ({ tempData, tamperData, fallDetectData }) => {
   const [adminLastName, setAdminLastName] = useState("");
   const [alerts, setAlerts] = useState([]);
 
-  const { currentLink, setCurrentLink } = useAdminNavBarContext();
+  const { currentLink, setCurrentLink } = useAdminDataContext();
 
   const navigate = useNavigate();
 

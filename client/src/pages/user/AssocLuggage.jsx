@@ -4,12 +4,17 @@ import { useNavigate } from "react-router-dom";
 import LuggageIcon from "../../assets/green_marker.png";
 import { toast } from "sonner";
 import { LuGhost } from "react-icons/lu";
-
+import { useUserData } from "../../context/UserContext";
+import { useUserNotif } from "../../context/UserNotifContext";
+import axiosInstance from "../../utils/axiosInstance";
 const AssocLuggage = () => {
-  const navigate = useNavigate();
-  const [luggageInfo, setLuggageInfo] = useState([]);
+  //Context
+  const { userId } = useUserData();
+  const { luggageInfo, setLuggageInfo } = useUserNotif();
+
+  //const [luggageInfo, setLuggageInfo] = useState([]);
   const [usersData, setUsersData] = useState([]);
-  const [userId, setUserId] = useState("");
+  //const [userId, setUserId] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,58 +29,21 @@ const AssocLuggage = () => {
   }, []);
 
   useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-
-        //console.log("Verify token response:", response.data);
-
-        if (!response.data.status || response.data.user.role !== "user") {
-          navigate("/sign-in");
-        } else {
-          console.log("Authorized");
-          setUserId(response.data.user.userID);
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
-
-  useEffect(() => {
     async function fetchUsersData() {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const data = await Axios.get(`${apiUrl}/auth/users`);
+        const data = await axiosInstance("/auth/users");
         setUsersData(data.data);
       } catch (error) {
         console.log("error fetching user data", error);
       }
     }
-
     fetchUsersData();
   }, []);
 
   useEffect(() => {
-    async function fetchLuggageInfo() {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/luggage-router/luggage`);
-        setLuggageInfo(response.data);
-        setFilteredData(response.data);
-        setTotalItems(response.data.length);
-      } catch (error) {
-        console.log("error fetching luggage info", error);
-      }
-    }
-    fetchLuggageInfo();
-  }, []);
+    setFilteredData(luggageInfo);
+    setTotalItems(luggageInfo.length || 0);
+  }, [luggageInfo]);
 
   useEffect(() => {
     const fetchCurrentLocations = async () => {
@@ -135,16 +103,15 @@ const AssocLuggage = () => {
 
   const handleAddNew = async (luggageData) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.post(
-        `${apiUrl}/luggage-router/addluggage`,
+      const response = await axiosInstance.post(
+        "/luggage-router/addluggage",
         luggageData
       );
       setLuggageInfo((prev) => [...prev, response.data]);
       setFilteredData((prev) => [...prev, response.data]);
       setTotalItems((prev) => prev + 1);
       setShowAddModal(false);
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       toast.error("Luggage Tag already in use");
       console.error("Error adding luggage", error);
@@ -153,9 +120,8 @@ const AssocLuggage = () => {
 
   const handleUpdateLuggage = async (luggageData) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.put(
-        `${apiUrl}/luggage-router/updateluggage/${luggageData._id}`,
+      const response = await axiosInstance.put(
+        `/luggage-router/updateluggage/${luggageData._id}`,
         luggageData
       );
       setLuggageInfo((prev) =>
@@ -169,7 +135,7 @@ const AssocLuggage = () => {
         )
       );
       setShowUpdateModal(false);
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.error("Error updating luggage", error);
     }
@@ -177,13 +143,12 @@ const AssocLuggage = () => {
 
   const handleDeleteLuggage = async (luggageId) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.delete(`${apiUrl}/luggage-router/deleteluggage/${luggageId}`);
+      await axiosInstance.delete(`/luggage-router/deleteluggage/${luggageId}`);
       setLuggageInfo((prev) => prev.filter((item) => item._id !== luggageId));
       setFilteredData((prev) => prev.filter((item) => item._id !== luggageId));
       setTotalItems((prev) => prev - 1);
       setShowDeleteModal(false);
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.error("Error deleting luggage", error);
     }
@@ -191,9 +156,8 @@ const AssocLuggage = () => {
 
   const handleDeleteData = async (luggageTagNumber) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.delete(
-        `${apiUrl}/luggage-router/delete-tracking-data/${luggageTagNumber}`
+      const response = await axiosInstance.delete(
+        `/luggage-router/delete-tracking-data/${luggageTagNumber}`
       );
       if (response.data.status === false) {
         toast.error("Error deleting data");
@@ -201,7 +165,7 @@ const AssocLuggage = () => {
       } else {
         toast.success("Successfully deleted data");
         setShowUpdateModal(false);
-        window.location.reload();
+        //window.location.reload();
       }
     } catch (error) {
       console.error("Error deleting data:", error);

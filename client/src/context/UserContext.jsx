@@ -27,7 +27,6 @@ export const UserProvider = ({ children }) => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  // Fetch initial location status on component mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -56,7 +55,7 @@ export const UserProvider = ({ children }) => {
       }
     };
     fetchUserData();
-  }, []); // Empty dependency array ensures it runs once on mount
+  }, []);
 
   // to update location periodically in the database
   const updateLocation = async (locationStatus) => {
@@ -108,7 +107,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     let locationInterval = null;
     if (isLocationOn) {
-      updateLocation(isLocationOn); // Initial location update
+      updateLocation(isLocationOn);
       locationInterval = setInterval(() => updateLocation(isLocationOn), 10000); // Update every 10 seconds
     }
     return () => {

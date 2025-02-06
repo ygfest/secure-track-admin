@@ -29,7 +29,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
 
 //Providers
-import { AdminNavBarProvider } from "./context/AdminNavBarContext";
+import { AdminDataProvider } from "./context/AdminDataContext";
 import { UserNotifProvider } from "./context/UserNotifContext";
 import { UserProvider } from "./context/UserContext";
 
@@ -60,7 +60,7 @@ const AppRoutes = ({ loadingBarRef }) => {
 
 const AdminRoutes = () => {
   return (
-    <AdminNavBarProvider>
+    <AdminDataProvider>
       <UserProvider>
         <Routes>
           <Route element={<AdminLayout />}>
@@ -73,7 +73,7 @@ const AdminRoutes = () => {
           <Route path="/tracking" element={<AdminLuggageTracking />} />
         </Routes>
       </UserProvider>
-    </AdminNavBarProvider>
+    </AdminDataProvider>
   );
 };
 

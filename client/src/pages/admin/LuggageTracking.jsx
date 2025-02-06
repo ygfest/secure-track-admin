@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import { BarLoader } from "react-spinners";
 import NavBarForMap from "./components/NavBarForMap";
 import { useUserData } from "../../context/UserContext";
+import RelativeTime from "../../components/RelativeTime";
+import axiosInstance from "../../utils/axiosInstance";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -38,98 +40,30 @@ const createClusterCustomIcon = (cluster) => {
   });
 };
 
-const RelativeTime = ({ shipmentDate }) => {
-  const [relativeTime, setRelativeTime] = useState("");
-
-  useEffect(() => {
-    const calculateRelativeTime = () => {
-      const now = new Date();
-      const shipmentDateTime = new Date(shipmentDate);
-      const timeDifference = now - shipmentDateTime;
-      const secondsDifference = Math.floor(timeDifference / 1000);
-
-      if (secondsDifference < 60) {
-        setRelativeTime("Last updated Now");
-      } else if (secondsDifference < 3600) {
-        const minutes = Math.floor(secondsDifference / 60);
-        setRelativeTime(
-          `${
-            minutes === 1
-              ? "Last updated a minute"
-              : `Last updated ${minutes} minutes`
-          } ago`
-        );
-      } else if (secondsDifference < 86400) {
-        const hours = Math.floor(secondsDifference / 3600);
-        setRelativeTime(
-          `${
-            hours === 1 ? "Last updated an hour" : `Last updated ${hours} hours`
-          } ago`
-        );
-      } else if (secondsDifference < 2592000) {
-        const days = Math.floor(secondsDifference / 86400);
-        setRelativeTime(
-          `${
-            days === 1 ? "Last updated a day" : `Last updated ${days} days`
-          } ago`
-        );
-      } else {
-        setRelativeTime("Last updated a while ago");
-      }
-    };
-
-    calculateRelativeTime();
-    const interval = setInterval(calculateRelativeTime, 60000);
-    return () => clearInterval(interval);
-  }, [shipmentDate]);
-
-  return <span>{relativeTime}</span>;
-};
-
 const AdminLuggageTracking = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [luggageDeets, setLuggageDeets] = useState([]);
   const [usersData, setUsersData] = useState([]);
-  const [userId, setUserId] = useState();
-  const [profileDp, setProfileDp] = useState("");
-  const [profileName, setProfileName] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const markerRefs = useRef([]);
   const itemRefs = useRef([]);
-  const navigate = useNavigate();
   const [shouldFly, setShouldFly] = useState(false);
-  const [currentUserLat, setCurrentUserLat] = useState(null);
-  const [currentUserLong, setCurrentUserLong] = useState(null);
+
   const { isLocationOn } = useUserData();
+
+  const {
+    userId,
+    profileDp,
+    profileFirstName,
+    currentUserLat,
+    currentUserLong,
+  } = useUserData();
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
   }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/verify`);
-        if (!response.data.status || response.data.user.role !== "admin") {
-          navigate("/sign-in");
-        } else {
-          setUserId(response.data.user.userID);
-          setProfileDp(response.data.user.profile_dp);
-          setProfileName(response.data.user.firstname);
-          setCurrentUserLat(Number(response.data.user.latitude));
-          setCurrentUserLong(Number(response.data.user.longitude));
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
 
   useEffect(() => {
     const fetchCurrentLocations = async () => {
@@ -222,10 +156,8 @@ const AdminLuggageTracking = () => {
 
   const fetchLuggageData = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const datas = await axios.get(`${apiUrl}/luggage-router/luggage-admin`);
+      const datas = await axiosInstance.get("/luggage-router/luggage-admin");
       setLuggageDeets(datas.data);
-      console.log("CURRENT ADDRESS FETCHED AGAIN");
     } catch (error) {
       console.error("Error fetching luggage data:", error);
     }
@@ -234,12 +166,6 @@ const AdminLuggageTracking = () => {
   useEffect(() => {
     fetchLuggageData();
   }, []);
-
-  const handleLocateUser = (map) => {
-    setTrackLocation(true);
-    map.locate();
-    console.log("button was clicked");
-  };
 
   const LocationMarker = ({ trackLocation }) => {
     const [position, setPosition] = useState(null);
@@ -264,8 +190,7 @@ const AdminLuggageTracking = () => {
   useEffect(() => {
     const fetchUsersData = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const datas = await axios.get(`${apiUrl}/auth/users`);
+        const datas = await axiosInstance("/auth/users");
         setUsersData(datas.data);
       } catch (error) {
         console.error("Error fetching users data:", error);
@@ -343,9 +268,8 @@ const AdminLuggageTracking = () => {
 
   const handleAddNewLuggage = async (newLuggage) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.post(
-        `${apiUrl}/luggage-router/addluggage`,
+      const response = await axiosInstance.post(
+        "/luggage-router/addluggage",
         newLuggage
       );
       if (response.status === 201) {
@@ -373,9 +297,9 @@ const AdminLuggageTracking = () => {
       if (isLocationOn && currentUserLat !== null && currentUserLong !== null) {
         map.flyTo([currentUserLat, currentUserLong], 16, { animate: true });
       }
-    }, [isLocationOn, currentUserLat, currentUserLong, map]); // Include map in dependency array
+    }, [isLocationOn, currentUserLat, currentUserLong, map]);
 
-    return null; // Component does not render anything
+    return null;
   };
 
   const userIcon = L.divIcon({
@@ -387,7 +311,11 @@ const AdminLuggageTracking = () => {
                  <img alt="Profile" src="${profileDp}" />
                </div>`
             : `<div class="w-[38px] h-[38px] rounded-full flex justify-center items-center border-gray-300 border-3 bg-white pt-1 text-gray-500 font-poppins text-xl">
-                 ${profileName ? profileName.charAt(0).toUpperCase() : ""}
+                 ${
+                   profileFirstName
+                     ? profileFirstName.charAt(0).toUpperCase()
+                     : ""
+                 }
                </div>`
         }
         <div class="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-gray-300"></div>
@@ -399,7 +327,7 @@ const AdminLuggageTracking = () => {
   if (
     currentUserLat === null ||
     currentUserLong === null ||
-    profileName === null
+    profileFirstName === null
   ) {
     return (
       <div className="bg-[#272829] h-[100vh] w-[100vw] flex flex-col items-center justify-center">

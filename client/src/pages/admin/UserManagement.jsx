@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import axiosInstance from "../../utils/axiosInstance";
+import { useAdminDataContext } from "../../context/AdminDataContext";
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -17,38 +19,11 @@ const UserManagement = () => {
   const [showModifyRole, setShowModifyRole] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    Axios.defaults.withCredentials = true;
-  }, []);
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-
-        console.log("Verify token response:", response.data);
-
-        if (!response.data.status || response.data.user.role !== "admin") {
-          navigate("/sign-in");
-        } else {
-          console.log("Authorized");
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-
-    verifyToken();
-  }, [navigate]);
+  const { luggageData } = useAdminDataContext();
 
   async function fetchUsersData() {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.get(`${apiUrl}/auth/users`, {
+      const response = await axiosInstance.get("/auth/users", {
         withCredentials: true,
       });
       const dataJson = await response.data;
@@ -66,21 +41,8 @@ const UserManagement = () => {
     }
   }
 
-  async function fetchLuggageInfo() {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.get(
-        `${apiUrl}/luggage-router/luggage-admin`
-      );
-      setLuggageInfo(response.data);
-    } catch (error) {
-      console.log("error fetching luggage info", error);
-    }
-  }
-
   useEffect(() => {
     fetchUsersData();
-    fetchLuggageInfo();
   }, []);
 
   const getUserStatus = (loggedInAt) => {
@@ -99,8 +61,7 @@ const UserManagement = () => {
 
   const updateUserStatus = async (userId, status) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.put(
+      const response = await axiosInstance.put(
         `${apiUrl}/auth/update-user-status/${userId}`,
         { status }
       );
@@ -243,7 +204,7 @@ const UserManagement = () => {
         return;
       }
 
-      if (!luggageInfo.confirmPassword) {
+      if (!luggageData.confirmPassword) {
         toast.error("Confirm Password is required");
         return;
       } else if (luggageInfo.password !== luggageInfo.confimPassword) {

@@ -1,10 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 const UserNotifContext = createContext();
 
@@ -18,6 +13,7 @@ const createAlert = (type, criticality, description, timestamp) => ({
 });
 
 export const UserNotifProvider = ({ children }) => {
+  const location = useLocation();
   const prevStatusesRef = useRef([]);
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [fallDetectData, setFallDetectData] = useState([]);
@@ -26,9 +22,7 @@ export const UserNotifProvider = ({ children }) => {
   const [hasNewNotifs, setHasNewNotifs] = useState(false);
   const [hasNewAlerts, setHasNewAlerts] = useState(false);
   const [alerts, setAlerts] = useState(localStorage.getItem("alerts"));
-  const [currentLink, setCurrentLink] = useState(
-    localStorage.getItem("currentLink") || "/user/"
-  );
+  const [currentLink, setCurrentLink] = useState(location.pathname);
   const [openNotif, setOpenNotif] = useState(false);
   const [userReports, setUserReports] = useState([]);
   const [statuses, setStatuses] = useState(null);
@@ -37,10 +31,6 @@ export const UserNotifProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("alerts", alerts);
   }, [alerts]);
-
-  useEffect(() => {
-    localStorage.setItem("currentLink", currentLink);
-  }, [currentLink]);
 
   useEffect(() => {
     const eventSource = new EventSource(
@@ -81,7 +71,9 @@ export const UserNotifProvider = ({ children }) => {
 
   const updateAlerts = () => {
     const newAlerts = [];
-
+    {
+      /*Temperature alerts*/
+    }
     tempData?.forEach((temp) => {
       if (temp.temperature > 30) {
         newAlerts.push(
@@ -104,6 +96,7 @@ export const UserNotifProvider = ({ children }) => {
       }
     });
 
+    // Tamper or Intrusion alert
     tamperData?.forEach((tamper) => {
       newAlerts.push(
         createAlert(
@@ -115,6 +108,7 @@ export const UserNotifProvider = ({ children }) => {
       );
     });
 
+    //Fall data alert
     fallDetectData?.forEach((fall) => {
       newAlerts.push(
         createAlert(
@@ -126,6 +120,7 @@ export const UserNotifProvider = ({ children }) => {
       );
     });
 
+    //Geofence alert
     luggageInfo?.forEach((luggage) => {
       if (luggage.status === "Out of Range") {
         newAlerts.push(
@@ -148,6 +143,7 @@ export const UserNotifProvider = ({ children }) => {
       }
     });
 
+    //Report status update
     userReports?.forEach((report) => {
       if (report.status === "In Progress") {
         newAlerts.push(
