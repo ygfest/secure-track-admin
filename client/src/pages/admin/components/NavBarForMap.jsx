@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../assets/st_logo.svg";
+import Logo from "../../../assets/st_logo.svg";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { useAdminNavBarContext } from "../../context/AdminNavBarContext";
-import { useUserData } from "../../context/UserContext";
+import { useAdminNavBarContext } from "../../../context/AdminNavBarContext";
+import { useUserData } from "../../../context/UserContext";
 
 const NavBarForMap = ({ tempData, tamperData, fallDetectData }) => {
   const [isOpen, setIsOpen] = useState(false);

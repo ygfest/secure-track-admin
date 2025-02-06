@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import hardwareIcon from "../assets/hardware.png";
-import softwareIcon from "../assets/software.png";
+import hardwareIcon from "../../assets/hardware.png";
+import softwareIcon from "../../assets/software.png";
 import { toast } from "sonner";
 
 const AdminReports = () => {

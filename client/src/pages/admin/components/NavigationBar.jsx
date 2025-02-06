@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../assets/st_logo.svg";
+import Logo from "../../../assets/st_logo.svg";
 
 import {
   MdDashboard,
@@ -14,7 +14,7 @@ import {
 } from "react-icons/md";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
-import { useAdminNavBarContext } from "../../context/AdminNavBarContext";
+import { useAdminNavBarContext } from "../../../context/AdminNavBarContext";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");

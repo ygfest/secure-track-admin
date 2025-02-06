@@ -9,7 +9,7 @@ import {
   FaExclamationTriangle,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import UserComboBox from "../components/ComboBox";
+import UserComboBox from "../../components/ComboBox";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -25,7 +25,7 @@ import {
   ArcElement,
 } from "chart.js";
 import "chartjs-adapter-moment";
-import { useUserNotif } from "../context/UserNotifContext";
+import { useUserNotif } from "../../context/UserNotifContext";
 
 ChartJS.register(
   CategoryScale,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { FiSettings } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { MdOutlineShareLocation } from "react-icons/md";
-import { useUserData } from "../context/UserContext";
+import { useUserData } from "../../context/UserContext";
 
 const EditProfile = ({ userProfile }) => {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ const EditProfile = ({ userProfile }) => {
     profileCreatedAt,
     isLocationOn,
     radius,
+    setRadius,
   } = useUserData();
   const [profileData, setProfileData] = useState({
     bio: "",
@@ -62,6 +63,7 @@ const EditProfile = ({ userProfile }) => {
       await Axios.put(`${apiUrl}/auth/edit-profile`, editedProfileData, {
         headers: { "Content-Type": "application/json" },
       });
+      setProfileDp(newProfilePhoto || profileDp || "");
       toast.success("Profile updated successfully");
       navigate("/user/profile");
     } catch (error) {
@@ -124,7 +126,7 @@ const EditProfile = ({ userProfile }) => {
   };
 
   const handleSelectRadius = async (event) => {
-    event.preventDefault(); // Prevent form from submitting normally
+    event.preventDefault();
 
     const apiUrl = import.meta.env.VITE_API_URL;
     const selectedRadius = event.target.elements.geofenceRadius.value; // Get selected radius
@@ -135,6 +137,7 @@ const EditProfile = ({ userProfile }) => {
         { radius: selectedRadius }, // Send radius in request body
         { headers: { "Content-Type": "application/json" } }
       );
+      setRadius(selectedRadius);
       toast.success("Updated the geofence range successfully");
     } catch (error) {
       console.error("Error changing geofence range:", error);
@@ -160,7 +163,7 @@ const EditProfile = ({ userProfile }) => {
             },
           }
         );
-        setNewProfilePhoto(response.data.url); // Update state with the new profile photo URL
+        setNewProfilePhoto(response.data.url);
         toast.success("Profile photo uploaded successfully!");
       } catch (error) {
         console.error("Error uploading image:", error);

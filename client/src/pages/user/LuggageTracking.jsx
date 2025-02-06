@@ -14,14 +14,14 @@ import { Icon, divIcon } from "leaflet";
 import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import debounce from "lodash.debounce";
-import greenMarker from "../assets/green_marker.png";
+import greenMarker from "../../assets/green_marker.png";
 import NavBarForMap from "./components/NavBarForMapPage";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { BarLoader } from "react-spinners";
 import L from "leaflet";
-import { useUserData } from "../context/UserContext";
+import { useUserData } from "../../context/UserContext";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -220,8 +220,6 @@ const LuggageTracking = () => {
       }
     };
 
-    //fetchCurrentLocations();
-
     // Debounce the API call to reduce stuttering
     const debouncedFetchCurrentLocations = debounce(
       fetchCurrentLocations,
@@ -317,7 +315,7 @@ const LuggageTracking = () => {
   }, [luggageDeets, currentUserLat, currentUserLong]);
 
   const updateGeofenceStatus = async () => {
-    if (isUpdating) return; // Prevent re-entry if an update is in progress
+    if (isUpdating) return;
 
     setIsUpdating(true);
     try {
@@ -390,7 +388,7 @@ const LuggageTracking = () => {
   const handleMarkerClick = (luggage, index) => {
     setSelectedMarker(luggage);
     markerRefs.current[index].openPopup();
-    setShouldFly(true); // Enable fly-to behavior
+    setShouldFly(true);
   };
 
   const FlyToLocation = ({ latitude, longitude, shouldFly, onFlyComplete }) => {
@@ -413,7 +411,7 @@ const LuggageTracking = () => {
   };
 
   const handleFlyComplete = () => {
-    setShouldFly(false); // Reset after flying
+    setShouldFly(false);
   };
 
   useEffect(() => {
@@ -452,10 +450,9 @@ const LuggageTracking = () => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
 
-      // Ensure newLuggage has a timestamp
       const luggageWithTimestamp = {
         ...newLuggage,
-        createdAt: new Date().toISOString(), // Add a valid timestamp
+        createdAt: new Date().toISOString(),
       };
 
       const response = await axios.post(
@@ -489,9 +486,9 @@ const LuggageTracking = () => {
       if (isLocationOn && currentUserLat !== null && currentUserLong !== null) {
         map.flyTo([currentUserLat, currentUserLong], 16, { animate: true });
       }
-    }, [isLocationOn, currentUserLat, currentUserLong, map]); // Include map in dependency array
+    }, [isLocationOn, currentUserLat, currentUserLong, map]);
 
-    return null; // Component does not render anything
+    return null;
   };
 
   const userIcon = L.divIcon({

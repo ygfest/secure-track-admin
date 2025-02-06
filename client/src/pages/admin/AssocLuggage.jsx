@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import LuggageIcon from "../assets/green_marker.png";
+import LuggageIcon from "../../assets/green_marker.png";
 import { toast } from "sonner";
 
 const AdminAssocLuggage = () => {

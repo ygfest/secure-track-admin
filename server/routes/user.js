@@ -325,7 +325,6 @@ router.post("/reset-password", async (req, res) => {
 
 router.post("/reset-password-edit", async (req, res) => {
   const { currentPassword, newPassword, userId } = req.body;
-  console.log("RESSEETTT");
 
   try {
     // Find user by ID

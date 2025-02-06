@@ -14,13 +14,13 @@ import { Icon, divIcon } from "leaflet";
 import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import debounce from "lodash.debounce";
-import greenMarker from "../assets/green_marker.png";
+import greenMarker from "../../assets/green_marker.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { BarLoader } from "react-spinners";
 import NavBarForMap from "./components/NavBarForMap";
-import { useUserData } from "../context/UserContext";
+import { useUserData } from "../../context/UserContext";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,

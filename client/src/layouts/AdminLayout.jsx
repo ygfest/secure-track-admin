@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationBar from "./components/NavigationBar";
+import NavigationBar from "../pages/admin/components/NavigationBar";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {

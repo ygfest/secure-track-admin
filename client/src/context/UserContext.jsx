@@ -146,6 +146,7 @@ export const UserProvider = ({ children }) => {
         profileCreatedAt,
         isLocationOn,
         radius,
+        setRadius,
         toggleLocation,
         currentUserLat,
         currentUserLong,

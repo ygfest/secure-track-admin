@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { toast } from "sonner";
 import { ImSpinner2 } from "react-icons/im";
-import { useUserData } from "../context/UserContext";
-import { useUserNotif } from "../context/UserNotifContext";
+import { useUserData } from "../../context/UserContext";
+import { useUserNotif } from "../../context/UserNotifContext";
 
 const Profile = () => {
   const navigate = useNavigate();

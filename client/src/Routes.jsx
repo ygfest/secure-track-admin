@@ -2,18 +2,19 @@ import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 //Admin Components
-import AdminDashBoard from "./pages-admin/DashBoard";
-import AdminLuggageTracking from "./pages-admin/LuggageTracking";
-import UserManagement from "./pages-admin/UserManagement";
-import AdminAssocLuggage from "./pages-admin/AssocLuggage";
-import AdminProfile from "./pages-admin/Profile";
-import AdminReports from "./pages-admin/Reports";
+import AdminDashBoard from "./pages/admin/DashBoard";
+import AdminLuggageTracking from "./pages/admin/LuggageTracking";
+import UserManagement from "./pages/admin/UserManagement";
+import AdminAssocLuggage from "./pages/admin/AssocLuggage";
+import AdminProfile from "./pages/admin/Profile";
+import AdminReports from "./pages/admin/Reports";
 
 //User Components
-import UserDashboard from "./pages-user/DashBoard";
-import LuggageTracking from "./pages-user/LuggageTracking";
-import Profile from "./pages-user/Profile";
-import AssocLuggage from "./pages-user/AssocLuggage";
+import UserDashboard from "./pages/user/DashBoard";
+import LuggageTracking from "./pages/user/LuggageTracking";
+import Profile from "./pages/user/Profile";
+import AssocLuggage from "./pages/user/AssocLuggage";
+import EditProfile from "./pages/user/EditProfile";
 
 //Global Components
 import SignInForm from "./components/SignIn";
@@ -22,11 +23,10 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import AuthCallback from "./auth/AuthCallBack";
 import Home from "./home/home-page";
-import EditProfile from "./pages-user/EditProfile";
 
 //Layouts for both user and admin side
-import AdminLayout from "./pages-admin/AdminLayout";
-import UserLayout from "./pages-user/UserLayout";
+import AdminLayout from "./layouts/AdminLayout";
+import UserLayout from "./layouts/UserLayout";
 
 //Providers
 import { AdminNavBarProvider } from "./context/AdminNavBarContext";
