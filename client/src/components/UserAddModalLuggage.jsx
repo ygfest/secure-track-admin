@@ -1,8 +1,36 @@
 import React from "react";
 
-const UserAddLuggageModal = ({ show, onClose, onSubmit, userId }) => {
+const UserAddLuggageModal = ({ userId }) => {
   if (!show) return null;
 
+  const handleAddNewLuggage = async (newLuggage) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      const luggageWithTimestamp = {
+        ...newLuggage,
+        createdAt: new Date().toISOString(),
+      };
+
+      const response = await axios.post(
+        `${apiUrl}/luggage-router/addluggage`,
+        luggageWithTimestamp
+      );
+
+      if (response.status === 201) {
+        await fetchLuggageData();
+
+        toast.success("Luggage added successfully");
+      } else {
+        toast.error("Luggage Tag already in use");
+      }
+
+      setShowAddModal(false);
+    } catch (error) {
+      console.log("error adding luggage", error);
+      toast.error("Luggage Tag already in use");
+    }
+  };
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[8000] bg-white bg-opacity-20">
       <div className="bg-[#020202a0] backdrop-blur-xl text-white p-6 w-[80%] md:w-[30%] rounded-lg shadow-lg">

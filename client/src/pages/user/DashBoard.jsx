@@ -210,7 +210,7 @@ const DashBoard = () => {
     datasets: [
       {
         data: Object.values(statusCounts),
-        backgroundColor: ["#3B3F3F", "#5CC90C", "#FFCE56", "#4BC0C0"],
+        backgroundColor: ["#5CC90C", "#3B3F3F", "#FFCE56", "#4BC0C0"],
       },
     ],
   };
@@ -231,23 +231,21 @@ const DashBoard = () => {
   };
 
   const intrusionCounts = tamperData.reduce((counts, log) => {
-    // Round down to the nearest 10 minutes
+    // Round down to the nearest 10 mins
     const tenMinuteInterval = moment(log.tamperTime)
       .startOf("minute")
       .minute(Math.floor(moment(log.tamperTime).minute() / 10) * 10);
 
-    // Format the interval label to include date and time for the 10-minute block
-    const intervalLabel = tenMinuteInterval.format("YYYY-MM-DD HH:mm"); // Ensure proper time format for distinctness
+    const intervalLabel = tenMinuteInterval.format("YYYY-MM-DD HH:mm");
 
-    // Ensure each 10-minute interval is counted individually, not stacked
+    // ro separate the stacking every 10 mins
     counts[intervalLabel] = (counts[intervalLabel] || 0) + 1;
 
     return counts;
   }, {});
 
-  // Now, let's format the data for the chart:
   const intrusionChartData = {
-    labels: Object.keys(intrusionCounts).map((timeLabel) => moment(timeLabel)), // Convert to time objects
+    labels: Object.keys(intrusionCounts).map((timeLabel) => moment(timeLabel)),
     datasets: [
       {
         label: "Intrusions",

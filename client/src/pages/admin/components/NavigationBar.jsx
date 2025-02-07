@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../../assets/st_logo.svg";
 
@@ -15,6 +15,8 @@ import {
 import { IoNotificationsOutline } from "react-icons/io5";
 import { format } from "date-fns";
 import { useAdminDataContext } from "../../../context/AdminDataContext";
+import { useUserData } from "../../../context/UserContext";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const formatDate = (dateObj) => {
   return format(dateObj, "MM/dd/yyyy, HH:mm:ss");
@@ -24,12 +26,14 @@ const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
-  const [adminProfileDp, setAdminProfileDp] = useState("");
-  const [adminProfileFirstName, setAdminProfileFirstName] = useState("");
-  const [adminProfileLastName, setAdminProfileLastName] = useState("");
+  //const [adminProfileDp, setAdminProfileDp] = useState("");
+  //const [adminProfileFirstName, setAdminProfileFirstName] = useState("");
+  //const [adminProfileLastName, setAdminProfileLastName] = useState("");
   const [showLogoutConfirmation, setIsShowLogoutConfirmation] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const navigate = useNavigate();
+
+  const { profileDp, profileFirstName, profileLastName } = useUserData();
 
   const {
     isSeenNotifications,
@@ -44,35 +48,9 @@ const NavigationBar = () => {
     setOpenNotif(false);
   };
 
-  axios.defaults.withCredentials = true;
-
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${apiUrl}/auth/verify`, {
-          withCredentials: true,
-        });
-        console.log(response.data);
-        if (!response.data.status) {
-          navigate("/sign-in");
-        } else {
-          setAdminProfileDp(response.data.user.profile_dp);
-          setAdminProfileFirstName(response.data.user.firstname);
-          setAdminProfileLastName(response.data.user.lastname);
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        navigate("/sign-in");
-      }
-    };
-    verifyToken();
-  }, [navigate]);
-
-  const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = () => {
-    axios
-      .get(`${apiUrl}/auth/logout`)
+    axiosInstance
+      .get("/auth/logout")
       .then((res) => {
         if (res.data.status) {
           navigate("/sign-in");
@@ -128,7 +106,7 @@ const NavigationBar = () => {
 
   const handleNotifClick = () => {
     setOpenNotif(!openNotif);
-    setIsSeenNotifications(true); // Mark notifications as seen
+    setIsSeenNotifications(true);
   };
   return (
     <>
@@ -191,17 +169,17 @@ const NavigationBar = () => {
                 className="btn btn-ghost btn-circle avatar"
                 onClick={toggleProfile}
               >
-                {adminProfileDp ? (
+                {profileDp ? (
                   <div className="w-10 rounded-full">
-                    <img alt="Profile" src={adminProfileDp} />
+                    <img alt="Profile" src={profileDp} />
                   </div>
                 ) : (
                   <div className="w-[38px] pt-1 rounded-full flex justify-center items-center bg-zinc-300 font-light text-zinc-500 text-xl ring-zinc-300 ring-offset-base-100 ring ring-offset-2">
-                    {adminProfileFirstName &&
-                      adminProfileLastName &&
-                      `${adminProfileFirstName
+                    {profileFirstName &&
+                      profileLastName &&
+                      `${profileFirstName
                         .charAt(0)
-                        .toUpperCase()}${adminProfileLastName
+                        .toUpperCase()}${profileLastName
                         .charAt(0)
                         .toUpperCase()}`}
                   </div>

@@ -9,6 +9,7 @@ import { FiSettings } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { MdOutlineShareLocation } from "react-icons/md";
 import { useUserData } from "../../context/UserContext";
+import axiosInstance from "../../utils/axiosInstance";
 
 const EditProfile = ({ userProfile }) => {
   const navigate = useNavigate();
@@ -59,8 +60,7 @@ const EditProfile = ({ userProfile }) => {
     };
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await Axios.put(`${apiUrl}/auth/edit-profile`, editedProfileData, {
+      await axiosInstance.put("/auth/edit-profile", editedProfileData, {
         headers: { "Content-Type": "application/json" },
       });
       setProfileDp(newProfilePhoto || profileDp || "");
@@ -96,7 +96,7 @@ const EditProfile = ({ userProfile }) => {
         newPassword: profileData.newPassword,
       });
       toast.success("Password reset successfully");
-      setResetPassMode(false); // Optionally close the reset password form
+      setResetPassMode(false);
     } catch (error) {
       console.error("Error resetting password:", error);
       toast.error("Error resetting password");
@@ -112,9 +112,8 @@ const EditProfile = ({ userProfile }) => {
   };
 
   const handleDeleteAccount = async () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      await Axios.delete(`${apiUrl}/auth/deleteuser/${userId}`, {
+      await axiosInstance.delete(`/auth/deleteuser/${userId}`, {
         headers: { "Content-Type": "application/json" },
       });
       toast.success("Account deleted successfully");
@@ -128,12 +127,11 @@ const EditProfile = ({ userProfile }) => {
   const handleSelectRadius = async (event) => {
     event.preventDefault();
 
-    const apiUrl = import.meta.env.VITE_API_URL;
     const selectedRadius = event.target.elements.geofenceRadius.value; // Get selected radius
 
     try {
-      await Axios.put(
-        `${apiUrl}/auth/select-radius/${userId}`,
+      await axiosInstance.put(
+        `/auth/select-radius/${userId}`,
         { radius: selectedRadius }, // Send radius in request body
         { headers: { "Content-Type": "application/json" } }
       );
@@ -154,8 +152,8 @@ const EditProfile = ({ userProfile }) => {
 
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await Axios.post(
-          `${apiUrl}/api/uploadthing/image`,
+        const response = await axiosInstance.post(
+          "/api/uploadthing/image",
           formData,
           {
             headers: {

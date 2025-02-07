@@ -15,7 +15,6 @@ import { FaChevronUp, FaChevronDown, FaPlusCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import debounce from "lodash.debounce";
 import greenMarker from "../../assets/green_marker.png";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { BarLoader } from "react-spinners";
@@ -23,6 +22,7 @@ import NavBarForMap from "./components/NavBarForMap";
 import { useUserData } from "../../context/UserContext";
 import RelativeTime from "../../components/RelativeTime";
 import axiosInstance from "../../utils/axiosInstance";
+import useAuth from "../../hook/useAuth";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -41,6 +41,8 @@ const createClusterCustomIcon = (cluster) => {
 };
 
 const AdminLuggageTracking = () => {
+  const admin = useAuth("admin");
+
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -268,21 +270,27 @@ const AdminLuggageTracking = () => {
 
   const handleAddNewLuggage = async (newLuggage) => {
     try {
+      const luggageWithTimestamp = {
+        ...newLuggage,
+        createdAt: new Date().toISOString(), // Adds a timestamp
+      };
+
       const response = await axiosInstance.post(
         "/luggage-router/addluggage",
-        newLuggage
+        luggageWithTimestamp
       );
+
       if (response.status === 201) {
-        setLuggageDeets([...luggageDeets, newLuggage]);
-        console.log("New Luggage Details: ", newLuggage);
-        toast.success("Luggage added succesfully");
+        await fetchLuggageData(); // Refreshes luggage data
+        toast.success("Luggage added successfully");
       } else {
-        toast.error("Error adding Luggage");
+        toast.error("Luggage Tag already in use");
       }
+
       setShowAddModal(false);
     } catch (error) {
-      console.log("error adding luggage", error);
-      toast.error("Error Adding Luggage");
+      console.error("Error adding luggage:", error);
+      toast.error("Luggage Tag already in use");
     }
   };
 
@@ -335,6 +343,10 @@ const AdminLuggageTracking = () => {
         <BarLoader color="white" size={40} data-testid="loader" />
       </div>
     );
+  }
+
+  if (!admin) {
+    return;
   }
 
   return (

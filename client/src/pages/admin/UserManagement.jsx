@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import axiosInstance from "../../utils/axiosInstance";
 import { useAdminDataContext } from "../../context/AdminDataContext";
+import SearchBar from "../../components/SearchBar";
 
 const UserManagement = () => {
-  const navigate = useNavigate();
   const [luggageInfo, setLuggageInfo] = useState([]);
   const [usersData, setUsersData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -48,7 +46,7 @@ const UserManagement = () => {
   const getUserStatus = (loggedInAt) => {
     const currentTime = new Date();
     const lastLoggedInTime = new Date(loggedInAt);
-    const timeDifference = (currentTime - lastLoggedInTime) / (1000 * 60); // difference in minutes
+    const timeDifference = (currentTime - lastLoggedInTime) / (1000 * 60);
 
     if (timeDifference <= 60) {
       return "Active"; // Logged in within the last 1 hour
@@ -62,7 +60,7 @@ const UserManagement = () => {
   const updateUserStatus = async (userId, status) => {
     try {
       const response = await axiosInstance.put(
-        `${apiUrl}/auth/update-user-status/${userId}`,
+        `/auth/update-user-status/${userId}`,
         { status }
       );
 
@@ -143,9 +141,8 @@ const UserManagement = () => {
       }
 
       console.log("User info to add:", userInfo);
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.post(
-        `${apiUrl}/auth/admin-user-register`,
+      const response = await axiosInstance.post(
+        "/auth/admin-user-register",
         userInfo
       );
 
@@ -186,34 +183,13 @@ const UserManagement = () => {
       if (!userInfo.email) {
         toast.error("Email is required");
         return;
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      } else if (!/\S+@\S+\.\S+/.test(userInfo.email)) {
         toast.error("Email is Invalid");
         return;
       }
 
-      const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
-
-      if (!userInfo.password) {
-        toast.error("Password is required");
-        return;
-      } else if (!passwordRegex.test(luggageInfo.password)) {
-        toast.error(
-          "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character"
-        );
-        return;
-      }
-
-      if (!luggageData.confirmPassword) {
-        toast.error("Confirm Password is required");
-        return;
-      } else if (luggageInfo.password !== luggageInfo.confimPassword) {
-        toast.error("Password did not match");
-        return;
-      }
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.put(
-        `${apiUrl}/auth/updateuser/${userInfo._id}`,
+      const response = await axiosInstance.put(
+        `/auth/updateuser/${userInfo._id}`,
         userInfo
       );
       setUsersData((prev) =>
@@ -235,10 +211,7 @@ const UserManagement = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.delete(
-        `${apiUrl}/auth/deleteuser/${userId}`
-      );
+      const response = await axiosInstance.delete(`/auth/deleteuser/${userId}`);
       setUsersData((prev) => prev.filter((item) => item._id !== userId));
       setFilteredData((prev) => prev.filter((item) => item._id !== userId));
       setTotalItems((prev) => prev - 1);
@@ -255,11 +228,10 @@ const UserManagement = () => {
 
   const handleModifyRole = async (userInfo) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       const updatedUser = { ...userInfo };
 
-      const response = await Axios.put(
-        `${apiUrl}/auth/modify-role/${userInfo.userId}`,
+      const response = await axiosInstance.put(
+        `/auth/modify-role/${userInfo.userId}`,
         updatedUser
       );
 
@@ -295,7 +267,7 @@ const UserManagement = () => {
   };
 
   const paginationButtons = [];
-  for (let i = 1; i <= Math.ceil(totalItems / 4); i++) {
+  for (let i = 1; i <= Math.ceil(totalItems / 5); i++) {
     paginationButtons.push(
       <button
         key={i}
@@ -313,7 +285,7 @@ const UserManagement = () => {
     </div>
   );
 
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
   const totalItemsCount = filteredData.length;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -332,29 +304,7 @@ const UserManagement = () => {
             + Add New
           </button>
 
-          <div className="search-bar relative w-56">
-            <input
-              type="text"
-              placeholder="Search here"
-              value={searchTerm}
-              onChange={handleSearch}
-              className="input input-bordered rounded-3xl w-full pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m4-6a8 8 0 11-16 0 8 8 0 0116 0z"
-              />
-            </svg>
-          </div>
+          <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
         </div>
 
         <div className="card bg-white shadow-md rounded-lg">
@@ -512,7 +462,7 @@ const UserManagement = () => {
                   lastname: e.target.lastname.value,
                   email: e.target.email.value,
                   password: e.target.password.value,
-                  confirmedPassword: e.target.confirmed_password.value,
+                  confirmPassword: e.target.confirmed_password.value,
                 });
                 setShowAddModal(false);
               }}
@@ -591,7 +541,7 @@ const UserManagement = () => {
                   firstname: e.target.firstname.value,
                   lastname: e.target.lastname.value,
                   email: e.target.email.value,
-                  phone: e.target.phone.value,
+                  phone: e.target.phone.value | "",
                 });
                 setShowUpdateModal(false);
               }}

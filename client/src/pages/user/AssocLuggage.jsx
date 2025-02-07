@@ -7,6 +7,8 @@ import { LuGhost } from "react-icons/lu";
 import { useUserData } from "../../context/UserContext";
 import { useUserNotif } from "../../context/UserNotifContext";
 import axiosInstance from "../../utils/axiosInstance";
+import SearchBar from "../../components/SearchBar";
+
 const AssocLuggage = () => {
   //Context
   const { userId } = useUserData();
@@ -112,6 +114,7 @@ const AssocLuggage = () => {
       setTotalItems((prev) => prev + 1);
       setShowAddModal(false);
       //window.location.reload();
+      toast.success("Luggage added successfully");
     } catch (error) {
       toast.error("Luggage Tag already in use");
       console.error("Error adding luggage", error);
@@ -135,6 +138,7 @@ const AssocLuggage = () => {
         )
       );
       setShowUpdateModal(false);
+      toast.success("Luggage updated successfully");
       //window.location.reload();
     } catch (error) {
       console.error("Error updating luggage", error);
@@ -149,6 +153,7 @@ const AssocLuggage = () => {
       setTotalItems((prev) => prev - 1);
       setShowDeleteModal(false);
       //window.location.reload();
+      toast.success("Luggage deleted successfully");
     } catch (error) {
       console.error("Error deleting luggage", error);
     }
@@ -211,29 +216,7 @@ const AssocLuggage = () => {
             + Add New
           </button>
 
-          <div className="search-bar relative w-56 ">
-            <input
-              type="text"
-              placeholder="Search here"
-              value={searchTerm}
-              onChange={handleSearch}
-              className="input input-bordered w-full rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m4-6a8 8 0 11-16 0 8 8 0 0116 0z"
-              />
-            </svg>
-          </div>
+          {/*Search Input*/}
         </div>
 
         <div className="card bg-white shadow-md rounded-lg">

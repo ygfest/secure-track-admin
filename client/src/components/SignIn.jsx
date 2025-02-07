@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Axios from "axios";
 import GoogleButton from "../auth/GoogleButton";
 import { ImSpinner2 } from "react-icons/im";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
@@ -51,14 +50,14 @@ export default function SignInForm() {
       const apiUrl = import.meta.env.VITE_API_URL;
 
       const headers = {
-        "Content-Type": "application/json", // Ensure the Content-Type is set
-        "Custom-Header": "YourHeaderValue", // Add your custom headers here
+        "Content-Type": "application/json",
+        "Custom-Header": "YourHeaderValue",
       };
 
-      // Using fetch to replace Axios
+      // i replacethe axios here for more native fetching
       const response = await fetch(`${apiUrl}/auth/signin`, {
         method: "POST",
-        credentials: "include", // Equivalent to Axios's withCredentials: true
+        credentials: "include",
         headers: headers,
         body: JSON.stringify({ email, password }),
       });
@@ -66,7 +65,6 @@ export default function SignInForm() {
       const data = await response.json();
 
       if (data.status) {
-        console.log("Navigating HAHAHA");
         setIsSigningIn(false);
         if (data.user.role === "user") {
           navigate("/user");
@@ -82,7 +80,7 @@ export default function SignInForm() {
       setIsSigningIn(false);
 
       if (error instanceof TypeError) {
-        // Handle fetch-specific errors (like network issues)
+        // Handle fetch errors or issues
         setErrors({
           server: "No response from server. Please try again later.",
         });

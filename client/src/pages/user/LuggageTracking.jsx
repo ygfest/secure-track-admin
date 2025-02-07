@@ -23,6 +23,7 @@ import L from "leaflet";
 import { useUserData } from "../../context/UserContext";
 import axiosInstance from "../../utils/axiosInstance";
 import RelativeTime from "../../components/RelativeTime";
+import useAuth from "../../hook/useAuth";
 
 const luggageIcon = new Icon({
   iconUrl: greenMarker,
@@ -41,6 +42,8 @@ const createClusterCustomIcon = (cluster) => {
 };
 
 const LuggageTracking = () => {
+  const user = useAuth("user");
+
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [trackLocation, setTrackLocation] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -98,9 +101,8 @@ const LuggageTracking = () => {
                 if (locationName !== luggageLoc.currentLocation) {
                   stationary_since = Date.now();
                 }
-                const apiUrl = import.meta.env.VITE_API_URL;
-                await axios.put(
-                  `${apiUrl}/luggage-router/update-current-location`,
+                await axiosInstance.put(
+                  "luggage-router/update-current-location",
                   {
                     luggageId,
                     currentLocation: locationName,
@@ -117,9 +119,8 @@ const LuggageTracking = () => {
                 if (luggageLoc.currentLocation !== null) {
                   stationary_since = Date.now();
                 }
-                const apiUrl = import.meta.env.VITE_API_URL;
-                await axios.put(
-                  `${apiUrl}/luggage-router/update-current-location`,
+                await axiosInstance.put(
+                  "/luggage-router/update-current-location",
                   {
                     luggageId,
                     currentLocation: null,
@@ -134,15 +135,11 @@ const LuggageTracking = () => {
               if (luggageLoc.currentLocation !== null) {
                 stationary_since = Date.now();
               }
-              const apiUrl = import.meta.env.VITE_API_URL;
-              await axios.put(
-                `${apiUrl}/luggage-router/update-current-location`,
-                {
-                  luggageId,
-                  currentLocation: null,
-                  stationary_since: stationary_since,
-                }
-              );
+              await axiosInstance("/luggage-router/update-current-location", {
+                luggageId,
+                currentLocation: null,
+                stationary_since: stationary_since,
+              });
               return { ...luggageLoc, currentLocation: "Unknown Location" };
             }
           })
@@ -168,8 +165,7 @@ const LuggageTracking = () => {
 
   const fetchLuggageData = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const datas = await axios.get(`${apiUrl}/luggage-router/luggage`);
+      const datas = await axiosInstance.get("/luggage-router/luggage");
       setLuggageDeets(datas.data);
     } catch (error) {
       console.error("Error fetching luggage data:", error);
@@ -381,15 +377,13 @@ const LuggageTracking = () => {
 
   const handleAddNewLuggage = async (newLuggage) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-
       const luggageWithTimestamp = {
         ...newLuggage,
         createdAt: new Date().toISOString(),
       };
 
-      const response = await axios.post(
-        `${apiUrl}/luggage-router/addluggage`,
+      const response = await axiosInstance.post(
+        "/luggage-router/addluggage",
         luggageWithTimestamp
       );
 
@@ -458,6 +452,8 @@ const LuggageTracking = () => {
       </div>
     );
   }
+
+  if (!user) return null;
   return (
     <>
       <NavBarForMap />

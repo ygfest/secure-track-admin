@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import hardwareIcon from "../../assets/hardware.png";
 import softwareIcon from "../../assets/software.png";
 import { toast } from "sonner";
 import { useAdminDataContext } from "../../context/AdminDataContext";
 import axiosInstance from "../../utils/axiosInstance";
+import SearchBar from "../../components/SearchBar";
 
 const AdminReports = () => {
   const navigate = useNavigate();
@@ -27,11 +27,14 @@ const AdminReports = () => {
     const fetchReports = async () => {
       try {
         const response = await axiosInstance.get("/auth/reports");
-        setReportsData(response.data);
-        setFilteredData(response.data);
-        setTotalItems(response.data.length);
+        const sortedReports = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setReportsData(sortedReports);
+        setFilteredData(sortedReports);
+        setTotalItems(sortedReports.length);
       } catch (error) {
-        console.error("Error fetching reorts:", reports);
+        console.error("Error fetching reports:", error);
       }
     };
 
@@ -83,9 +86,8 @@ const AdminReports = () => {
 
   const handleUpdateReport = async (reportData) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await Axios.put(
-        `${apiUrl}/auth/update-reports/${reportData._id}`,
+      const response = await axiosInstance.put(
+        `/auth/update-reports/${reportData._id}`,
         reportData
       );
       setLuggageInfo((prev) =>
@@ -130,7 +132,7 @@ const AdminReports = () => {
   };
 
   const paginationButtons = [];
-  for (let i = 1; i <= Math.ceil(totalItems / 4); i++) {
+  for (let i = 1; i <= Math.ceil(totalItems / 5); i++) {
     paginationButtons.push(
       <button
         key={i}
@@ -148,7 +150,7 @@ const AdminReports = () => {
     </div>
   );
 
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
   const totalItemsCount = filteredData.length;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -160,29 +162,7 @@ const AdminReports = () => {
     <div className="h-full">
       <div className="mt-5 ml-5 mr-5">
         <div className="flex justify-end mb-5 gap-4">
-          <div className="search-bar relative w-56">
-            <input
-              type="text"
-              placeholder="Search here"
-              value={searchTerm}
-              onChange={handleSearch}
-              className="input input-bordered w-full rounded-3xl pr-10 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m4-6a8 8 0 11-16 0 8 8 0 0116 0z"
-              />
-            </svg>
-          </div>
+          <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
         </div>
 
         <div className="card bg-white shadow-md rounded-lg">

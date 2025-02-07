@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import GoogleButton from "../auth/GoogleButton";
@@ -79,7 +79,7 @@ export default function SignUp() {
       const response = await Axios.post(
         `${apiUrl}/auth/signup`,
         { ...formData },
-        { withCredentials: true } // Ensure credentials (cookies) are included
+        { withCredentials: true }
       );
 
       if (response.data.status) {
@@ -108,7 +108,6 @@ export default function SignUp() {
         </h2>
         <div className="grid grid-cols-1 gap-4">
           <div className="grid grid-cols-2 gap-4">
-            {/* First Name */}
             <div className="flex flex-col">
               <label htmlFor="firstname" className="text-sm mb-1">
                 First Name
@@ -127,7 +126,6 @@ export default function SignUp() {
               )}
             </div>
 
-            {/* Last Name */}
             <div className="flex flex-col">
               <label htmlFor="lastname" className="text-sm mb-1">
                 Last Name
@@ -147,7 +145,6 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* Email */}
           <div className="flex flex-col">
             <label htmlFor="email" className="text-sm mb-1">
               Email
@@ -164,7 +161,6 @@ export default function SignUp() {
             {errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
 
-          {/* Password */}
           <div className="flex flex-col">
             <label htmlFor="password" className="text-sm mb-1">
               Password
@@ -196,7 +192,6 @@ export default function SignUp() {
             )}
           </div>
 
-          {/* Confirm Password */}
           <div className="flex flex-col">
             <label htmlFor="confirmPassword" className="text-sm mb-1">
               Confirm Password
