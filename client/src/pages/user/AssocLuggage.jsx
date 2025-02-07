@@ -75,7 +75,7 @@ const AssocLuggage = () => {
     if (luggageInfo.length > 0) {
       fetchCurrentLocations();
     }
-  }, [JSON.stringify(luggageInfo)]);
+  }, []);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -179,7 +179,7 @@ const AssocLuggage = () => {
   };
 
   const paginationButtons = [];
-  for (let i = 1; i <= Math.ceil(totalItems / 6); i++) {
+  for (let i = 1; i <= Math.ceil(totalItems / 4); i++) {
     paginationButtons.push(
       <button
         key={i}
@@ -197,7 +197,7 @@ const AssocLuggage = () => {
     </div>
   );
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 4;
   const totalItemsCount = filteredData.length;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
